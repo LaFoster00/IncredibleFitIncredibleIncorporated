@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     19.12.2023 11:37:27                          */
+/* Created on:     28.12.2023 15:38:52                          */
 /*==============================================================*/
 
 
@@ -49,11 +49,11 @@ alter table EXERCISE_SPORT
 alter table EXERCISE_SPORT
    drop constraint FK_EXERCISE_IS_PART_O_SPORT;
 
-alter table EXERCISE_TRAINING_PLAN
-   drop constraint FK_EXERCISE_CONTAINS2_EXERCISE;
+alter table EXERCISE_UNIT
+   drop constraint FK_EXERCISE_CONTAINS6_EXERCISE;
 
-alter table EXERCISE_TRAINING_PLAN
-   drop constraint FK_EXERCISE_IS_CONTAI_TRAINING;
+alter table EXERCISE_UNIT
+   drop constraint FK_EXERCISE_IS_A_PART_TRAINING;
 
 alter table FITNESSLEVEL
    drop constraint FK_FITNESSL_HAS_USER;
@@ -81,6 +81,12 @@ alter table RECIPE_INGRIDIENT
 
 alter table RECIPE_INGRIDIENT
    drop constraint FK_RECIPE_I_RECIPE_IN_RECIPE;
+
+alter table RELATIONSHIP_23
+   drop constraint FK_RELATION_CONTAINS7_TRAINING;
+
+alter table RELATIONSHIP_23
+   drop constraint FK_RELATION_IS_A_PART_TRAINING;
 
 alter table TRAINING_PLAN_APPOINTMENT
    drop constraint FK_TRAINING_CONTAINS_TRAINING;
@@ -167,11 +173,11 @@ drop index IS_PART_OF_FK;
 
 drop table EXERCISE_SPORT cascade constraints;
 
-drop index CONTAINS2_FK;
+drop index CONTAINS6_FK;
 
-drop index IS_CONTAINED_IN_FK;
+drop index IS_A_PART_OF2_FK;
 
-drop table EXERCISE_TRAINING_PLAN cascade constraints;
+drop table EXERCISE_UNIT cascade constraints;
 
 drop index HAS_FK;
 
@@ -205,6 +211,12 @@ drop index RECIPE_INGRIDIENT_QUANTITY_FK;
 
 drop table RECIPE_INGRIDIENT cascade constraints;
 
+drop index CONTAINS5_FK2;
+
+drop index IS_A_PART_OF_FK;
+
+drop table RELATIONSHIP_23 cascade constraints;
+
 drop table SPORT cascade constraints;
 
 drop table TRAINING_PLAN cascade constraints;
@@ -216,6 +228,8 @@ drop index CONTAINS_FK;
 drop table TRAINING_PLAN_APPOINTMENT cascade constraints;
 
 drop table TRAINING_TYPE cascade constraints;
+
+drop table TRAINING_UNIT cascade constraints;
 
 drop index IS_FROM_FK;
 
@@ -522,25 +536,27 @@ create index CONTAINS3_FK on EXERCISE_SPORT (
 );
 
 /*==============================================================*/
-/* Table: EXERCISE_TRAINING_PLAN                                */
+/* Table: EXERCISE_UNIT                                         */
 /*==============================================================*/
-create table EXERCISE_TRAINING_PLAN (
+create table EXERCISE_UNIT (
    TRA_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
-   constraint PK_EXERCISE_TRAINING_PLAN primary key (TRA_ID, ID)
+   REPETITIONS          NUMBER                not null,
+   SETS                 NUMBER                not null,
+   constraint PK_EXERCISE_UNIT primary key (TRA_ID, ID)
 );
 
 /*==============================================================*/
-/* Index: IS_CONTAINED_IN_FK                                    */
+/* Index: IS_A_PART_OF2_FK                                      */
 /*==============================================================*/
-create index IS_CONTAINED_IN_FK on EXERCISE_TRAINING_PLAN (
+create index IS_A_PART_OF2_FK on EXERCISE_UNIT (
    TRA_ID ASC
 );
 
 /*==============================================================*/
-/* Index: CONTAINS2_FK                                          */
+/* Index: CONTAINS6_FK                                          */
 /*==============================================================*/
-create index CONTAINS2_FK on EXERCISE_TRAINING_PLAN (
+create index CONTAINS6_FK on EXERCISE_UNIT (
    ID ASC
 );
 
@@ -765,6 +781,29 @@ create index QUANTITY_INGRIDIENT_FK on RECIPE_INGRIDIENT (
 );
 
 /*==============================================================*/
+/* Table: RELATIONSHIP_23                                       */
+/*==============================================================*/
+create table RELATIONSHIP_23 (
+   TRA_ID               NUMBER(6)             not null,
+   ID                   NUMBER(6)             not null,
+   constraint PK_RELATIONSHIP_23 primary key (TRA_ID, ID)
+);
+
+/*==============================================================*/
+/* Index: IS_A_PART_OF_FK                                       */
+/*==============================================================*/
+create index IS_A_PART_OF_FK on RELATIONSHIP_23 (
+   TRA_ID ASC
+);
+
+/*==============================================================*/
+/* Index: CONTAINS5_FK2                                         */
+/*==============================================================*/
+create index CONTAINS5_FK2 on RELATIONSHIP_23 (
+   ID ASC
+);
+
+/*==============================================================*/
 /* Table: SPORT                                                 */
 /*==============================================================*/
 create table SPORT (
@@ -794,6 +833,7 @@ create table TRAINING_PLAN (
       generated as identity ( start with 1 nocycle noorder)  not null,
    NAME                 VARCHAR2(100)         not null,
    DESCRIPTION          VARCHAR2(1024)        not null,
+   DIFFICULTY           VARCHAR2(50)          not null,
    constraint PK_TRAINING_PLAN primary key (ID)
 );
 
@@ -851,6 +891,18 @@ Attributes:
 @name: the name of the type';
 
 /*==============================================================*/
+/* Table: TRAINING_UNIT                                         */
+/*==============================================================*/
+create table TRAINING_UNIT (
+   ID                   NUMBER(6)           
+      generated as identity ( start with 1 nocycle noorder)  not null,
+   NAME                 VARCHAR2(100),
+   DESCRIPTION          VARCHAR2(1024),
+   DIFFICULTY           VARCHAR2(50),
+   constraint PK_TRAINING_UNIT primary key (ID)
+);
+
+/*==============================================================*/
 /* Table: "USER"                                                */
 /*==============================================================*/
 create table "USER" (
@@ -858,7 +910,6 @@ create table "USER" (
       generated as identity ( start with 1 nocycle noorder)  not null,
    EMP_ID               NUMBER(6),
    AIM_ID               NUMBER(6),
-   USE_ID               NUMBER(6),
    FIT_ID               NUMBER(6),
    NAME                 VARCHAR2(50)          not null,
    FIRST_NAME           VARCHAR2(50)          not null,
@@ -893,7 +944,7 @@ every user can access their appointments';
 /* Index: OWNS_FK                                               */
 /*==============================================================*/
 create index OWNS_FK on "USER" (
-   USE_ID ASC,
+   FIT_ID ASC,
    FIT_ID ASC
 );
 
@@ -1040,13 +1091,13 @@ alter table EXERCISE_SPORT
    add constraint FK_EXERCISE_IS_PART_O_SPORT foreign key (SPO_ID)
       references SPORT (ID);
 
-alter table EXERCISE_TRAINING_PLAN
-   add constraint FK_EXERCISE_CONTAINS2_EXERCISE foreign key (ID)
+alter table EXERCISE_UNIT
+   add constraint FK_EXERCISE_CONTAINS6_EXERCISE foreign key (ID)
       references EXERCISE (ID);
 
-alter table EXERCISE_TRAINING_PLAN
-   add constraint FK_EXERCISE_IS_CONTAI_TRAINING foreign key (TRA_ID)
-      references TRAINING_PLAN (ID);
+alter table EXERCISE_UNIT
+   add constraint FK_EXERCISE_IS_A_PART_TRAINING foreign key (TRA_ID)
+      references TRAINING_UNIT (ID);
 
 alter table FITNESSLEVEL
    add constraint FK_FITNESSL_HAS_USER foreign key (USE_ID)
@@ -1084,6 +1135,14 @@ alter table RECIPE_INGRIDIENT
    add constraint FK_RECIPE_I_RECIPE_IN_RECIPE foreign key (REC_ID)
       references RECIPE (ID);
 
+alter table RELATIONSHIP_23
+   add constraint FK_RELATION_CONTAINS7_TRAINING foreign key (ID)
+      references TRAINING_UNIT (ID);
+
+alter table RELATIONSHIP_23
+   add constraint FK_RELATION_IS_A_PART_TRAINING foreign key (TRA_ID)
+      references TRAINING_PLAN (ID);
+
 alter table TRAINING_PLAN_APPOINTMENT
    add constraint FK_TRAINING_CONTAINS_TRAINING foreign key (ID)
       references TRAINING_PLAN (ID);
@@ -1097,7 +1156,7 @@ alter table "USER"
       references AIM (ID);
 
 alter table "USER"
-   add constraint FK_USER_OWNS_FITNESSL foreign key (USE_ID, FIT_ID)
+   add constraint FK_USER_OWNS_FITNESSL foreign key (FIT_ID, FIT_ID)
       references FITNESSLEVEL (USE_ID, ID);
 
 alter table "USER"
