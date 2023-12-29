@@ -1,9 +1,10 @@
-namespace IncredibleFit.Screens;
-
-using CommunityToolkit.Maui.Views;
 using IncredibleFit.Models;
 using IncredibleFit.PopUps;
 using IncredibleFit.SQL;
+
+namespace IncredibleFit.Screens;
+
+using CommunityToolkit.Maui.Views;
 
 public partial class CalorieTracker : ContentPage
 {
@@ -19,8 +20,6 @@ public partial class CalorieTracker : ContentPage
     public void ChangeLabel()
     {
         UserBasalMetabolicRate.Text = currentUser.BasalMetabolicRate + " kcal";
-
-
     }
 
     void EditCaloriesClicked(object sender, EventArgs e)
