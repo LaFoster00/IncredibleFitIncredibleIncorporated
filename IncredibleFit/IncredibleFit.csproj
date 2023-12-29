@@ -67,36 +67,36 @@
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-        <PackageReference Include="Oracle.ManagedDataAccess" Version="21.12.0" />
+        <PackageReference Include="Oracle.ManagedDataAccess" Version="12.2.1100" />
         <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <MauiXaml Update="PopUps\EditCaloriesPopUp.xaml">
+      <MauiXaml Update="IncredibleFit\PopUps\EditCaloriesPopUp.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="Screens\CalorieTracker.xaml">
+      <MauiXaml Update="IncredibleFit\Screens\CalorieTracker.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="Screens\DietPlan.xaml">
+      <MauiXaml Update="IncredibleFit\Screens\DietPlan.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="Screens\Profile.xaml">
+      <MauiXaml Update="IncredibleFit\Screens\Profile.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="Screens\RecipeDetails.xaml">
+      <MauiXaml Update="IncredibleFit\Screens\RecipeDetails.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="Screens\RecipeSearch.xaml">
+      <MauiXaml Update="IncredibleFit\Screens\RecipeSearch.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="Screens\Settings.xaml">
+      <MauiXaml Update="IncredibleFit\Screens\Settings.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="Screens\Timeline.xaml">
+      <MauiXaml Update="IncredibleFit\Screens\Timeline.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="Screens\Training.xaml">
+      <MauiXaml Update="IncredibleFit\Screens\Training.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
     </ItemGroup>
