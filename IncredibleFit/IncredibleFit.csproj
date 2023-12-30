@@ -56,6 +56,8 @@
       <None Remove="Resources\Images\icon_minus.png" />
       <None Remove="Resources\Images\icon_plus.png" />
       <None Remove="Resources\Images\icon_profile.png" />
+      <None Remove="Resources\Images\icon_ruler.png" />
+      <None Remove="Resources\Images\icon_scale.png" />
       <None Remove="Resources\Images\icon_settings.png" />
       <None Remove="Resources\Images\icon_timeline.png" />
       <None Remove="Resources\Images\icon_training.png" />
