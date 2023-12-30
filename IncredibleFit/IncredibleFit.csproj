@@ -32,14 +32,13 @@
 
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" />
 
         <!-- Splash Screen -->
         <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
         <!-- Images -->
         <MauiImage Include="Resources\Images\*" />
-        <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
         <!-- Custom Fonts -->
         <MauiFont Include="Resources\Fonts\*" />
@@ -49,8 +48,62 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Resources\Images\icon_average.png" />
+      <None Remove="Resources\Images\icon_edit.png" />
+      <None Remove="Resources\Images\icon_food.png" />
+      <None Remove="Resources\Images\icon_heart.png" />
+      <None Remove="Resources\Images\icon_heart_filled.png" />
+      <None Remove="Resources\Images\icon_minus.png" />
+      <None Remove="Resources\Images\icon_plus.png" />
+      <None Remove="Resources\Images\icon_profile.png" />
+      <None Remove="Resources\Images\icon_settings.png" />
+      <None Remove="Resources\Images\icon_timeline.png" />
+      <None Remove="Resources\Images\icon_training.png" />
+      <None Remove="Resources\Images\incredible_fit_logo.jpeg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiImage Include="Resources\AppIcon\incredible_fit_logo.jpeg" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-        <PackageReference Include="Oracle.ManagedDataAccess" Version="21.12.0" />
+        <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" />
+        <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiXaml Update="IncredibleFit\PopUps\EditCaloriesPopUp.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\PopUps\EditRecipeSearchFilterPopUp.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\CalorieTracker.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\DietPlan.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\Profile.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\RecipeDetails.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\RecipeSearch.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\Settings.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\Timeline.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\Training.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
     </ItemGroup>
 
 </Project>
