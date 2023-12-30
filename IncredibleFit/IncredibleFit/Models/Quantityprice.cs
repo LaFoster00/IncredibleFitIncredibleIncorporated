@@ -4,26 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IncredibleFit.Models
+namespace IncredibleFit.IncredibleFit.Models
 {
     public class Quantityprice
     {
-        private int quantityUnit;
-        private int quantity;
-        private double priceLower;
-        private double priceUpper;
+        private int _quantityUnit;
+        private int _quantity;
+        private double _priceLower;
+        private double _priceUpper;
 
         public Quantityprice(int quantityUnit, int quantity, double priceLower, double priceUpper)
         {
-            this.quantityUnit = quantityUnit;
-            this.quantity = quantity;
-            this.priceLower = priceLower;
-            this.priceUpper = priceUpper;
+            this._quantityUnit = quantityUnit;
+            this._quantity = quantity;
+            this._priceLower = priceLower;
+            this._priceUpper = priceUpper;
         }
 
-        public int QuantityUnit { get { return quantityUnit; } set { quantityUnit = value; } }
-        public int Quantity { get { return quantity;} set { quantity = value; } }
-        public double PriceLower { get { return priceLower; } set { priceLower = value; } }
-        public double PriceUpper { get {  return priceUpper; } set { priceUpper = value; } }
+        public int QuantityUnit { get { return _quantityUnit; } set { _quantityUnit = value; } }
+        public int Quantity { get { return _quantity;} set { _quantity = value; } }
+        public double PriceLower { get { return _priceLower; } set { _priceLower = value; } }
+        public double PriceUpper { get {  return _priceUpper; } set { _priceUpper = value; } }
     }
 }

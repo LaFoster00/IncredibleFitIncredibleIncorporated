@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="IncredibleFit.Screens.CalorieTracker"
+             x:Class="IncredibleFit.IncredibleFit.Screens.CalorieTracker"
              Shell.NavBarIsVisible="False">
     <VerticalStackLayout>
         <Border>
@@ -22,100 +22,60 @@
                     FontAttributes="Bold"
                     FontSize="Medium"
                     Margin="0,0,0,10"/>
-                <Grid RowSpacing="15" ColumnSpacing="5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                <Grid RowSpacing="15" ColumnSpacing="5" HeightRequest="30">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0.5*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="KCAL" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
                     <Label Text="KH" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
                     <Label Text="P" Grid.Column="3" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
                     <Label Text="F" Grid.Column="4" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
-                    
-                    <Label Text="Mo" Grid.Row="1"/>
-                    <Label Text=" - " Grid.Row="1" Grid.Column="1" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="1" Grid.Column="2" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="1" Grid.Column="3" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="1" Grid.Column="4" HorizontalOptions="Center"/>
-                    <ImageButton Source="icon_edit.png" HeightRequest="20" WidthRequest="20"
-                                 Grid.Row="1" Grid.Column="5" Clicked="EditCaloriesClicked"
-                                 VerticalOptions="Center" HorizontalOptions="Center"/>
-
-                    <Label Text="Di" Grid.Row="2"/>
-                    <Label Text=" - " Grid.Row="2" Grid.Column="1" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="2" Grid.Column="2" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="2" Grid.Column="3" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="2" Grid.Column="4" HorizontalOptions="Center"/>
-                    <ImageButton Source="icon_edit.png" HeightRequest="20" WidthRequest="20"
-                                 Grid.Row="2" Grid.Column="5" Clicked="EditCaloriesClicked"
-                                 VerticalOptions="Center" HorizontalOptions="Center"/>
-
-                    <Label Text="Mi" Grid.Row="3"/>
-                    <Label Text=" - " Grid.Row="3" Grid.Column="1" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="3" Grid.Column="2" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="3" Grid.Column="3" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="3" Grid.Column="4" HorizontalOptions="Center"/>
-                    <ImageButton Source="icon_edit.png" HeightRequest="20" WidthRequest="20"
-                                 Grid.Row="3" Grid.Column="5" Clicked="EditCaloriesClicked"
-                                 VerticalOptions="Center" HorizontalOptions="Center"/>
-
-                    <Label Text="Do" Grid.Row="4"/>
-                    <Label Text=" - " Grid.Row="4" Grid.Column="1" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="4" Grid.Column="2" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="4" Grid.Column="3" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="4" Grid.Column="4" HorizontalOptions="Center"/>
-                    <ImageButton Source="icon_edit.png" HeightRequest="20" WidthRequest="20"
-                                 Grid.Row="4" Grid.Column="5" Clicked="EditCaloriesClicked"
-                                 VerticalOptions="Center" HorizontalOptions="Center"/>
-
-                    <Label Text="Fr" Grid.Row="5"/>
-                    <Label Text=" - " Grid.Row="5" Grid.Column="1" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="5" Grid.Column="2" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="5" Grid.Column="3" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="5" Grid.Column="4" HorizontalOptions="Center"/>
-                    <ImageButton Source="icon_edit.png" HeightRequest="20" WidthRequest="20"
-                                 Grid.Row="5" Grid.Column="5" Clicked="EditCaloriesClicked"
-                                 VerticalOptions="Center" HorizontalOptions="Center"/>
-
-                    <Label Text="Sa" Grid.Row="6"/>
-                    <Label Text=" - " Grid.Row="6" Grid.Column="1" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="6" Grid.Column="2" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="6" Grid.Column="3" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="6" Grid.Column="4" HorizontalOptions="Center"/>
-                    <ImageButton Source="icon_edit.png" HeightRequest="20" WidthRequest="20"
-                                 Grid.Row="6" Grid.Column="5" Clicked="EditCaloriesClicked"
-                                 VerticalOptions="Center" HorizontalOptions="Center"/>
-
-                    <Label Text="So" Grid.Row="7"/>
-                    <Label Text=" - " Grid.Row="7" Grid.Column="1" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="7" Grid.Column="2" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="7" Grid.Column="3" HorizontalOptions="Center"/>
-                    <Label Text=" - " Grid.Row="7" Grid.Column="4" HorizontalOptions="Center"/>
-                    <ImageButton Source="icon_edit.png" HeightRequest="20" WidthRequest="20"
-                                 Grid.Row="7" Grid.Column="5" Clicked="EditCaloriesClicked"
-                                 VerticalOptions="Center" HorizontalOptions="Center"/>
-
-                    <Image Source="icon_average.png" HeightRequest="15" WidthRequest="15" Grid.Row="8" HorizontalOptions="Start"/>
-                    <Label Text="0" Grid.Row="8" Grid.Column="1" HorizontalOptions="Center"/>
-                    <Label Text="0" Grid.Row="8" Grid.Column="2" HorizontalOptions="Center"/>
-                    <Label Text="0" Grid.Row="8" Grid.Column="3" HorizontalOptions="Center"/>
-                    <Label Text="0" Grid.Row="8" Grid.Column="4" HorizontalOptions="Center"/>
-
+                </Grid>
+                <ListView ItemsSource="{Binding weekCalorieTracks}" SeparatorVisibility="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid ColumnSpacing="5" HeightRequest="30">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.5*"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="0.5*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding Weekday}"/>
+                                    <Label Text="{Binding Kcal}" Grid.Column="1" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Kh}" Grid.Column="2" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding P}" Grid.Column="3" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding F}" Grid.Column="4" HorizontalOptions="Center"/>
+                                    <ImageButton Source="icon_edit.png" HeightRequest="20" WidthRequest="20"
+                                                 Grid.Column="5" Clicked="EditCaloriesClicked"
+                                                 VerticalOptions="Center" HorizontalOptions="Center"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Grid ColumnSpacing="5" HeightRequest="30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="icon_average.png" HeightRequest="15" WidthRequest="15" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <Label x:Name="averageKcalText" Grid.Column="1" HorizontalOptions="Center"/>
+                    <Label x:Name="averageKhText" Grid.Column="2" HorizontalOptions="Center"/>
+                    <Label x:Name="averagePText" Grid.Column="3" HorizontalOptions="Center"/>
+                    <Label x:Name="averageFText" Grid.Column="4" HorizontalOptions="Center"/>
                 </Grid>
             </StackLayout>
         </Border>

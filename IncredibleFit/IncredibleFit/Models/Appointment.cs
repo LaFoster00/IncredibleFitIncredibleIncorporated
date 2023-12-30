@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IncredibleFit.Models
+namespace IncredibleFit.IncredibleFit.Models
 {
     public class Appointment
     {
-        private DateTime date = new DateTime();
-        private bool isTraining;
-        private Recipe recipe;
+        private DateTime _date = new DateTime();
+        private bool _isTraining;
+        private Recipe _recipe;
     }
 }

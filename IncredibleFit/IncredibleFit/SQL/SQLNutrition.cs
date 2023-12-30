@@ -1,4 +1,4 @@
-﻿using IncredibleFit.Models;
+﻿using IncredibleFit.IncredibleFit.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IncredibleFit.SQL
+namespace IncredibleFit.IncredibleFit.SQL
 {
     public class SQLNutrition
     {
@@ -17,14 +17,36 @@ namespace IncredibleFit.SQL
 
             //get all Recipes from Database
 
-            recipes.Add(new Recipe("Lasagne", "Leckerer Auflauf mit Nudeln und Hackfleisch", "Bla", 1,"Fleischhaltig", 100, new List<Ingredient> { }));
+            recipes = getDummyRecipes();
+
+            return recipes;
+        }
+
+        public static ObservableCollection<Recipe> getRecipesByIngredientAndKeyword(string keyword, string ingredient)
+        {
+            //TODO Get Recipes from Database
+
+            return getDummyRecipes();
+        }
+
+        public static void SaveCalorieTrack(CalorieTrack calorieTrack)
+        {
+            //TODO Save calorieTrack in Database
+        }
+
+
+        private static ObservableCollection<Recipe> getDummyRecipes()
+        {
+            ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
+
+            recipes.Add(new Recipe("Lasagne", "Leckerer Auflauf mit Nudeln und Hackfleisch", "Bla", 1, "Fleischhaltig", 100, new List<Ingredient> { }));
             recipes.Add(new Recipe("Pfannkuchen", "Nach Wunsch belegte Teigfladen", "Bla", 1, "Vegetarisch", 50, new List<Ingredient> { }));
             List<Ingredient> ingredients = new List<Ingredient> { };
             ingredients.Add(new Ingredient("Zucchini", 1, 17.0, 1.2, 0.3, 1.5, 95.0, new Quantityprice(0, 400, 0.5, 1.0)));
             ingredients.Add(new Ingredient("Aubergine", 1, 25, 1, 0.2, 3.5, 92, new Quantityprice(0, 300, 1, 2)));
             ingredients.Add(new Ingredient("Paprika", 1, 31, 1, 0.3, 4.2, 92, new Quantityprice(0, 300, 0.7, 1.5)));
             ingredients.Add(new Ingredient("Tomate", 1, 18, 0.9, 0.2, 2.6, 94, new Quantityprice(0, 400, 0.3, 0.6)));
-            ingredients.Add(new Ingredient("Knoblauchzehe", 1, 149,6.4,0.5,1,58,new Quantityprice(0,20,0.2,0.4)));
+            ingredients.Add(new Ingredient("Knoblauchzehe", 1, 149, 6.4, 0.5, 1, 58, new Quantityprice(0, 20, 0.2, 0.4)));
             ingredients.Add(new Ingredient("Olivenöl", 1, 884, 0, 100, 0, 0, new Quantityprice(1, 30, 0.3, 0.6)));
             ingredients.Add(new Ingredient("Kräuter", 1, 0, 0, 0, 0, 0, new Quantityprice(0, 10, 0.5, 1.5)));
             int wholeEnergy = 0;
@@ -38,11 +60,6 @@ namespace IncredibleFit.SQL
                 1, "Vegetarisch", wholeEnergy, ingredients));
 
             return recipes;
-        }
-
-        public static void addRecipeToFavs(Recipe recipe)
-        {
-            //TODO
         }
     }
 }
