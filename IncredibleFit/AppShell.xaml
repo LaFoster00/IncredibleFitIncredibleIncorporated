@@ -16,7 +16,8 @@
         </Tab>
         <Tab Title="Training"
              Icon="icon_training.png">
-            <ShellContent ContentTemplate="{DataTemplate screens:Training}" />
+            <ShellContent Title="Training" ContentTemplate="{DataTemplate screens:Training}" />
+            <ShellContent Title="Trainingsplan" ContentTemplate="{DataTemplate screens:Trainingplan}" />
         </Tab>
         <Tab Title="Timeline"
              Icon="icon_timeline.png">

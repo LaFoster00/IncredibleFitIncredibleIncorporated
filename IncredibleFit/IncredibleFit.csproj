@@ -104,6 +104,9 @@
       <MauiXaml Update="IncredibleFit\Screens\Training.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\Trainingplan.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
     </ItemGroup>
 
 </Project>
