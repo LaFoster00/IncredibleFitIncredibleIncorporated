@@ -9,19 +9,16 @@ namespace IncredibleFit.IncredibleFit.SQL
     [Entity("ANGESTELLTER")]
     public class Angestellter
     {
-        [Field("ID")]
-        public int id { get; private set; }
+        [Field("ID")] public int Id { get; private set; } = -1;
 
-        [Field("NAME")]
-        public string name { get; set; }
+        [Field("NAME")] public string Name { get; set; } = String.Empty;
 
-        [Field("GEHALT")]
-        public double gehalt { get; set; }
+        [Field("VORNAME")] public string? Vorname { get; set; } = null;
 
-        [Field("KOMISSION")]
-        public double komission { get; set; }
+        [Field("GEHALT")] public double? Gehalt { get; set; } = null;
 
-        [Field("CHEF")]
-        public int chef {get; set; }
+        [Field("KOMISSION")] public double? Komission { get; set; } = null;
+
+        [Field("CHEF")] public int? Chef { get; set; } = null;
     }
 }
