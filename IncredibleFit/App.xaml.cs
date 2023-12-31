@@ -18,6 +18,8 @@ public partial class App : Application
         window.Created += (s, e) =>
         {
             OracleDatabase.Connect("", "");
+            var reader = OracleDatabase.ExecuteQuery(OracleDatabase.CreateCommand("SELECT * FROM ANGESTELLTER"));
+            var employees = reader.ToObjectList<Angestellter>();
         };
 
         window.Destroying += (sender, args) =>

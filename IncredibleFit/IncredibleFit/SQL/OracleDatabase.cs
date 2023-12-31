@@ -1,18 +1,44 @@
 ﻿#nullable enable
+using System.Data;
 using System.Diagnostics;
-using System.Threading;
+using System.Reflection;
+using System.Text;
 using Oracle.ManagedDataAccess.Client;
 
 namespace IncredibleFit.IncredibleFit.SQL
 {
-    internal class OracleDatabase : IDisposable, IAsyncDisposable
+    class OracleDatabase : IDisposable, IAsyncDisposable
     {
         private static OracleDatabase? _instance = null;
+
         public static OracleDatabase Instance
         {
             get => _instance ??= new OracleDatabase();
             private set => _instance = value;
         }
+
+        public static Dictionary<Type, DbType> TypeToDb = new()
+        {
+            { typeof(byte), DbType.Byte },
+            { typeof(sbyte), DbType.SByte },
+            { typeof(short), DbType.Int16 },
+            { typeof(ushort), DbType.UInt16 },
+            { typeof(int), DbType.Int32 },
+            { typeof(uint), DbType.UInt32 },
+            { typeof(long), DbType.Int64 },
+            { typeof(ulong), DbType.UInt64 },
+            { typeof(float), DbType.Single },
+            { typeof(double), DbType.Double },
+            { typeof(decimal), DbType.Decimal },
+            { typeof(bool), DbType.Boolean },
+            { typeof(string), DbType.String },
+            { typeof(char), DbType.StringFixedLength },
+            { typeof(Guid), DbType.Guid },
+            { typeof(DateTime), DbType.DateTime },
+            { typeof(DateTimeOffset), DbType.DateTimeOffset }
+        };
+
+        public static Dictionary<DbType, Type> DbToType = TypeToDb.ToDictionary(kv => kv.Value, kv => kv.Key);
 
         private OracleConnection? connection = null;
 
@@ -71,18 +97,14 @@ namespace IncredibleFit.IncredibleFit.SQL
             }
         }
 
-        public static OracleDataReader? ExecuteSqlQuery(OracleConnection connection, string query)
+        public static OracleDataReader? ExecuteQuery(OracleCommand? command)
         {
-            using var command = new OracleCommand(query, connection);
+            if (Instance.connection == null || command == null)
+                return null;
+
             try
             {
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    // Process the data, e.g., retrieve values from columns
-                    Console.WriteLine($"Column1: {reader["Column1"]}, Column2: {reader["Column2"]}");
-                }
-
+                var reader = command!.ExecuteReader();
                 return reader;
             }
             catch (Exception ex)
@@ -91,6 +113,93 @@ namespace IncredibleFit.IncredibleFit.SQL
             }
 
             return null;
+        }
+
+        public static OracleCommand? CreateCommand(string command)
+        {
+            return Instance.connection == null ? null : new OracleCommand(command, Instance.connection);
+        }
+
+        public static void InsertObjects<T>(List<T> objects)
+        {
+            if (Instance.connection == null)
+                return;
+
+            using var transaction = Instance.connection.BeginTransaction();
+
+            var commandBuilder = new StringBuilder();
+            commandBuilder.Append("INSERT INTO ");
+
+            #region RetreiveTableName
+            var typeInfo = typeof(T).GetTypeInfo();
+            var entityName = typeInfo.GetCustomAttribute<Entity>();
+            if (entityName == null)
+                return;
+            commandBuilder.Append(entityName.name);
+            #endregion
+
+            #region SetupParamList
+            var parameters = new List<Tuple<string, DbType, PropertyInfo>>();
+            foreach (var propertyInfo in typeInfo.GetProperties())
+            {
+                if (propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsPrivate)
+                    continue;
+                var fieldAttribute = propertyInfo.GetCustomAttribute<Field>();
+                if (fieldAttribute == null)
+                    continue;
+                parameters.Add(new Tuple<string, DbType, PropertyInfo>(
+                    fieldAttribute.name,
+                    TypeToDb[propertyInfo.PropertyType],
+                    propertyInfo)
+                );
+            }
+            #endregion
+
+            #region AddParamsAndValueParams
+            commandBuilder.Append('(');
+            foreach (var (name, dbType, propertyInfo) in parameters)
+            {
+                commandBuilder.Append(name);
+            }
+
+            commandBuilder.Append(") \n" +
+                                  "VALUES (");
+            foreach (var (name, dbType, propertyInfo) in parameters)
+            {
+                commandBuilder.Append('@').Append(name);
+            }
+
+            commandBuilder.Append(")");
+            #endregion
+
+            #region CreateCommandAndAddParams
+            using var command = CreateCommand(commandBuilder.ToString());
+            foreach (var (name, dbType, propertyInfo) in parameters)
+            {
+                command!.Parameters.Add($"@{name}", dbType);
+            }
+            #endregion
+
+            #region InsertDataIntoDb
+            try
+            {
+                foreach (var o in objects)
+                {
+                    for (var index = 0; index < parameters.Count; index++)
+                    {
+                        var (name, dbType, propertyInfo) = parameters[index];
+                        command!.Parameters[index].Value = propertyInfo.GetValue(o);
+                    }
+
+                    command!.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            #endregion
         }
 
         public static void CloseConnection()
