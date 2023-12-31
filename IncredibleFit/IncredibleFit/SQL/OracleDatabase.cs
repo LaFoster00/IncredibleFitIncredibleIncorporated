@@ -113,6 +113,7 @@ namespace IncredibleFit.IncredibleFit.SQL
             }
             catch (Exception ex)
             {
+                Instance.connection = null;
                 Debug.WriteLine($"Error: {ex.Message}");
                 if (ex.InnerException != null)
                 {
@@ -170,7 +171,7 @@ namespace IncredibleFit.IncredibleFit.SQL
             var parameters = new List<Tuple<string, OracleDbType, PropertyInfo>>();
             foreach (var propertyInfo in typeInfo.GetProperties())
             {
-                if (propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsPrivate && propertyInfo.GetCustomAttribute<ServersideSetup>() == null)
+                if (propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsPrivate && propertyInfo.GetCustomAttribute<AutoIncrement>() == null)
                     continue;
                 var fieldAttribute = propertyInfo.GetCustomAttribute<Field>();
                 if (fieldAttribute == null)
@@ -218,38 +219,47 @@ namespace IncredibleFit.IncredibleFit.SQL
 
             #region CreateCommandAndAddParams
             using var command = CreateCommand(commandBuilder.ToString());
+            command.CommandType = CommandType.Text;
             foreach (var (name, dbType, propertyInfo) in parameters)
             {
                 command!.Parameters.Add($"{name}", dbType);
             }
             #endregion
 
-            Debug.WriteLine(commandBuilder);
-
             #region InsertDataIntoDb
-            try
-            {
-                foreach (var o in objects)
-                {
-                    for (var index = 0; index < parameters.Count; index++)
-                    {
-                        var (name, dbType, propertyInfo) = parameters[index];
-                        var value = propertyInfo.GetValue(o);
-                        if (value == null)
-                            command!.Parameters[index].Value = DBNull.Value;
-                        else
-                            command!.Parameters[index].Value = propertyInfo.GetValue(o);
-                    }
 
+
+            foreach (var o in objects)
+            {
+                for (var index = 0; index < parameters.Count; index++)
+                {
+                    var (name, dbType, propertyInfo) = parameters[index];
+                    var value = propertyInfo.GetValue(o);
+                    command!.Parameters[index].Direction = ParameterDirection.InputOutput;
+                    if (value == null || propertyInfo.GetCustomAttribute<AutoIncrement>() != null)
+                        command!.Parameters[index].Value = DBNull.Value;
+                    else
+                        command!.Parameters[index].Value = propertyInfo.GetValue(o);
+                }
+
+                try
+                {
                     command!.ExecuteNonQuery();
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
+                catch (OracleException e)
+                {
+                    Debug.WriteLine(e);
+                    var inner = e.InnerException;
+                    while (inner != null)
+                    {
+                        Debug.WriteLine(inner);
+                        inner = inner.InnerException;
+                    }
+                }
             }
             #endregion
+
+            transaction.Commit();
         }
 
         public static void CloseConnection()
