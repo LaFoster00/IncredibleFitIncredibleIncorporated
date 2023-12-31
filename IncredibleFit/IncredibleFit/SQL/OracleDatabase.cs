@@ -16,28 +16,57 @@ namespace IncredibleFit.IncredibleFit.SQL
             private set => _instance = value;
         }
 
-        public static Dictionary<Type, DbType> TypeToDb = new()
+        // https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/oracle-data-type-mappings
+        public static Dictionary<OracleDbType, Type> DbToType = new()
         {
-            { typeof(byte), DbType.Byte },
-            { typeof(sbyte), DbType.SByte },
-            { typeof(short), DbType.Int16 },
-            { typeof(ushort), DbType.UInt16 },
-            { typeof(int), DbType.Int32 },
-            { typeof(uint), DbType.UInt32 },
-            { typeof(long), DbType.Int64 },
-            { typeof(ulong), DbType.UInt64 },
-            { typeof(float), DbType.Single },
-            { typeof(double), DbType.Double },
-            { typeof(decimal), DbType.Decimal },
-            { typeof(bool), DbType.Boolean },
-            { typeof(string), DbType.String },
-            { typeof(char), DbType.StringFixedLength },
-            { typeof(Guid), DbType.Guid },
-            { typeof(DateTime), DbType.DateTime },
-            { typeof(DateTimeOffset), DbType.DateTimeOffset }
+            { OracleDbType.Char, typeof(string) },
+            { OracleDbType.NChar, typeof(string) },
+            { OracleDbType.Date, typeof(DateTime) },
+            { OracleDbType.IntervalDS, typeof(TimeSpan) },
+            { OracleDbType.IntervalYM, typeof(long) },
+            { OracleDbType.Long, typeof(string) },
+            { OracleDbType.Raw, typeof(byte[]) },
+            { OracleDbType.LongRaw, typeof(byte[]) },
+            { OracleDbType.Int16, typeof(short)},
+            { OracleDbType.Int32, typeof(int)},
+            { OracleDbType.Int64, typeof(long)},
+            { OracleDbType.Single, typeof(object[])}, // --> not validated
+            { OracleDbType.BinaryFloat, typeof(float) },
+            { OracleDbType.Double, typeof(double)}, // --> not validated
+            { OracleDbType.BinaryDouble, typeof(double) },
+            { OracleDbType.Decimal, typeof(decimal) },
+            { OracleDbType.BFile, typeof(byte[]) },
+            { OracleDbType.Blob, typeof(byte[]) },
+            { OracleDbType.Clob, typeof(string) },
+            { OracleDbType.Json, typeof(string) },
+            { OracleDbType.TimeStamp, typeof(DateTime) },
+            { OracleDbType.TimeStampTZ, typeof(DateTime) },
+            { OracleDbType.TimeStampLTZ, typeof(DateTime) },
+            { OracleDbType.Array, typeof(List<object>)}, // --> not validated
+            { OracleDbType.Ref, typeof(string) },
+            { OracleDbType.Varchar2, typeof(string) },
+            { OracleDbType.NVarchar2, typeof(string) },
+            { OracleDbType.Object, typeof(object) },
+            { OracleDbType.ObjectAsJson, typeof(string) },
+            // Add more as needed
         };
 
-        public static Dictionary<DbType, Type> DbToType = TypeToDb.ToDictionary(kv => kv.Value, kv => kv.Key);
+        public static Dictionary<Type, OracleDbType> TypeToDb = new()
+        {
+            { typeof(DateTime), OracleDbType.Date },
+            { typeof(decimal), OracleDbType.Decimal },
+            { typeof(byte), OracleDbType.Byte },
+            { typeof(short), OracleDbType.Int16 },
+            { typeof(int), OracleDbType.Int32 },
+            { typeof(long), OracleDbType.Int64 },
+            { typeof(float), OracleDbType.Single },
+            { typeof(double), OracleDbType.Double },
+            { typeof(bool), OracleDbType.Boolean },
+            { typeof(string), OracleDbType.Varchar2 },
+            { typeof(byte[]), OracleDbType.Raw },
+            { typeof(DateTimeOffset), OracleDbType.TimeStampTZ },
+            // Add more as needed
+        };
 
         private OracleConnection? connection = null;
 
@@ -134,38 +163,54 @@ namespace IncredibleFit.IncredibleFit.SQL
             var entityName = typeInfo.GetCustomAttribute<Entity>();
             if (entityName == null)
                 return;
-            commandBuilder.Append(entityName.name);
+            commandBuilder.Append(entityName.name).Append(' ');
             #endregion
 
             #region SetupParamList
-            var parameters = new List<Tuple<string, DbType, PropertyInfo>>();
+            var parameters = new List<Tuple<string, OracleDbType, PropertyInfo>>();
             foreach (var propertyInfo in typeInfo.GetProperties())
             {
-                if (propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsPrivate)
+                if (propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsPrivate && propertyInfo.GetCustomAttribute<ServersideSetup>() == null)
                     continue;
                 var fieldAttribute = propertyInfo.GetCustomAttribute<Field>();
                 if (fieldAttribute == null)
                     continue;
-                parameters.Add(new Tuple<string, DbType, PropertyInfo>(
-                    fieldAttribute.name,
-                    TypeToDb[propertyInfo.PropertyType],
-                    propertyInfo)
-                );
+                if (fieldAttribute.Mapping == null)
+                {
+                    Type propType = propertyInfo.PropertyType;
+                    if (Nullable.GetUnderlyingType(propType) != null)
+                        propType = Nullable.GetUnderlyingType(propType) ?? throw new InvalidOperationException();
+
+                    parameters.Add(new Tuple<string, OracleDbType, PropertyInfo>(
+                        fieldAttribute.Name,
+                        TypeToDb[propType],
+                        propertyInfo)
+                    );
+                }
+                else
+                {
+                    parameters.Add(new Tuple<string, OracleDbType, PropertyInfo>(
+                        fieldAttribute.Name,
+                        fieldAttribute.Mapping.Value,
+                        propertyInfo)
+                    );
+                }
             }
             #endregion
 
             #region AddParamsAndValueParams
             commandBuilder.Append('(');
-            foreach (var (name, dbType, propertyInfo) in parameters)
+            for (var i = 0; i < parameters.Count; i++)
             {
-                commandBuilder.Append(name);
+                var (name, dbType, propertyInfo) = parameters[i];
+                commandBuilder.Append(name).Append(i < parameters.Count - 1 ? ", " : "");
             }
 
-            commandBuilder.Append(") \n" +
-                                  "VALUES (");
-            foreach (var (name, dbType, propertyInfo) in parameters)
+            commandBuilder.Append(")\nVALUES (");
+            for (var i = 0; i < parameters.Count; i++)
             {
-                commandBuilder.Append('@').Append(name);
+                var (name, dbType, propertyInfo) = parameters[i];
+                commandBuilder.Append(':').Append(name).Append(i < parameters.Count - 1 ? ", " : "");
             }
 
             commandBuilder.Append(")");
@@ -175,9 +220,11 @@ namespace IncredibleFit.IncredibleFit.SQL
             using var command = CreateCommand(commandBuilder.ToString());
             foreach (var (name, dbType, propertyInfo) in parameters)
             {
-                command!.Parameters.Add($"@{name}", dbType);
+                command!.Parameters.Add($"{name}", dbType);
             }
             #endregion
+
+            Debug.WriteLine(commandBuilder);
 
             #region InsertDataIntoDb
             try
@@ -187,7 +234,11 @@ namespace IncredibleFit.IncredibleFit.SQL
                     for (var index = 0; index < parameters.Count; index++)
                     {
                         var (name, dbType, propertyInfo) = parameters[index];
-                        command!.Parameters[index].Value = propertyInfo.GetValue(o);
+                        var value = propertyInfo.GetValue(o);
+                        if (value == null)
+                            command!.Parameters[index].Value = DBNull.Value;
+                        else
+                            command!.Parameters[index].Value = propertyInfo.GetValue(o);
                     }
 
                     command!.ExecuteNonQuery();
