@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -97,9 +96,9 @@ namespace IncredibleFit.IncredibleFit.SQL
             }
         }
 
-        public static OracleDataReader? ExecuteQuery(OracleCommand? command)
+        public static OracleDataReader? ExecuteQuery(OracleCommand command)
         {
-            if (Instance.connection == null || command == null)
+            if (Instance.connection == null)
                 return null;
 
             try
@@ -115,9 +114,9 @@ namespace IncredibleFit.IncredibleFit.SQL
             return null;
         }
 
-        public static OracleCommand? CreateCommand(string command)
+        public static OracleCommand CreateCommand(string command)
         {
-            return Instance.connection == null ? null : new OracleCommand(command, Instance.connection);
+            return new OracleCommand(command, Instance.connection);
         }
 
         public static void InsertObjects<T>(List<T> objects)

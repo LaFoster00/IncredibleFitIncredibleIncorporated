@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,12 +13,18 @@ namespace IncredibleFit.IncredibleFit.SQL
 {
     public static class DatabaseExtensions
     {
-        public static List<T> ToObjectList<T>(this OracleDataReader reader)
+        public static List<T> ToObjectList<T>(this OracleDataReader? reader)
         {
-            TypeInfo typeInfo = typeof(T).GetTypeInfo();
+            if (reader == null)
+            {
+                Debug.WriteLine("Reader is null. Cant convert to list of objects.");
+                return new List<T>();
+            }
+            var typeInfo = typeof(T).GetTypeInfo();
             var entityName = typeInfo.GetCustomAttribute(typeof(Entity));
             if (entityName == null)
-                return null;
+                return new List<T>();
+
             var list = new List<T>();
             while (reader.Read())
             {
@@ -29,18 +36,17 @@ namespace IncredibleFit.IncredibleFit.SQL
                         continue;
                     for (var i = 0; i < reader.FieldCount; i++)
                     {
-                        if (reader.GetName(i).Equals(fieldAttribute.name))
+                        if (!reader.GetName(i).Equals(fieldAttribute.name))
+                            continue;
+                        if (!reader.GetValue(i).Equals(DBNull.Value))
                         {
-                            if (!reader.GetValue(i).Equals(DBNull.Value))
-                            {
-                                propertyInfo.SetValue(newInstance,
-                                    Convert.ChangeType(
-                                        reader.GetValue(i),
-                                        reader.GetFieldType(i)));
-                            }
-
-                            break;
+                            propertyInfo.SetValue(newInstance,
+                                Convert.ChangeType(
+                                    reader.GetValue(i),
+                                    reader.GetFieldType(i)));
                         }
+
+                        break;
                     }
                 }
                 list.Add(newInstance);
