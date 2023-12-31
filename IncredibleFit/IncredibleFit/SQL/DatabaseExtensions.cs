@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace IncredibleFit.IncredibleFit.SQL
     {
         public static List<T> ToObjectList<T>(this OracleDataReader? reader)
         {
+            ToNullable(0);
             if (reader == null)
             {
                 Debug.WriteLine("Reader is null. Cant convert to list of objects.");
@@ -28,7 +30,7 @@ namespace IncredibleFit.IncredibleFit.SQL
             var list = new List<T>();
             while (reader.Read())
             {
-                var newInstance = Activator.CreateInstance<T>();
+                var newInstance = (T)Activator.CreateInstance(typeof(T), true)!;
                 foreach (var propertyInfo in typeInfo.GetProperties())
                 {
                     var fieldAttribute = propertyInfo.GetCustomAttribute<Field>();
@@ -36,14 +38,22 @@ namespace IncredibleFit.IncredibleFit.SQL
                         continue;
                     for (var i = 0; i < reader.FieldCount; i++)
                     {
-                        if (!reader.GetName(i).Equals(fieldAttribute.name))
+                        if (!reader.GetName(i).Equals(fieldAttribute.Name))
                             continue;
-                        if (!reader.GetValue(i).Equals(DBNull.Value))
+                        if (reader.GetValue(i).Equals(DBNull.Value))
+                            break;
+                        if (Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null)
                         {
+                            var nullableInfo = typeof(DatabaseExtensions).GetMethods();
+                            var toNullableConverter = ToNullableInfo!.MakeGenericMethod(propertyInfo.PropertyType);
                             propertyInfo.SetValue(newInstance,
-                                Convert.ChangeType(
-                                    reader.GetValue(i),
-                                    reader.GetFieldType(i)));
+                                toNullableConverter.Invoke(null, new[]{
+                                    reader.GetValue(i)
+                                }));
+                        }
+                        else
+                        {
+                            propertyInfo.SetValue(newInstance, reader.GetValue(i));
                         }
 
                         break;
@@ -52,6 +62,13 @@ namespace IncredibleFit.IncredibleFit.SQL
                 list.Add(newInstance);
             }
             return list;
+        }
+
+        private static readonly MethodInfo ToNullableInfo = typeof(DatabaseExtensions).GetMethod("ToNullable") ?? throw new InvalidOperationException();
+
+        public static T? ToNullable<T>(T value)
+        {
+            return (T?)value;
         }
     }
 }
