@@ -37,7 +37,7 @@ namespace IncredibleFit.IncredibleFit.SQL
     }
 
     [AttributeUsage(AttributeTargets.Property)]
-    public class ServersideSetup : Attribute
+    public class AutoIncrement : Attribute
     {
 
     }

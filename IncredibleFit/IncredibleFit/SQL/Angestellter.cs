@@ -10,13 +10,13 @@ namespace IncredibleFit.IncredibleFit.SQL
     [Entity("ANGESTELLTER")]
     public class Angestellter
     {
-        [Field("ID", OracleDbType.Int32), ServersideSetup] public int Id { get; private set; } = 25;
+        [Field("ID", OracleDbType.Int32), AutoIncrement] public int Id { get; private set; } = -1;
 
-        [Field("NAME", OracleDbType.Varchar2)] public string Name { get; set; }
+        [Field("NAME")] public string Name { get; set; }
 
-        [Field("VORNAME", OracleDbType.Varchar2)] public string? Vorname { get; set; }
+        [Field("VORNAME")] public string? Vorname { get; set; }
 
-        [Field("GEHALT", OracleDbType.Double)] public double? Gehalt { get; set; }
+        [Field("GEHALT")] public double? Gehalt { get; set; }
 
         [Field("KOMMISSION")] public double? Kommission { get; set; }
 
