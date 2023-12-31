@@ -1,4 +1,4 @@
-namespace IncredibleFit.Screens;
+namespace IncredibleFit.IncredibleFit.Screens;
 
 public partial class Settings : ContentPage
 {

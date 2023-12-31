@@ -1,10 +1,10 @@
-using IncredibleFit.Models;
+using IncredibleFit.IncredibleFit.Models;
 
-namespace IncredibleFit.Screens;
+namespace IncredibleFit.IncredibleFit.Screens;
 
 public partial class DietPlan : ContentPage
 {
-    private Recipe nextRecipe = null;
+    private Recipe _nextRecipe = null;
 	public DietPlan()
 	{
 		InitializeComponent();
@@ -16,6 +16,6 @@ public partial class DietPlan : ContentPage
 	}
     void RecipeClicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new RecipeDetails(nextRecipe));
+        Navigation.PushAsync(new RecipeDetails(_nextRecipe));
     }
 }

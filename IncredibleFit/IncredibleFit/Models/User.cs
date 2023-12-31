@@ -1,33 +1,33 @@
-﻿namespace IncredibleFit.Models
+﻿namespace IncredibleFit.IncredibleFit.Models
 {
     public class User
     {
-        private String name;
-        private double weight;
-        private double height;
-        private double bodyFatPercentage;
-        private int basalMetabolicRate;
-        private Aim aim;
-        private String fitnesslevel;
+        private String _name;
+        private double _weight;
+        private double _height;
+        private double _bodyFatPercentage;
+        private int _basalMetabolicRate;
+        private Aim _aim;
+        private String _fitnesslevel;
 
         public User(string name, double weight, double height, double bodyFatPercentage, int basalMetabolicRate, Aim aim, string fitnesslevel)
         {
-            this.name = name;
-            this.weight = weight;
-            this.height = height;
-            this.bodyFatPercentage = bodyFatPercentage;
-            this.basalMetabolicRate = basalMetabolicRate;
-            this.aim = aim;
-            this.fitnesslevel = fitnesslevel;
+            this._name = name;
+            this._weight = weight;
+            this._height = height;
+            this._bodyFatPercentage = bodyFatPercentage;
+            this._basalMetabolicRate = basalMetabolicRate;
+            this._aim = aim;
+            this._fitnesslevel = fitnesslevel;
         }
 
-        public string Name { get { return name; } set { name = value; } }
-        public double Weight { get { return weight;} set { weight = value; } }
-        public double Height { get { return height;} set { height = value; } }  
-        public double BodyFatPercentage { get { return bodyFatPercentage; } set { bodyFatPercentage = value; } }
-        public int BasalMetabolicRate { get {  return basalMetabolicRate; } set { basalMetabolicRate= value; } }
-        public Aim Aim { get {  return aim; } set {  aim = value; } }
-        public string Fitnesslevel { get {  return fitnesslevel; } set {  fitnesslevel = value; } }
+        public string Name { get { return _name; } set { _name = value; } }
+        public double Weight { get { return _weight;} set { _weight = value; } }
+        public double Height { get { return _height;} set { _height = value; } }  
+        public double BodyFatPercentage { get { return _bodyFatPercentage; } set { _bodyFatPercentage = value; } }
+        public int BasalMetabolicRate { get {  return _basalMetabolicRate; } set { _basalMetabolicRate= value; } }
+        public Aim Aim { get {  return _aim; } set {  _aim = value; } }
+        public string Fitnesslevel { get {  return _fitnesslevel; } set {  _fitnesslevel = value; } }
 
     }
 }

@@ -1,17 +1,17 @@
-﻿namespace IncredibleFit.Models
+﻿namespace IncredibleFit.IncredibleFit.Models
 {
     public class Aim
     {
-        private String targetDescription;
-        private double targetWeight;
+        private String _targetDescription;
+        private double _targetWeight;
 
         public Aim(string targetDescription, double targetWeight)
         {
-            TargetDescription = targetDescription;
-            TargetWeight = targetWeight;
+            this._targetDescription = targetDescription;
+            this._targetWeight = targetWeight;
         }
 
-        public string TargetDescription { get { return targetDescription; } set { targetDescription = value; } }
-        public double TargetWeight{ get { return targetWeight; } set { targetWeight = value; } }
+        public string TargetDescription { get { return _targetDescription; } set { _targetDescription = value; } }
+        public double TargetWeight{ get { return _targetWeight; } set { _targetWeight = value; } }
     }
 }
