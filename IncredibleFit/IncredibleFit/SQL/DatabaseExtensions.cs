@@ -44,7 +44,6 @@ namespace IncredibleFit.IncredibleFit.SQL
                             break;
                         if (Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null)
                         {
-                            var nullableInfo = typeof(DatabaseExtensions).GetMethods();
                             var toNullableConverter = ToNullableInfo!.MakeGenericMethod(propertyInfo.PropertyType);
                             propertyInfo.SetValue(newInstance,
                                 toNullableConverter.Invoke(null, new[]{
