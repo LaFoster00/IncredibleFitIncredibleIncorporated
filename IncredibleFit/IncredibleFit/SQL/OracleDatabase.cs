@@ -149,55 +149,28 @@ namespace IncredibleFit.IncredibleFit.SQL
             return new OracleCommand(command, Instance.connection);
         }
 
-        public static void InsertObjects<T>(List<T> objects)
+        public static Entity? GetEntityAttribute(TypeInfo info)
         {
-            if (Instance.connection == null)
-                return;
+            return info.GetCustomAttribute<Entity>();
+        }
 
-            using var transaction = Instance.connection.BeginTransaction();
+
+        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<PropertyInfo> parameters)> TypeInsertCommands = new();
+        private static (OracleCommand command, IReadOnlyList<PropertyInfo> parameters) GetInsertCommand<T>()
+        {
+            if (TypeInsertCommands.ContainsKey(typeof(T)))
+                return TypeInsertCommands[typeof(T)];
 
             var commandBuilder = new StringBuilder();
             commandBuilder.Append("INSERT INTO ");
 
             #region RetreiveTableName
             var typeInfo = typeof(T).GetTypeInfo();
-            var entityName = typeInfo.GetCustomAttribute<Entity>();
-            if (entityName == null)
-                return;
-            commandBuilder.Append(entityName.name).Append(' ');
+            var entityName = GetEntityAttribute(typeInfo);
+            commandBuilder.Append(entityName!.name).Append(' ');
             #endregion
 
-            #region SetupParamList
-            var parameters = new List<Tuple<string, OracleDbType, PropertyInfo>>();
-            foreach (var propertyInfo in typeInfo.GetProperties())
-            {
-                if (propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsPrivate && propertyInfo.GetCustomAttribute<AutoIncrement>() == null)
-                    continue;
-                var fieldAttribute = propertyInfo.GetCustomAttribute<Field>();
-                if (fieldAttribute == null)
-                    continue;
-                if (fieldAttribute.Mapping == null)
-                {
-                    Type propType = propertyInfo.PropertyType;
-                    if (Nullable.GetUnderlyingType(propType) != null)
-                        propType = Nullable.GetUnderlyingType(propType) ?? throw new InvalidOperationException();
-
-                    parameters.Add(new Tuple<string, OracleDbType, PropertyInfo>(
-                        fieldAttribute.Name,
-                        TypeToDb[propType],
-                        propertyInfo)
-                    );
-                }
-                else
-                {
-                    parameters.Add(new Tuple<string, OracleDbType, PropertyInfo>(
-                        fieldAttribute.Name,
-                        fieldAttribute.Mapping.Value,
-                        propertyInfo)
-                    );
-                }
-            }
-            #endregion
+            var parameters = GetParameterList(typeof(T));
 
             #region AddParamsAndValueParams
             commandBuilder.Append('(');
@@ -214,52 +187,116 @@ namespace IncredibleFit.IncredibleFit.SQL
                 commandBuilder.Append(':').Append(name).Append(i < parameters.Count - 1 ? ", " : "");
             }
 
-            commandBuilder.Append(")");
+            commandBuilder.Append(')');
             #endregion
 
-            #region CreateCommandAndAddParams
-            using var command = CreateCommand(commandBuilder.ToString());
-            command.CommandType = CommandType.Text;
-            foreach (var (name, dbType, propertyInfo) in parameters)
-            {
-                command!.Parameters.Add($"{name}", dbType);
-            }
-            #endregion
+            TypeInsertCommands.Add(
+                typeof(T),
+                (SetupCommandWithParams(commandBuilder, parameters), parameters.Select(tuple => tuple.Item3).ToList()));
+            return TypeInsertCommands[typeof(T)];
+        }
 
-            #region InsertDataIntoDb
+        public static void InsertObject<T>(T o)
+        {
+            if (Instance.connection == null)
+                return;
+
+            var entityName = GetEntityAttribute(typeof(T).GetTypeInfo());
+            if (entityName == null)
+                return;
+
+            ExecuteCommandWithObjectData(GetInsertCommand<T>(), o);
+        }
 
 
+        public static void InsertObjects<T>(List<T> objects)
+        {
+            if (Instance.connection == null)
+                return;
+
+            using var transaction = Instance.connection.BeginTransaction();
             foreach (var o in objects)
             {
-                for (var index = 0; index < parameters.Count; index++)
-                {
-                    var (name, dbType, propertyInfo) = parameters[index];
-                    var value = propertyInfo.GetValue(o);
-                    command!.Parameters[index].Direction = ParameterDirection.InputOutput;
-                    if (value == null || propertyInfo.GetCustomAttribute<AutoIncrement>() != null)
-                        command!.Parameters[index].Value = DBNull.Value;
-                    else
-                        command!.Parameters[index].Value = propertyInfo.GetValue(o);
-                }
+                InsertObject<T>(o);
+            }
+            transaction.Commit();
+        }
 
-                try
+        private static void ExecuteCommandWithObjectData(in (OracleCommand command, IReadOnlyList<PropertyInfo> parameters) c, in object o)
+        {
+            for (var index = 0; index < c.parameters.Count; index++)
+            {
+                var propertyInfo = c.parameters[index];
+                var value = propertyInfo.GetValue(o);
+                c.command!.Parameters[index].Direction = ParameterDirection.InputOutput;
+                if (value == null || propertyInfo.GetCustomAttribute<AutoIncrement>() != null)
+                    c.command!.Parameters[index].Value = DBNull.Value;
+                else
+                    c.command!.Parameters[index].Value = propertyInfo.GetValue(o);
+            }
+
+            try
+            {
+                c.command.ExecuteNonQuery();
+            }
+            catch (OracleException e)
+            {
+                Debug.WriteLine(e);
+                var inner = e.InnerException;
+                while (inner != null)
                 {
-                    command!.ExecuteNonQuery();
-                }
-                catch (OracleException e)
-                {
-                    Debug.WriteLine(e);
-                    var inner = e.InnerException;
-                    while (inner != null)
-                    {
-                        Debug.WriteLine(inner);
-                        inner = inner.InnerException;
-                    }
+                    Debug.WriteLine(inner);
+                    inner = inner.InnerException;
                 }
             }
-            #endregion
+        }
 
-            transaction.Commit();
+        private static OracleCommand SetupCommandWithParams(in StringBuilder commandBuilder, in IReadOnlyList<(string name, OracleDbType type, PropertyInfo property)> parameters)
+        {
+            var command = CreateCommand(commandBuilder.ToString());
+            command.CommandType = CommandType.Text;
+            foreach (var param in parameters)
+            {
+                command!.Parameters.Add($"{param.name}", param.type);
+            }
+
+            return command;
+        }
+
+        private static List<(string name, OracleDbType type, PropertyInfo property)> GetParameterList(Type type)
+        { 
+            var parameters = new List<ValueTuple<string, OracleDbType, PropertyInfo>>();
+            foreach (var propertyInfo in type.GetProperties())
+            {
+                if (propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsPrivate &&
+                    propertyInfo.GetCustomAttribute<AutoIncrement>() == null)
+                    continue;
+                var fieldAttribute = propertyInfo.GetCustomAttribute<Field>();
+                if (fieldAttribute == null)
+                    continue;
+                if (fieldAttribute.Mapping == null)
+                {
+                    Type propType = propertyInfo.PropertyType;
+                    if (Nullable.GetUnderlyingType(propType) != null)
+                        propType = Nullable.GetUnderlyingType(propType) ?? throw new InvalidOperationException();
+
+                    parameters.Add(new ValueTuple<string, OracleDbType, PropertyInfo>(
+                        fieldAttribute.Name,
+                        TypeToDb[propType],
+                        propertyInfo)
+                    );
+                }
+                else
+                {
+                    parameters.Add(new ValueTuple<string, OracleDbType, PropertyInfo>(
+                        fieldAttribute.Name,
+                        fieldAttribute.Mapping.Value,
+                        propertyInfo)
+                    );
+                }
+            }
+
+            return parameters;
         }
 
         public static void CloseConnection()
