@@ -16,7 +16,6 @@ namespace IncredibleFit.IncredibleFit.SQL
     {
         public static List<T> ToObjectList<T>(this OracleDataReader? reader)
         {
-            ToNullable(0);
             if (reader == null)
             {
                 Debug.WriteLine("Reader is null. Cant convert to list of objects.");

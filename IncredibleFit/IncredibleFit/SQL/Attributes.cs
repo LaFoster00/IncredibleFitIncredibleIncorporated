@@ -41,4 +41,10 @@ namespace IncredibleFit.IncredibleFit.SQL
     {
 
     }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class ID : Attribute
+    {
+
+    }
 }
