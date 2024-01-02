@@ -17,7 +17,7 @@ public partial class App : Application
 
         window.Created += (s, e) =>
         {
-            OracleDatabase.Connect("", "");
+            OracleDatabase.Connect("incrediblefit", "IncFitIncInc");
             var reader = OracleDatabase.ExecuteQuery(OracleDatabase.CreateCommand("SELECT * FROM ANGESTELLTER"));
             var employees = reader.ToObjectList<Angestellter>();
             var testDieter = new Angestellter("John", "Doe", 50000, 0.1, null);
