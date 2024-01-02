@@ -6,9 +6,7 @@ using System.Text;
 using Oracle.ManagedDataAccess.Client;
 
 namespace IncredibleFit.IncredibleFit.SQL
-{
-
-
+{ 
     class OracleDatabase : IDisposable, IAsyncDisposable
     {
         private struct CommandParameter
@@ -228,7 +226,7 @@ namespace IncredibleFit.IncredibleFit.SQL
             commandBuilder.Append(entityName!.name).Append(' ');
             #endregion
 
-            var parameters = GetParameterList(typeof(T));
+            var parameters = GetParameterList(typeof(T), true);
 
             #region AddParamsAndValueParams
             commandBuilder.Append("(\n");
@@ -275,7 +273,7 @@ namespace IncredibleFit.IncredibleFit.SQL
             commandBuilder.Append(entityName!.name).Append(' ');
             #endregion
 
-            var parameters = GetParameterList(typeof(T));
+            var parameters = GetParameterList(typeof(T), false);
 
             #region AddParamsAndValueParams
             commandBuilder.Append("\nSET");
@@ -285,10 +283,10 @@ namespace IncredibleFit.IncredibleFit.SQL
                 commandBuilder.Append($"\t{param.Name} = :{param.Name}").Append(i < parameters.Count - 1 ? ",\n" : "\n");
             }
 
-            var idProperty = GetIdProperty<T>();
+            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
             parameters.Add(idProperty);
 
-            //commandBuilder.Append($"WHERE {entityName.name}.{idProperty.Name} = :{idProperty.Name}");
+            commandBuilder.Append($"WHERE {entityName.name}.{idProperty.Name} = :{idProperty.Name}");
             #endregion
 
             TypeUpdateCommands.Add(
@@ -312,7 +310,6 @@ namespace IncredibleFit.IncredibleFit.SQL
                 var value = param.PropertyInfo.GetValue(o);
                 c.command.Parameters[param.Name].Value = value ?? DBNull.Value;
             }
-
 
             try
             {
@@ -352,7 +349,6 @@ namespace IncredibleFit.IncredibleFit.SQL
                 if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
                 {
                     command.Parameters.Add($"{GeneratedExt}{param.Name}", param.Type, param.Direction);
-                    command.Parameters[$"{GeneratedExt}{param.Name}"].IsNullable = param.Nullable;
                 }
 
                 if (param.Direction is not (ParameterDirection.Output or ParameterDirection.ReturnValue))
@@ -366,14 +362,17 @@ namespace IncredibleFit.IncredibleFit.SQL
         }
 
         // Marks private setters as output values to be set in class after operation
-        private static List<CommandParameter> GetParameterList(in Type type)
+        private static List<CommandParameter> GetParameterList(in Type type, in bool readBack)
         {
             var parameters = new List<CommandParameter>();
             foreach (var propertyInfo in type.GetProperties())
             {
                 var direction = ParameterDirection.Input;
                 if (propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsPrivate)
-                    direction = ParameterDirection.Output;
+                    if (readBack)
+                        direction = ParameterDirection.ReturnValue;
+                    else
+                        continue;
 
                 var fieldAttribute = propertyInfo.GetCustomAttribute<Field>();
                 if (fieldAttribute == null)
@@ -392,7 +391,7 @@ namespace IncredibleFit.IncredibleFit.SQL
             return parameters;
         }
 
-        private static CommandParameter GetIdProperty<T>()
+        private static CommandParameter GetIdProperty<T>(ParameterDirection direction)
         {
             try
             {
@@ -401,7 +400,7 @@ namespace IncredibleFit.IncredibleFit.SQL
                 var field = info.GetCustomAttribute<Field>()!;
                 var name = field.Name;
                 var type = GetOracleDbType(info, field);
-                return new CommandParameter(name, info, ParameterDirection.InputOutput, type, IsNullable(info.PropertyType));
+                return new CommandParameter(name, info, direction, type, IsNullable(info.PropertyType));
             }
             catch (InvalidOperationException)
             {
