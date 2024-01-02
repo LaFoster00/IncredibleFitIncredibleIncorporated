@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Oracle.ManagedDataAccess.Client;
+﻿using Oracle.ManagedDataAccess.Client;
 
 namespace IncredibleFit.IncredibleFit.SQL
 {
     [Entity("ANGESTELLTER")]
     public class Angestellter
     {
-        [ID, Field("ID", OracleDbType.Int32), AutoIncrement] public int Id { get; private set; } = -1;
+        [ID, Field("ID", OracleDbType.Decimal), AutoIncrement] public decimal Id { get; private set; } = -1;
 
         [Field("NAME")] public string Name { get; set; }
 
