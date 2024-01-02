@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 
 namespace IncredibleFit.IncredibleFit.SQL
 { 
@@ -100,6 +101,8 @@ namespace IncredibleFit.IncredibleFit.SQL
                 return;
             }
 
+            OracleConfiguration.TraceFileLocation = "E:\\";
+
             const string host = "rs03-db-inf-min.ad.fh-bielefeld.de";
             const int port = 1521;
             const string sid = "orcl";
@@ -164,7 +167,9 @@ namespace IncredibleFit.IncredibleFit.SQL
 
         public static OracleCommand CreateCommand(in string command)
         {
-            return new OracleCommand(command, Instance.connection);
+            var cmd = new OracleCommand(command, Instance.connection);
+            cmd.BindByName = true;
+            return cmd;
         }
 
         public static Entity? GetEntityAttribute(in TypeInfo info)
@@ -303,7 +308,6 @@ namespace IncredibleFit.IncredibleFit.SQL
             {
                 if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
                 {
-                    c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value = DBNull.Value;
                     continue;
                 }
 
@@ -321,7 +325,7 @@ namespace IncredibleFit.IncredibleFit.SQL
                     {
                         continue;
                     }
-                    param.PropertyInfo.SetValue(o, c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value);
+                    param.PropertyInfo.SetValue(o, ToSystemObject(c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value));
                 }
             }
             catch (OracleException e)
@@ -334,8 +338,6 @@ namespace IncredibleFit.IncredibleFit.SQL
                     inner = inner.InnerException;
                 }
             }
-
-            
         }
 
         private static OracleCommand SetupCommandWithParams(
@@ -370,7 +372,7 @@ namespace IncredibleFit.IncredibleFit.SQL
                 var direction = ParameterDirection.Input;
                 if (propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsPrivate)
                     if (readBack)
-                        direction = ParameterDirection.ReturnValue;
+                        direction = ParameterDirection.Output;
                     else
                         continue;
 
@@ -449,6 +451,21 @@ namespace IncredibleFit.IncredibleFit.SQL
         public static void CloseConnection()
         {
             Instance.connection?.Close();
+        }
+
+        // Converts oracle objects to their .net equivalent in case it is an oracle object
+        private static object? ToSystemObject(object? o)
+        {
+            if (o is null)
+                return null;
+
+            switch (o)
+            {
+                case OracleDecimal or:
+                    return or.Value;
+                default:
+                    return o;
+            }
         }
 
         public void Dispose()
