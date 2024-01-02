@@ -21,6 +21,7 @@ namespace IncredibleFit.IncredibleFit.SQL
                 Debug.WriteLine("Reader is null. Cant convert to list of objects.");
                 return new List<T>();
             }
+
             var typeInfo = typeof(T).GetTypeInfo();
             var entityName = typeInfo.GetCustomAttribute(typeof(Entity));
             if (entityName == null)
@@ -45,7 +46,8 @@ namespace IncredibleFit.IncredibleFit.SQL
                         {
                             var toNullableConverter = ToNullableInfo!.MakeGenericMethod(propertyInfo.PropertyType);
                             propertyInfo.SetValue(newInstance,
-                                toNullableConverter.Invoke(null, new[]{
+                                toNullableConverter.Invoke(null, new[]
+                                {
                                     reader.GetValue(i)
                                 }));
                         }
@@ -57,12 +59,15 @@ namespace IncredibleFit.IncredibleFit.SQL
                         break;
                     }
                 }
+
                 list.Add(newInstance);
             }
+
             return list;
         }
 
-        private static readonly MethodInfo ToNullableInfo = typeof(DatabaseExtensions).GetMethod("ToNullable") ?? throw new InvalidOperationException();
+        private static readonly MethodInfo ToNullableInfo =
+            typeof(DatabaseExtensions).GetMethod("ToNullable") ?? throw new InvalidOperationException();
 
         public static T? ToNullable<T>(T value)
         {
