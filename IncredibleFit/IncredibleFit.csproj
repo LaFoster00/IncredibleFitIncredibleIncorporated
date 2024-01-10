@@ -69,6 +69,7 @@
 
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
         <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" />
         <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
@@ -106,6 +107,9 @@
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\Screens\Trainingplan.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Models\Login.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
     </ItemGroup>

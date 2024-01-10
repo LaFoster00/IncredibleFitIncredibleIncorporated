@@ -4,34 +4,32 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:screens="clr-namespace:IncredibleFit.IncredibleFit.Screens" 
-    xmlns:local="clr-namespace:IncredibleFit"
-    Shell.FlyoutBehavior="Disabled">
+    xmlns:local="clr-namespace:IncredibleFit">
 
-    <TabBar>
-        <Tab Title="Ernährung"
-             Icon="icon_food.png">
+    <ShellContent 
+        Title="Login"
+        ContentTemplate="{DataTemplate local:Login}"
+        Route="MainPage"/>
+
+    <TabBar Route="Landing">
+        <Tab Title="Ernährung" Icon="icon_food.png">
             <ShellContent Title="Kalorientracker" ContentTemplate="{DataTemplate screens:CalorieTracker}" />
             <ShellContent Title="Ernährungsplan" ContentTemplate="{DataTemplate screens:DietPlan}" />
             <ShellContent Title="Rezepte finden" ContentTemplate="{DataTemplate screens:RecipeSearch}" />
         </Tab>
-        <Tab Title="Training"
-             Icon="icon_training.png">
+        <Tab Title="Training" Icon="icon_training.png">
             <ShellContent Title="Training" ContentTemplate="{DataTemplate screens:Training}" />
             <ShellContent Title="Trainingsplan" ContentTemplate="{DataTemplate screens:Trainingplan}" />
         </Tab>
-        <Tab Title="Timeline"
-             Icon="icon_timeline.png">
+        <Tab Title="Timeline" Icon="icon_timeline.png">
             <ShellContent x:Name="timelinePage"
-                          ContentTemplate="{DataTemplate screens:Timeline}" />
+                  ContentTemplate="{DataTemplate screens:Timeline}" />
         </Tab>
-        <Tab Title="Profil"
-             Icon="icon_profile.png">
+        <Tab Title="Profil" Icon="icon_profile.png" Route="Profile">
             <ShellContent ContentTemplate="{DataTemplate screens:Profile}" />
         </Tab>
-        <Tab Title="Einstellungen"
-             Icon="icon_settings.png">
+        <Tab Title="Einstellungen" Icon="icon_settings.png">
             <ShellContent ContentTemplate="{DataTemplate screens:Settings}" />
         </Tab>
     </TabBar>
-
 </Shell>

@@ -16,15 +16,23 @@ namespace IncredibleFit.IncredibleFit.SQL
             public readonly PropertyInfo PropertyInfo;
             public readonly ParameterDirection Direction;
             public readonly OracleDbType Type;
-            public readonly bool Nullable;
+            public readonly int Size;
+            public readonly string? CreateRoutine;
 
-            public CommandParameter(string name, PropertyInfo propertyInfo, ParameterDirection direction, OracleDbType type, bool nullable)
+            public CommandParameter(
+                string name,
+                PropertyInfo propertyInfo,
+                ParameterDirection direction,
+                OracleDbType type,
+                int size,
+                string? createRoutine)
             {
                 Name = name;
                 PropertyInfo = propertyInfo;
                 Direction = direction;
                 Type = type;
-                Nullable = nullable;
+                Size = size;
+                CreateRoutine = createRoutine;
             }
         }
 
@@ -132,17 +140,15 @@ namespace IncredibleFit.IncredibleFit.SQL
                 Instance.connection.Open();
                 Debug.WriteLine("Connected to Oracle Database");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 Instance.connection = null;
-                Debug.WriteLine($"Error: {ex.Message}");
-                if (ex.InnerException != null)
+                Debug.WriteLine(e);
+                var inner = e.InnerException;
+                while (inner != null)
                 {
-                    Debug.WriteLine(ex.InnerException.Message);
-                    if (ex.InnerException.InnerException != null)
-                    {
-                        Debug.WriteLine(ex.InnerException.InnerException);
-                    }
+                    Debug.WriteLine(inner);
+                    inner = inner.InnerException;
                 }
             }
         }
@@ -157,9 +163,15 @@ namespace IncredibleFit.IncredibleFit.SQL
                 var reader = command!.ExecuteReader();
                 return reader;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine($"Error executing query: {ex.Message}");
+                Debug.WriteLine(e);
+                var inner = e.InnerException;
+                while (inner != null)
+                {
+                    Debug.WriteLine(inner);
+                    inner = inner.InnerException;
+                }
             }
 
             return null;
@@ -172,17 +184,12 @@ namespace IncredibleFit.IncredibleFit.SQL
             return cmd;
         }
 
-        public static Entity? GetEntityAttribute(in TypeInfo info)
-        {
-            return info.GetCustomAttribute<Entity>();
-        }
-
         public static void InsertObject<T>(in T? o)
         {
             if (Instance.connection == null || o == null)
                 return;
 
-            var entityName = GetEntityAttribute(typeof(T).GetTypeInfo());
+            var entityName = typeof(T).GetEntity();
             if (entityName == null)
                 return;
 
@@ -208,7 +215,7 @@ namespace IncredibleFit.IncredibleFit.SQL
             if (Instance.connection == null || o == null)
                 return;
 
-            var entityName = GetEntityAttribute(typeof(T).GetTypeInfo());
+            var entityName = typeof(T).GetEntity();
             if (entityName == null)
                 return;
 
@@ -223,12 +230,12 @@ namespace IncredibleFit.IncredibleFit.SQL
                 return TypeInsertCommands[typeof(T)];
 
             var commandBuilder = new StringBuilder();
-            commandBuilder.Append("INSERT INTO ");
+            commandBuilder.Append("INSERT INTO \"");
 
             #region RetreiveTableName
-            var typeInfo = typeof(T).GetTypeInfo();
-            var entityName = GetEntityAttribute(typeInfo);
-            commandBuilder.Append(entityName!.name).Append(' ');
+            var type = typeof(T);
+            var entityName = typeof(T).GetEntity();
+            commandBuilder.Append(entityName!.Name).Append("\" ");
             #endregion
 
             var parameters = GetParameterList(typeof(T), true);
@@ -238,7 +245,7 @@ namespace IncredibleFit.IncredibleFit.SQL
             for (var i = 0; i < parameters.Count; i++)
             {
                 var param = parameters[i];
-                if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
+                if (param.CreateRoutine == null && param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
                     continue;
                 commandBuilder.Append('\t').Append(param.Name).Append(i < parameters.Count - 1 ? ",\n" : "");
             }
@@ -247,9 +254,13 @@ namespace IncredibleFit.IncredibleFit.SQL
             for (var i = 0; i < parameters.Count; i++)
             {
                 var param = parameters[i];
-                if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
+                if (param.CreateRoutine == null && param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
                     continue;
-                commandBuilder.Append(':').Append(param.Name).Append(i < parameters.Count - 1 ? ", " : "");
+
+                if (param.CreateRoutine == null)
+                    commandBuilder.Append(':').Append(param.Name).Append(i < parameters.Count - 1 ? ", " : "");
+                else
+                    commandBuilder.Append(param.CreateRoutine).Append(i < parameters.Count - 1 ? ", " : "");
             }
 
             commandBuilder.Append(')');
@@ -270,12 +281,12 @@ namespace IncredibleFit.IncredibleFit.SQL
                 return TypeUpdateCommands[typeof(T)];
 
             var commandBuilder = new StringBuilder();
-            commandBuilder.Append("UPDATE ");
+            commandBuilder.Append("UPDATE \"");
 
             #region RetreiveTableName
-            var typeInfo = typeof(T).GetTypeInfo();
-            var entityName = GetEntityAttribute(typeInfo);
-            commandBuilder.Append(entityName!.name).Append(' ');
+            var type = typeof(T);
+            var entityName = type.GetEntity();
+            commandBuilder.Append(entityName!.Name).Append("\" ");
             #endregion
 
             var parameters = GetParameterList(typeof(T), false);
@@ -291,7 +302,7 @@ namespace IncredibleFit.IncredibleFit.SQL
             var idProperty = GetIdProperty<T>(ParameterDirection.Input);
             parameters.Add(idProperty);
 
-            commandBuilder.Append($"WHERE {entityName.name}.{idProperty.Name} = :{idProperty.Name}");
+            commandBuilder.Append($"WHERE {entityName.Name}.{idProperty.Name} = :{idProperty.Name}");
             #endregion
 
             TypeUpdateCommands.Add(
@@ -307,9 +318,9 @@ namespace IncredibleFit.IncredibleFit.SQL
             foreach (var param in c.parameters)
             {
                 if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
-                {
                     continue;
-                }
+                if (param.CreateRoutine != null)
+                    continue;
 
                 var value = param.PropertyInfo.GetValue(o);
                 c.command.Parameters[param.Name].Value = value ?? DBNull.Value;
@@ -351,12 +362,12 @@ namespace IncredibleFit.IncredibleFit.SQL
                 if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
                 {
                     command.Parameters.Add($"{GeneratedExt}{param.Name}", param.Type, param.Direction);
+                    command.Parameters[$"{GeneratedExt}{param.Name}"].Size = param.Size;
                 }
 
                 if (param.Direction is not (ParameterDirection.Output or ParameterDirection.ReturnValue))
                 {
                     command.Parameters.Add($"{param.Name}", param.Type, param.Direction);
-                    command.Parameters[$"{param.Name}"].IsNullable = param.Nullable;
                 }
             }
 
@@ -376,7 +387,7 @@ namespace IncredibleFit.IncredibleFit.SQL
                     else
                         continue;
 
-                var fieldAttribute = propertyInfo.GetCustomAttribute<Field>();
+                var fieldAttribute = propertyInfo.GetField();
                 if (fieldAttribute == null)
                     continue;
 
@@ -385,7 +396,8 @@ namespace IncredibleFit.IncredibleFit.SQL
                     propertyInfo,
                     direction,
                     GetOracleDbType(propertyInfo, fieldAttribute),
-                    IsNullable(propertyInfo.PropertyType))
+                    fieldAttribute.Size,
+                    propertyInfo.GetSubroutine())
                 );
 
             }
@@ -398,11 +410,11 @@ namespace IncredibleFit.IncredibleFit.SQL
             try
             {
                 var info = typeof(T).GetProperties().First(info =>
-                    info.GetCustomAttribute<Field>() != null && info.GetCustomAttribute<ID>() != null);
-                var field = info.GetCustomAttribute<Field>()!;
+                    info.GetField() != null && info.GetCustomAttribute<ID>() != null);
+                var field = info.GetField()!;
                 var name = field.Name;
                 var type = GetOracleDbType(info, field);
-                return new CommandParameter(name, info, direction, type, IsNullable(info.PropertyType));
+                return new CommandParameter(name, info, direction, type, field.Size, info.GetSubroutine());
             }
             catch (InvalidOperationException)
             {
@@ -463,6 +475,8 @@ namespace IncredibleFit.IncredibleFit.SQL
             {
                 case OracleDecimal or:
                     return or.Value;
+                case OracleString os:
+                    return os.Value;
                 default:
                     return o;
             }
