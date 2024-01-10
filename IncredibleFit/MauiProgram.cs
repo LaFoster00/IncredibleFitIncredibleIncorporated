@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using IncredibleFit.ViewModels;
 using IncredibleFit.Screens;
 using IncredibleFit.ViewModels;
 using Microsoft.Extensions.Logging;
@@ -21,8 +22,11 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<SessionInfo>();
         builder.Services.AddSingleton<LoginViewModel>();
-        
+        builder.Services.AddSingleton<SignUpViewModel>();
+
         builder.Services.AddSingleton<Login>();
+        builder.Services.AddSingleton<SignUp>();
+        builder.Services.AddSingleton<Profile>();
 
 #if DEBUG
         builder.Logging.AddDebug();

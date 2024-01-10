@@ -177,6 +177,27 @@ namespace IncredibleFit.SQL
             return null;
         }
 
+        public static void ExecuteNonQuery(in OracleCommand command)
+        {
+            if (Instance.connection == null)
+                return;
+
+            try
+            {
+                command!.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                var inner = e.InnerException;
+                while (inner != null)
+                {
+                    Debug.WriteLine(inner);
+                    inner = inner.InnerException;
+                }
+            }
+        }
+
         public static OracleCommand CreateCommand(in string command)
         {
             var cmd = new OracleCommand(command, Instance.connection);

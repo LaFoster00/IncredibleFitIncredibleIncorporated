@@ -55,7 +55,6 @@ public partial class EditCaloriesPopUp : Popup
     void SaveEditClicked(object sender, EventArgs e)
 	{
 		_calorieTracker.setWeekCalorieTracks(_index, _calorieTrack);
-        SQLNutrition.SaveCalorieTrack(_calorieTrack);
         this.Close();
 	}
 

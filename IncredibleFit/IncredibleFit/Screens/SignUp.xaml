@@ -2,7 +2,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="IncredibleFit.Screens.SignUp">
-    
-    
+
+	<StackLayout Padding="20">
+
+		<Label Text="Sign Up" FontSize="30" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+
+		<Entry Text="{Binding Email}" Placeholder="Email" Margin="0,10,0,0"/>
+		<Entry Text="{Binding FirstName}" Placeholder="First Name" Margin="0,10,0,0"/>
+		<Entry Text="{Binding Name}" Placeholder="Last Name" Margin="0,10,0,0"/>
+		<Entry Text="{Binding Password}" Placeholder="Password" IsPassword="True" Margin="0,10,0,0"/>
+		<Entry Text="{Binding ConfirmPassword}" Placeholder="Confirm Password" IsPassword="True" Margin="0,10,0,0"/>
+
+		<Button Text="Sign Up" Command="{Binding SignUpCommand}" BackgroundColor="#3498db" TextColor="White" Margin="0,20,0,0"/>
+
+	</StackLayout>
     
 </ContentPage>

@@ -3,14 +3,15 @@ using CommunityToolkit.Mvvm.Input;
 using IncredibleFit.SQL;
 using IncredibleFit.SQL.Entities;
 using IncredibleFit.Screens;
-using System.Security.Cryptography;
 using System.Text;
+using System.Diagnostics;
 
 namespace IncredibleFit.ViewModels
 {
     public partial class LoginViewModel : BaseViewModel
     {
         private readonly SessionInfo _sessionInfo;
+        private readonly SignUp _signUp;
 
         [ObservableProperty]
         private string _userName = string.Empty;
@@ -18,24 +19,10 @@ namespace IncredibleFit.ViewModels
         [ObservableProperty]
         private string _password = string.Empty;
 
-        private const int keySize = 64;
-        private const int iterations = 350000;
-        HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
-
-        public LoginViewModel(SessionInfo sessionInfo)
+        public LoginViewModel(SessionInfo sessionInfo, SignUp signUp)
         {
             _sessionInfo = sessionInfo;
-        }
-
-        string HashPasword(in string password, in byte[] salt)
-        {
-            var hash = Rfc2898DeriveBytes.Pbkdf2(
-                Encoding.UTF8.GetBytes(password),
-                salt,
-                iterations,
-                hashAlgorithm,
-                keySize);
-            return Convert.ToHexString(hash);
+            _signUp = signUp;
         }
 
         [RelayCommand]
@@ -49,7 +36,7 @@ namespace IncredibleFit.ViewModels
             var reader = OracleDatabase.ExecuteQuery(OracleDatabase.CreateCommand(
                 $"""
                 SELECT * FROM "USER"
-                WHERE EMAIl = {UserName}
+                WHERE EMAIl = '{UserName}'
                 """));
 
             var users = reader.ToObjectList<User>();
@@ -58,7 +45,7 @@ namespace IncredibleFit.ViewModels
                 return;
             }
 
-            string hashedPassword = HashPasword(Password, Encoding.UTF8.GetBytes(users[0].Salt));
+            string hashedPassword = PasswordUtil.Hash(Password, users[0].Salt);
             if (!hashedPassword.Equals(users[0].Password))
             {
                 HandleIncorrectUserData();
@@ -74,7 +61,7 @@ namespace IncredibleFit.ViewModels
 
         private void HandleIncorrectUserData()
         {
-            throw new NotImplementedException();
+            Debug.WriteLine("Incorrect user data");
         }
 
         [RelayCommand]
@@ -82,7 +69,7 @@ namespace IncredibleFit.ViewModels
         {
             // Navigate to the signup page
             // You might need to adjust the navigation method based on your application's structure
-            Application.Current.MainPage.Navigation.PushAsync(new SignUp());
+            await Application.Current!.MainPage!.Navigation.PushAsync(_signUp);
         }
     }
 }
