@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     10.01.2024 19:07:16                          */
+/* Created on:     10.01.2024 19:13:53                          */
 /*==============================================================*/
 
 
@@ -936,6 +936,9 @@ create table "USER" (
    HEIGHT               NUMBER(6,2),
    BODY_FAT_PERCENTAGE  NUMBER(6,1),
    BASAL_METABOLIC_RATE NUMBER(7),
+   EMAIL                VARCHAR2(50)          not null,
+   PASSWORD             VARCHAR2(20)          not null,
+   SALT                 VARCHAR2(20)          not null,
    constraint PK_USER primary key (ID)
 );
 
