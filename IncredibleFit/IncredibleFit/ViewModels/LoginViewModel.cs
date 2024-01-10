@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using IncredibleFit.IncredibleFit.SQL;
-using IncredibleFit.IncredibleFit.SQL.Entities;
+using IncredibleFit.SQL;
+using IncredibleFit.SQL.Entities;
+using IncredibleFit.Screens;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace IncredibleFit.IncredibleFit.ViewModels
+namespace IncredibleFit.ViewModels
 {
     public partial class LoginViewModel : BaseViewModel
     {
@@ -74,6 +75,14 @@ namespace IncredibleFit.IncredibleFit.ViewModels
         private void HandleIncorrectUserData()
         {
             throw new NotImplementedException();
+        }
+
+        [RelayCommand]
+        public async Task SignUp()
+        {
+            // Navigate to the signup page
+            // You might need to adjust the navigation method based on your application's structure
+            Application.Current.MainPage.Navigation.PushAsync(new SignUp());
         }
     }
 }

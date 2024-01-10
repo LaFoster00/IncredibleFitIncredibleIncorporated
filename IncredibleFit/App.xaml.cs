@@ -1,5 +1,4 @@
-﻿using IncredibleFit.IncredibleFit.SQL;
-using IncredibleFit.IncredibleFit.SQL.Entities;
+﻿using IncredibleFit.SQL;
 
 namespace IncredibleFit;
 

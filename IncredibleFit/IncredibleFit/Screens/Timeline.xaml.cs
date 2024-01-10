@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace IncredibleFit.IncredibleFit.Screens;
+namespace IncredibleFit.Screens;
 
 public partial class Timeline : ContentPage
 {

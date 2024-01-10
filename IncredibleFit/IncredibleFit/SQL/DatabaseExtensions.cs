@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 
-namespace IncredibleFit.IncredibleFit.SQL
+namespace IncredibleFit.SQL
 {
     public static class DatabaseExtensions
     {

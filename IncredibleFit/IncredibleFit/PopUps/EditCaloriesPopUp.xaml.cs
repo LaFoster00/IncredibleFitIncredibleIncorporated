@@ -1,11 +1,11 @@
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Views;
-using IncredibleFit.IncredibleFit.Models;
-using IncredibleFit.IncredibleFit.Screens;
-using IncredibleFit.IncredibleFit.SQL;
+using IncredibleFit.Models;
+using IncredibleFit.Screens;
+using IncredibleFit.SQL;
 using System.Globalization;
 
-namespace IncredibleFit.IncredibleFit.PopUps;
+namespace IncredibleFit.PopUps;
 
 public partial class EditCaloriesPopUp : Popup
 {

@@ -100,6 +100,9 @@
       <MauiXaml Update="IncredibleFit\Screens\Settings.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\SignUp.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
       <MauiXaml Update="IncredibleFit\Screens\Timeline.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
@@ -109,7 +112,7 @@
       <MauiXaml Update="IncredibleFit\Screens\Trainingplan.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="IncredibleFit\Models\Login.xaml">
+      <MauiXaml Update="IncredibleFit\Screens\Login.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
     </ItemGroup>

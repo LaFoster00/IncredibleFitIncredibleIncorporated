@@ -1,4 +1,4 @@
-namespace IncredibleFit.IncredibleFit.Screens;
+namespace IncredibleFit.Screens;
 
 public partial class Training : ContentPage
 {

@@ -1,6 +1,6 @@
 ﻿using Oracle.ManagedDataAccess.Client;
 
-namespace IncredibleFit.IncredibleFit.SQL.Entities
+namespace IncredibleFit.SQL.Entities
 {
     [Entity("USER")]
     public class User

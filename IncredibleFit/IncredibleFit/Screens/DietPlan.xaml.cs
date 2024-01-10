@@ -1,6 +1,6 @@
-using IncredibleFit.IncredibleFit.Models;
+using IncredibleFit.Models;
 
-namespace IncredibleFit.IncredibleFit.Screens;
+namespace IncredibleFit.Screens;
 
 public partial class DietPlan : ContentPage
 {

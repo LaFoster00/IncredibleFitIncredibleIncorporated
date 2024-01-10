@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IncredibleFit.IncredibleFit.Models
+namespace IncredibleFit.Models
 {
     public class Recipe
     {

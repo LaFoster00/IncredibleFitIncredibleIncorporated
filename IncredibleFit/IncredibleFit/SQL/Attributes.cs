@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 
-namespace IncredibleFit.IncredibleFit.SQL
+namespace IncredibleFit.SQL
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class Entity : Attribute

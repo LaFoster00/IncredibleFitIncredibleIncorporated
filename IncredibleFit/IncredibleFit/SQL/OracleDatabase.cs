@@ -6,7 +6,7 @@ using System.Text;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 
-namespace IncredibleFit.IncredibleFit.SQL
+namespace IncredibleFit.SQL
 { 
     class OracleDatabase : IDisposable, IAsyncDisposable
     {

@@ -1,8 +1,8 @@
-﻿using IncredibleFit.IncredibleFit.ViewModels;
+﻿using IncredibleFit.ViewModels;
 
-namespace IncredibleFit
+namespace IncredibleFit.Screens
 {
-    public partial class Login
+    public partial class Login : ContentPage
     {
         public Login(LoginViewModel loginViewModel)
         {

@@ -1,8 +1,8 @@
-using IncredibleFit.IncredibleFit.Models;
+using IncredibleFit.Models;
 using System.Collections;
 using System.Collections.ObjectModel;
 
-namespace IncredibleFit.IncredibleFit.Screens;
+namespace IncredibleFit.Screens;
 
 public partial class RecipeDetails : ContentPage
 {

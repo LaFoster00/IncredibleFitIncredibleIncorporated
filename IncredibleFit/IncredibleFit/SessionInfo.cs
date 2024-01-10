@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using IncredibleFit.IncredibleFit.SQL.Entities;
+using IncredibleFit.SQL.Entities;
 
-namespace IncredibleFit.IncredibleFit
+namespace IncredibleFit
 {
     public partial class SessionInfo : ObservableObject
     {

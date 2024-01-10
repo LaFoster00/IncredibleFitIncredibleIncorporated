@@ -1,11 +1,11 @@
-using IncredibleFit.IncredibleFit.PopUps;
-using IncredibleFit.IncredibleFit.SQL;
-using IncredibleFit.IncredibleFit.Models;
+using IncredibleFit.PopUps;
+using IncredibleFit.SQL;
+using IncredibleFit.Models;
 using CommunityToolkit.Maui.Views;
 using static System.Net.Mime.MediaTypeNames;
 using System.Collections.ObjectModel;
 
-namespace IncredibleFit.IncredibleFit.Screens;
+namespace IncredibleFit.Screens;
 
 public partial class CalorieTracker : ContentPage
 {

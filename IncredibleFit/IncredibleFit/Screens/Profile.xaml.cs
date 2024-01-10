@@ -1,8 +1,8 @@
 using CommunityToolkit.Maui.Alerts;
-using IncredibleFit.IncredibleFit.Models;
-using IncredibleFit.IncredibleFit.SQL;
+using IncredibleFit.Models;
+using IncredibleFit.SQL;
 
-namespace IncredibleFit.IncredibleFit.Screens;
+namespace IncredibleFit.Screens;
 
 public partial class Profile : ContentPage
 {

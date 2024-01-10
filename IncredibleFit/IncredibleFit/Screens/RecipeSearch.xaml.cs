@@ -1,11 +1,11 @@
-using IncredibleFit.IncredibleFit.Models;
-using IncredibleFit.IncredibleFit.PopUps;
-using IncredibleFit.IncredibleFit.SQL;
+using IncredibleFit.Models;
+using IncredibleFit.PopUps;
+using IncredibleFit.SQL;
 using CommunityToolkit.Maui.Views;
 using System.Collections;
 using System.Collections.ObjectModel;
 
-namespace IncredibleFit.IncredibleFit.Screens;
+namespace IncredibleFit.Screens;
 
 public partial class RecipeSearch : ContentPage
 {

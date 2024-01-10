@@ -1,11 +1,11 @@
-﻿using IncredibleFit.IncredibleFit.Models;
+﻿using IncredibleFit.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IncredibleFit.IncredibleFit.SQL
+namespace IncredibleFit.SQL
 {
     public class SQLProfile
     {

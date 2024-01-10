@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Maui;
-using IncredibleFit.IncredibleFit;
-using IncredibleFit.IncredibleFit.ViewModels;
+using IncredibleFit.Screens;
+using IncredibleFit.ViewModels;
 using Microsoft.Extensions.Logging;
 
 namespace IncredibleFit;
