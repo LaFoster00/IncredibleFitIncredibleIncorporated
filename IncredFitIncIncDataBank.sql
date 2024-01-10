@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     02.01.2024 14:18:49                          */
+/* Created on:     10.01.2024 19:07:16                          */
 /*==============================================================*/
 
 
@@ -87,12 +87,6 @@ alter table TRACK
 
 alter table TRAINING_PLAN
    drop constraint FK_TRAINING_PLAN_SPOR_SPORT;
-
-alter table UNIT_APPOINTMENT
-   drop constraint FK_UNIT_APP_UNIT_APPO_APPOINTM;
-
-alter table UNIT_APPOINTMENT
-   drop constraint FK_UNIT_APP_UNIT_APPO_TRAINING;
 
 alter table UNIT_TO_PLAN
    drop constraint FK_UNIT_TO__CONTAINS7_TRAINING;
@@ -230,12 +224,6 @@ drop table TRAINING_PLAN cascade constraints;
 drop table TRAINING_TYPE cascade constraints;
 
 drop table TRAINING_UNIT cascade constraints;
-
-drop index UNIT_APPOINTMENT_FK2;
-
-drop index UNIT_APPOINTMENT_FK;
-
-drop table UNIT_APPOINTMENT cascade constraints;
 
 drop index IS_A_PART_OF_FK;
 
@@ -408,69 +396,69 @@ create index EMPLOYEE_AUTHORIZATION_FK on EMPLOYEE (
 /* Table: EMPLOYEE_RECIPE                                       */
 /*==============================================================*/
 create table EMPLOYEE_RECIPE (
-   EMP_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
-   constraint PK_EMPLOYEE_RECIPE primary key (EMP_ID, ID)
+   REC_ID               NUMBER(6)             not null,
+   constraint PK_EMPLOYEE_RECIPE primary key (ID, REC_ID)
 );
 
 /*==============================================================*/
 /* Index: IS_MANAGED_BY_FK                                      */
 /*==============================================================*/
 create index IS_MANAGED_BY_FK on EMPLOYEE_RECIPE (
-   EMP_ID ASC
+   ID ASC
 );
 
 /*==============================================================*/
 /* Index: MANAGES_FK                                            */
 /*==============================================================*/
 create index MANAGES_FK on EMPLOYEE_RECIPE (
-   ID ASC
+   REC_ID ASC
 );
 
 /*==============================================================*/
 /* Table: EMPLOYEE_SPORT                                        */
 /*==============================================================*/
 create table EMPLOYEE_SPORT (
+   EMP_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
-   SPO_ID               NUMBER(6)             not null,
-   constraint PK_EMPLOYEE_SPORT primary key (ID, SPO_ID)
+   constraint PK_EMPLOYEE_SPORT primary key (EMP_ID, ID)
 );
 
 /*==============================================================*/
 /* Index: IS_CREATED_BY_FK                                      */
 /*==============================================================*/
 create index IS_CREATED_BY_FK on EMPLOYEE_SPORT (
-   ID ASC
+   EMP_ID ASC
 );
 
 /*==============================================================*/
 /* Index: CREATED_FK                                            */
 /*==============================================================*/
 create index CREATED_FK on EMPLOYEE_SPORT (
-   SPO_ID ASC
+   ID ASC
 );
 
 /*==============================================================*/
 /* Table: EMPLOYEE_TRAINING_PLAN                                */
 /*==============================================================*/
 create table EMPLOYEE_TRAINING_PLAN (
-   EMP_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
-   constraint PK_EMPLOYEE_TRAINING_PLAN primary key (EMP_ID, ID)
+   TRA_ID               NUMBER(6)             not null,
+   constraint PK_EMPLOYEE_TRAINING_PLAN primary key (ID, TRA_ID)
 );
 
 /*==============================================================*/
 /* Index: IS_MANAGED_BY2_FK                                     */
 /*==============================================================*/
 create index IS_MANAGED_BY2_FK on EMPLOYEE_TRAINING_PLAN (
-   EMP_ID ASC
+   ID ASC
 );
 
 /*==============================================================*/
 /* Index: MANAGES2_FK                                           */
 /*==============================================================*/
 create index MANAGES2_FK on EMPLOYEE_TRAINING_PLAN (
-   ID ASC
+   TRA_ID ASC
 );
 
 /*==============================================================*/
@@ -508,46 +496,46 @@ create index EXERCISE_TRAINING_TYPE_FK on EXERCISE (
 /* Table: EXERCISE_CATEGORY                                     */
 /*==============================================================*/
 create table EXERCISE_CATEGORY (
+   EXE_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
-   CAT_ID               NUMBER(6)             not null,
-   constraint PK_EXERCISE_CATEGORY primary key (ID, CAT_ID)
+   constraint PK_EXERCISE_CATEGORY primary key (EXE_ID, ID)
 );
 
 /*==============================================================*/
 /* Index: CONTAINS5_FK                                          */
 /*==============================================================*/
 create index CONTAINS5_FK on EXERCISE_CATEGORY (
-   ID ASC
+   EXE_ID ASC
 );
 
 /*==============================================================*/
 /* Index: BELONGS_TO_FK                                         */
 /*==============================================================*/
 create index BELONGS_TO_FK on EXERCISE_CATEGORY (
-   CAT_ID ASC
+   ID ASC
 );
 
 /*==============================================================*/
 /* Table: EXERCISE_SPORT                                        */
 /*==============================================================*/
 create table EXERCISE_SPORT (
+   SPO_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
-   EXE_ID               NUMBER(6)             not null,
-   constraint PK_EXERCISE_SPORT primary key (ID, EXE_ID)
+   constraint PK_EXERCISE_SPORT primary key (SPO_ID, ID)
 );
 
 /*==============================================================*/
 /* Index: IS_PART_OF_FK                                         */
 /*==============================================================*/
 create index IS_PART_OF_FK on EXERCISE_SPORT (
-   ID ASC
+   SPO_ID ASC
 );
 
 /*==============================================================*/
 /* Index: CONTAINS3_FK                                          */
 /*==============================================================*/
 create index CONTAINS3_FK on EXERCISE_SPORT (
-   EXE_ID ASC
+   ID ASC
 );
 
 /*==============================================================*/
@@ -556,9 +544,12 @@ create index CONTAINS3_FK on EXERCISE_SPORT (
 create table EXERCISE_UNIT (
    ID                   NUMBER(6)             not null,
    TRA_ID               NUMBER(6)             not null,
+   DESCRIPTION          VARCHAR2(1024)        not null,
+   DIFFICULTY           VARCHAR2(100)         not null
+      constraint CKC_DIFFICULTY_EXERCISE check (DIFFICULTY between '1' and '3' and DIFFICULTY in ('1','2','3')),
    REPETITIONS          NUMBER                not null,
    SETS                 NUMBER                not null,
-   constraint PK_EXERCISE_UNIT primary key (ID, TRA_ID)
+   constraint PK_EXERCISE_UNIT primary key (ID, TRA_ID, DESCRIPTION, DIFFICULTY)
 );
 
 /*==============================================================*/
@@ -741,23 +732,23 @@ One RECIPECATEGORY contains multiple recipes.
 /* Table: RECIPE_APPOINTMENT                                    */
 /*==============================================================*/
 create table RECIPE_APPOINTMENT (
-   REC_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
-   constraint PK_RECIPE_APPOINTMENT primary key (REC_ID, ID)
+   APP_ID               NUMBER(6)             not null,
+   constraint PK_RECIPE_APPOINTMENT primary key (ID, APP_ID)
 );
 
 /*==============================================================*/
 /* Index: CONTAINS4_FK                                          */
 /*==============================================================*/
 create index CONTAINS4_FK on RECIPE_APPOINTMENT (
-   REC_ID ASC
+   ID ASC
 );
 
 /*==============================================================*/
 /* Index: IS_IN_FK                                              */
 /*==============================================================*/
 create index IS_IN_FK on RECIPE_APPOINTMENT (
-   ID ASC
+   APP_ID ASC
 );
 
 /*==============================================================*/
@@ -847,7 +838,8 @@ create table TRAINING_PLAN (
    SPO_ID               NUMBER(6)             not null,
    NAME                 VARCHAR2(100)         not null,
    DESCRIPTION          VARCHAR2(1024)        not null,
-   DIFFICULTY           VARCHAR2(50)          not null,
+   DIFFICULTY           VARCHAR2(100)         not null
+      constraint CKC_DIFFICULTY_TRAINING check (DIFFICULTY between '1' and '3' and DIFFICULTY in ('1','2','3')),
    constraint PK_TRAINING_PLAN primary key (ID)
 );
 
@@ -894,33 +886,11 @@ Attributes:
 create table TRAINING_UNIT (
    ID                   NUMBER(6)           
       generated as identity ( start with 1 nocycle noorder)  not null,
-   NAME                 VARCHAR2(100),
-   DESCRIPTION          VARCHAR2(1024),
-   DIFFICULTY           VARCHAR2(50),
+   NAME                 VARCHAR2(100)         not null,
+   DESCRIPTION          VARCHAR2(1024)        not null,
+   DIFFICULTY           VARCHAR2(100)         not null
+      constraint CKC_DIFFICULTY_TRAINING check (DIFFICULTY between '1' and '3' and DIFFICULTY in ('1','2','3')),
    constraint PK_TRAINING_UNIT primary key (ID)
-);
-
-/*==============================================================*/
-/* Table: UNIT_APPOINTMENT                                      */
-/*==============================================================*/
-create table UNIT_APPOINTMENT (
-   ID                   NUMBER(6)             not null,
-   APP_ID               NUMBER(6)             not null,
-   constraint PK_UNIT_APPOINTMENT primary key (ID, APP_ID)
-);
-
-/*==============================================================*/
-/* Index: UNIT_APPOINTMENT_FK                                   */
-/*==============================================================*/
-create index UNIT_APPOINTMENT_FK on UNIT_APPOINTMENT (
-   ID ASC
-);
-
-/*==============================================================*/
-/* Index: UNIT_APPOINTMENT_FK2                                  */
-/*==============================================================*/
-create index UNIT_APPOINTMENT_FK2 on UNIT_APPOINTMENT (
-   APP_ID ASC
 );
 
 /*==============================================================*/
@@ -929,9 +899,12 @@ create index UNIT_APPOINTMENT_FK2 on UNIT_APPOINTMENT (
 create table UNIT_TO_PLAN (
    TRA_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
+   DESCRIPTION          VARCHAR2(1024)        not null,
+   DIFFICULTY           VARCHAR2(100)         not null
+      constraint CKC_DIFFICULTY_UNIT_TO_ check (DIFFICULTY between '1' and '3' and DIFFICULTY in ('1','2','3')),
    WEEKDAY              VARCHAR2(100)         not null
       constraint CKC_WEEKDAY_UNIT_TO_ check (WEEKDAY between '1' and '7' and WEEKDAY in ('1','2','3','4','5','6','7')),
-   constraint PK_UNIT_TO_PLAN primary key (TRA_ID, ID)
+   constraint PK_UNIT_TO_PLAN primary key (TRA_ID, ID, DESCRIPTION, DIFFICULTY)
 );
 
 /*==============================================================*/
@@ -960,8 +933,8 @@ create table "USER" (
    NAME                 VARCHAR2(50)          not null,
    FIRST_NAME           VARCHAR2(50)          not null,
    WEIGHT               NUMBER(6,2),
-   HEIGHT               NUMBER(3,2),
-   BODY_FAT_PERCENTAGE  NUMBER(3,1),
+   HEIGHT               NUMBER(6,2),
+   BODY_FAT_PERCENTAGE  NUMBER(6,1),
    BASAL_METABOLIC_RATE NUMBER(7),
    constraint PK_USER primary key (ID)
 );
@@ -1012,69 +985,69 @@ create index IS_FROM_FK on "USER" (
 /* Table: USER_RECIPE                                           */
 /*==============================================================*/
 create table USER_RECIPE (
+   USE_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
-   REC_ID               NUMBER(6)             not null,
-   constraint PK_USER_RECIPE primary key (ID, REC_ID)
+   constraint PK_USER_RECIPE primary key (USE_ID, ID)
 );
 
 /*==============================================================*/
 /* Index: IS_CALLED_BY_FK                                       */
 /*==============================================================*/
 create index IS_CALLED_BY_FK on USER_RECIPE (
-   ID ASC
+   USE_ID ASC
 );
 
 /*==============================================================*/
 /* Index: CALLS_ON_FK                                           */
 /*==============================================================*/
 create index CALLS_ON_FK on USER_RECIPE (
-   REC_ID ASC
+   ID ASC
 );
 
 /*==============================================================*/
 /* Table: USER_SPORT                                            */
 /*==============================================================*/
 create table USER_SPORT (
-   USE_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
-   constraint PK_USER_SPORT primary key (USE_ID, ID)
+   SPO_ID               NUMBER(6)             not null,
+   constraint PK_USER_SPORT primary key (ID, SPO_ID)
 );
 
 /*==============================================================*/
 /* Index: IS_PRACTICED_BY_FK                                    */
 /*==============================================================*/
 create index IS_PRACTICED_BY_FK on USER_SPORT (
-   USE_ID ASC
+   ID ASC
 );
 
 /*==============================================================*/
 /* Index: PRACTISES_FK                                          */
 /*==============================================================*/
 create index PRACTISES_FK on USER_SPORT (
-   ID ASC
+   SPO_ID ASC
 );
 
 /*==============================================================*/
 /* Table: USER_TRAINING_PLAN                                    */
 /*==============================================================*/
 create table USER_TRAINING_PLAN (
+   USE_ID               NUMBER(6)             not null,
    ID                   NUMBER(6)             not null,
-   TRA_ID               NUMBER(6)             not null,
-   constraint PK_USER_TRAINING_PLAN primary key (ID, TRA_ID)
+   constraint PK_USER_TRAINING_PLAN primary key (USE_ID, ID)
 );
 
 /*==============================================================*/
 /* Index: IS_CALLED_BY2_FK                                      */
 /*==============================================================*/
 create index IS_CALLED_BY2_FK on USER_TRAINING_PLAN (
-   ID ASC
+   USE_ID ASC
 );
 
 /*==============================================================*/
 /* Index: CALLS_ON2_FK                                          */
 /*==============================================================*/
 create index CALLS_ON2_FK on USER_TRAINING_PLAN (
-   TRA_ID ASC
+   ID ASC
 );
 
 alter table AIM
@@ -1094,27 +1067,27 @@ alter table EMPLOYEE
       references AUTHORIZATION (ID);
 
 alter table EMPLOYEE_RECIPE
-   add constraint FK_EMPLOYEE_IS_MANAGE_EMPLOYEE foreign key (EMP_ID)
+   add constraint FK_EMPLOYEE_IS_MANAGE_EMPLOYEE foreign key (ID)
       references EMPLOYEE (ID);
 
 alter table EMPLOYEE_RECIPE
-   add constraint FK_EMPLOYEE_MANAGES_RECIPE foreign key (ID)
+   add constraint FK_EMPLOYEE_MANAGES_RECIPE foreign key (REC_ID)
       references RECIPE (ID);
 
 alter table EMPLOYEE_SPORT
-   add constraint FK_EMPLOYEE_CREATED_SPORT foreign key (SPO_ID)
+   add constraint FK_EMPLOYEE_CREATED_SPORT foreign key (ID)
       references SPORT (ID);
 
 alter table EMPLOYEE_SPORT
-   add constraint FK_EMPLOYEE_IS_CREATE_EMPLOYEE foreign key (ID)
+   add constraint FK_EMPLOYEE_IS_CREATE_EMPLOYEE foreign key (EMP_ID)
       references EMPLOYEE (ID);
 
 alter table EMPLOYEE_TRAINING_PLAN
-   add constraint FK_EMPLOYEE_IS_MANAGE_EMPLOYEE foreign key (EMP_ID)
+   add constraint FK_EMPLOYEE_IS_MANAGE_EMPLOYEE foreign key (ID)
       references EMPLOYEE (ID);
 
 alter table EMPLOYEE_TRAINING_PLAN
-   add constraint FK_EMPLOYEE_MANAGES_TRAINING foreign key (ID)
+   add constraint FK_EMPLOYEE_MANAGES_TRAINING foreign key (TRA_ID)
       references TRAINING_PLAN (ID);
 
 alter table EXERCISE
@@ -1122,19 +1095,19 @@ alter table EXERCISE
       references TRAINING_TYPE (ID);
 
 alter table EXERCISE_CATEGORY
-   add constraint FK_EXERCISE_BELONGS_T_CATEGORY foreign key (CAT_ID)
+   add constraint FK_EXERCISE_BELONGS_T_CATEGORY foreign key (ID)
       references CATEGORY (ID);
 
 alter table EXERCISE_CATEGORY
-   add constraint FK_EXERCISE_CONTAINS5_EXERCISE foreign key (ID)
+   add constraint FK_EXERCISE_CONTAINS5_EXERCISE foreign key (EXE_ID)
       references EXERCISE (ID);
 
 alter table EXERCISE_SPORT
-   add constraint FK_EXERCISE_CONTAINS3_EXERCISE foreign key (EXE_ID)
+   add constraint FK_EXERCISE_CONTAINS3_EXERCISE foreign key (ID)
       references EXERCISE (ID);
 
 alter table EXERCISE_SPORT
-   add constraint FK_EXERCISE_IS_PART_O_SPORT foreign key (ID)
+   add constraint FK_EXERCISE_IS_PART_O_SPORT foreign key (SPO_ID)
       references SPORT (ID);
 
 alter table EXERCISE_UNIT
@@ -1166,11 +1139,11 @@ alter table RECIPE
       references "USER" (ID);
 
 alter table RECIPE_APPOINTMENT
-   add constraint FK_RECIPE_A_CONTAINS4_RECIPE foreign key (REC_ID)
+   add constraint FK_RECIPE_A_CONTAINS4_RECIPE foreign key (ID)
       references RECIPE (ID);
 
 alter table RECIPE_APPOINTMENT
-   add constraint FK_RECIPE_A_IS_IN_APPOINTM foreign key (ID)
+   add constraint FK_RECIPE_A_IS_IN_APPOINTM foreign key (APP_ID)
       references APPOINTMENT (ID);
 
 alter table RECIPE_INGREDIENT
@@ -1188,14 +1161,6 @@ alter table TRACK
 alter table TRAINING_PLAN
    add constraint FK_TRAINING_PLAN_SPOR_SPORT foreign key (SPO_ID)
       references SPORT (ID);
-
-alter table UNIT_APPOINTMENT
-   add constraint FK_UNIT_APP_UNIT_APPO_APPOINTM foreign key (APP_ID)
-      references APPOINTMENT (ID);
-
-alter table UNIT_APPOINTMENT
-   add constraint FK_UNIT_APP_UNIT_APPO_TRAINING foreign key (ID)
-      references TRAINING_UNIT (ID);
 
 alter table UNIT_TO_PLAN
    add constraint FK_UNIT_TO__CONTAINS7_TRAINING foreign key (TRA_ID)
@@ -1218,26 +1183,26 @@ alter table "USER"
       references EMPLOYEE (ID);
 
 alter table USER_RECIPE
-   add constraint FK_USER_REC_CALLS_ON_RECIPE foreign key (REC_ID)
+   add constraint FK_USER_REC_CALLS_ON_RECIPE foreign key (ID)
       references RECIPE (ID);
 
 alter table USER_RECIPE
-   add constraint FK_USER_REC_IS_CALLED_USER foreign key (ID)
+   add constraint FK_USER_REC_IS_CALLED_USER foreign key (USE_ID)
       references "USER" (ID);
 
 alter table USER_SPORT
-   add constraint FK_USER_SPO_IS_PRACTI_USER foreign key (USE_ID)
+   add constraint FK_USER_SPO_IS_PRACTI_USER foreign key (ID)
       references "USER" (ID);
 
 alter table USER_SPORT
-   add constraint FK_USER_SPO_PRACTISES_SPORT foreign key (ID)
+   add constraint FK_USER_SPO_PRACTISES_SPORT foreign key (SPO_ID)
       references SPORT (ID);
 
 alter table USER_TRAINING_PLAN
-   add constraint FK_USER_TRA_CALLS_ON_TRAINING foreign key (TRA_ID)
+   add constraint FK_USER_TRA_CALLS_ON_TRAINING foreign key (ID)
       references TRAINING_PLAN (ID);
 
 alter table USER_TRAINING_PLAN
-   add constraint FK_USER_TRA_IS_CALLED_USER foreign key (ID)
+   add constraint FK_USER_TRA_IS_CALLED_USER foreign key (USE_ID)
       references "USER" (ID);
 
