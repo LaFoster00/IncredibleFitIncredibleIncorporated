@@ -1,10 +1,10 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     11.01.2024 18:34:14                          */
+/* Created on:     11.01.2024 18:51:24                          */
 /*==============================================================*/
 
 
-drop function GENENERATESALT
+drop function GENERATESALT
 /
 
 alter table AIM
@@ -381,7 +381,7 @@ create table AIM (
 /
 
 comment on table AIM is
-'Documents the user’s aim they want to achieve, can be formulated freely and as target weight.
+'Documents the userï¿½s aim they want to achieve, can be formulated freely and as target weight.
 
 Attributs:
 @target description: The user can freely formulate the individual target they want to reach
@@ -1127,10 +1127,10 @@ comment on table "USER" is
 Attributs:
 @name: last name of the user
 @first name: first name of the user
-@weight: user’s weight in kg, as indicator for training plan and nutrition
-@height: user’s height to calculate the body mass index in m
-@body fat percentage: user’s bady fat percentage in kg/ m², as indicator for training pan and nutrion
-@basal metabolic rate: user’s basal metabolic rate in cal/hour, as indicator for training pan and nutrion
+@weight: userï¿½s weight in kg, as indicator for training plan and nutrition
+@height: userï¿½s height to calculate the body mass index in m
+@body fat percentage: userï¿½s bady fat percentage in kg/ mï¿½, as indicator for training pan and nutrion
+@basal metabolic rate: userï¿½s basal metabolic rate in cal/hour, as indicator for training pan and nutrion
 
 Relations:
 every user can practice various sports.
@@ -1440,13 +1440,13 @@ alter table USER_TRAINING_PLAN
 /
 
 
-create or replace function GENENERATESALT()
-return VARCHAR2 as
-declare
-     SALT VARCHAR2(10);
-begin
-    SELECT DBMS_RANDOM.STRING('X', 10) INTO SALT FROM DUAL;
-    return SALT;
-end;
+create or replace function GENERATESALT
+RETURN VARCHAR2
+IS
+  SALT VARCHAR2(10);
+BEGIN
+  SELECT DBMS_RANDOM.STRING('X', 10) INTO SALT FROM DUAL;
+  RETURN SALT;
+END GENERATESALT;
 /
 

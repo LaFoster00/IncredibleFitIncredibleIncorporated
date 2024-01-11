@@ -4,7 +4,7 @@
 
 <Workspace>
 	<Local Expanded="Yes">
-		<Model Expanded="Yes" ID="{40720A2E-E231-488E-B2F4-6BC482EC2E76}" Name="Incredible Fit Inc Inc" Type="{1E597170-9350-11D1-AB3C-0020AF71E433}" URL="IncredibleFitIncInc_ERD.cdm"/>
+		<Model Expanded="Yes" ID="{40720A2E-E231-488E-B2F4-6BC482EC2E76}" Loaded="No" Name="Incredible Fit Inc Inc" Type="{1E597170-9350-11D1-AB3C-0020AF71E433}" URL="IncredibleFitIncInc_ERD.cdm"/>
 		<Model Expanded="Yes" ID="{67E92B05-230C-4A44-B067-40B3CE79F2D9}" Name="Incredible Fit Inc Inc" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="Incredible Fit Inc Inc.pdm"/>
 	</Local>
 	<BrowserModule Name="Repository"/>
