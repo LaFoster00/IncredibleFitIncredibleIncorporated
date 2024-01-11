@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:IncredibleFit.ViewModels"
              x:Class="IncredibleFit.Screens.Settings"
-             Title="Settings">
+             Title="Settings"
+             x:DataType="viewModels:SettingsViewModel">
+
     <VerticalStackLayout>
         <Button x:Name="LogOut"
-                Text="Ausloggen"/>
+                Text="Ausloggen"
+                Command="{Binding LogoutCommand}"/>
         <Button x:Name="DeleteAccoung"
-                Text="Account löschen"/>
+                Text="Account löschen"
+                Command="{Binding DeleteAccountCommand}"/>
     </VerticalStackLayout>
 </ContentPage>
