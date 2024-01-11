@@ -323,7 +323,7 @@ namespace IncredibleFit.SQL
             var idProperty = GetIdProperty<T>(ParameterDirection.Input);
             parameters.Add(idProperty);
 
-            commandBuilder.Append($"WHERE {entityName.Name}.{idProperty.Name} = :{idProperty.Name}");
+            commandBuilder.Append($"WHERE \"{entityName.Name}\".{idProperty.Name} = :{idProperty.Name}");
             #endregion
 
             TypeUpdateCommands.Add(
