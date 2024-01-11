@@ -2,95 +2,30 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="IncredibleFit.Screens.Profile"
-             Title="Profile">
+             xmlns:viewModels ="clr-namespace:IncredibleFit.ViewModels"
+             xmlns:contentViews = "clr-namespace:IncredibleFit.ContentViews"
+             Title="Profile"
+             x:DataType="viewModels:ProfileViewModel">
 
     <ScrollView>
         <StackLayout>
-            <Border>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Name:" Grid.Column="0" FontAttributes="Bold"/>
-                    <Label x:Name="cardName"
-                           Text=""
-                           Grid.Column="1"/>
-                    <ImageButton Grid.Column="2" 
-                                 Source="icon_edit.png" 
-                                 MaximumHeightRequest="20"
-                                 Clicked="OnEditNameClicked"/>
-                </Grid>
-            </Border>
-            <Border>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Gewicht:" Grid.Column="0" FontAttributes="Bold"/>
-                    <Label x:Name="cardWeight"
-                           Text=""
-                           Grid.Column="1"/>
-                    <ImageButton Grid.Column="2" 
-                                 Source="icon_edit.png" 
-                                 MaximumHeightRequest="20"
-                                 Clicked="OnEditNameClicked"/>
-                </Grid>
-            </Border>
-            <Border>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Größe:" Grid.Column="0" FontAttributes="Bold"/>
-                    <Label x:Name="cardHeight"
-                           Text=""
-                           Grid.Column="1"/>
-                    <ImageButton Grid.Column="2" 
-                                 Source="icon_edit.png" 
-                                 MaximumHeightRequest="20"
-                                 Clicked="OnEditNameClicked"/>
-                </Grid>
-            </Border>
-            <Border>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Körperfettanteil:" Grid.Column="0" FontAttributes="Bold"/>
-                    <Label x:Name="cardBodyFatPercentage"
-                           Text=""
-                           Grid.Column="1"/>
-                    <ImageButton Grid.Column="2" 
-                                 Source="icon_edit.png" 
-                                 MaximumHeightRequest="20"
-                                 Clicked="OnEditNameClicked"/>
-                </Grid>
-            </Border>
-            <Border>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Fitnesslevel:" Grid.Column="0" FontAttributes="Bold"/>
-                    <Label x:Name="cardFitnesslevel"
-                           Text=""
-                           Grid.Column="1"/>
-                    <ImageButton Grid.Column="2" 
-                                 Source="icon_edit.png" 
-                                 MaximumHeightRequest="20"
-                                 Clicked="OnEditNameClicked"/>
-                </Grid>
-            </Border>
+            <contentViews:EditableField Label = "First Name"
+                                        Value = "{Binding FirstName}"/>
+            <contentViews:EditableField Label = "Last Name"
+                                        Value = "{Binding Name}"/>
+            <contentViews:EditableField Label = "Password"
+                                        Value = "{Binding Password}"/>
+            <contentViews:EditableField Label = "Email"
+                                        Value = "{Binding Email}"/>
+            <contentViews:EditableField Label = "Weight"
+                                        Value = "{Binding Weight}"
+                                        Placeholder="0"/>
+            <contentViews:EditableField Label = "Body Fat Percentage"
+                                        Value = "{Binding BodyFatPercentage}"
+                                        Placeholder="0"/>
+            <contentViews:EditableField Label = "Basal Metabolic Rate"
+                                        Value = "{Binding BasalMetabolicRate}"
+                                        Placeholder="0"/>
             <Border>
                 <Grid RowSpacing="5">
                     <Grid.ColumnDefinitions>
@@ -116,8 +51,7 @@
                            Grid.Row="2"/>
                     <ImageButton Grid.Column="2" 
                                  Source="icon_edit.png" 
-                                 MaximumHeightRequest="20"
-                                 Clicked="OnEditNameClicked"/>
+                                 MaximumHeightRequest="20"/>
                 </Grid>
             </Border>
         </StackLayout>

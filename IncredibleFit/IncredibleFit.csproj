@@ -76,6 +76,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <MauiXaml Update="IncredibleFit\ContentViews\EditableField.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
       <MauiXaml Update="IncredibleFit\PopUps\EditCaloriesPopUp.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>

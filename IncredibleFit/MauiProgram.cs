@@ -3,6 +3,7 @@ using IncredibleFit.ViewModels;
 using IncredibleFit.Screens;
 using IncredibleFit.ViewModels;
 using Microsoft.Extensions.Logging;
+using IncredibleFit.ContentViews;
 
 namespace IncredibleFit;
 
@@ -23,10 +24,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<SessionInfo>();
         builder.Services.AddSingleton<LoginViewModel>();
         builder.Services.AddSingleton<SignUpViewModel>();
+        builder.Services.AddSingleton<ProfileViewModel>();
 
         builder.Services.AddSingleton<Login>();
         builder.Services.AddSingleton<SignUp>();
         builder.Services.AddSingleton<Profile>();
+
+        builder.Services.AddTransient<EditableField>();
+        
 
 #if DEBUG
         builder.Logging.AddDebug();
