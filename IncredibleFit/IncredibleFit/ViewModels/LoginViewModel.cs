@@ -37,7 +37,7 @@ namespace IncredibleFit.ViewModels
             if (string.IsNullOrWhiteSpace(UserName) && string.IsNullOrWhiteSpace(Password))
                 return;
 
-            User? user = SQLLogin.GetUserWithEmail(UserName);
+            User? user = SQLLoginAndSignUp.GetUserWithEmail(UserName);
             
             if (user == null)
             {
