@@ -3,12 +3,13 @@
     x:Class="IncredibleFit.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:screens="clr-namespace:IncredibleFit.Screens">
+    xmlns:screens="clr-namespace:IncredibleFit.Screens"
+    Shell.FlyoutBehavior="Disabled">
 
     <ShellContent 
         Title="Login"
         ContentTemplate="{DataTemplate screens:Login}"
-        Route="MainPage"/>
+        Route="Login"/>
 
     <TabBar Route="Landing">
         <Tab Title="Ernährung" Icon="icon_food.png">
@@ -24,7 +25,7 @@
             <ShellContent x:Name="timelinePage"
                   ContentTemplate="{DataTemplate screens:Timeline}" />
         </Tab>
-        <Tab Title="Profil" Icon="icon_profile.png" Route="Profile">
+        <Tab Route="Profile" Title="Profil" Icon="icon_profile.png">
             <ShellContent ContentTemplate="{DataTemplate screens:Profile}" />
         </Tab>
         <Tab Title="Einstellungen" Icon="icon_settings.png">
