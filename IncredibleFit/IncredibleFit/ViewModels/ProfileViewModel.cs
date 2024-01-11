@@ -24,13 +24,13 @@ namespace IncredibleFit.ViewModels
         private string _email = string.Empty;
 
         [ObservableProperty]
-        private int? _weight = null;
+        private float? _weight = null;
 
         [ObservableProperty]
-        private int? _height = null;
+        private float? _height = null;
 
         [ObservableProperty]
-        private int? _bodyFatPercentage = null;
+        private float? _bodyFatPercentage = null;
 
         [ObservableProperty]
         private int? _basalMetabolicRate = null;
