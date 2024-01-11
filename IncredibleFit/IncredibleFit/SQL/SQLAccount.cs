@@ -17,7 +17,7 @@ namespace IncredibleFit.IncredibleFit.SQL
         public UserInvalidException(string message, Exception inner) : base(message, inner) { }
     }
 
-    public static class SQLLoginAndSignUp
+    public static class SQLAccount
     {
         public static User? GetUserWithEmail(in string email)
         {
@@ -42,9 +42,9 @@ namespace IncredibleFit.IncredibleFit.SQL
             OracleDatabase.UpdateObject(user);
         }
 
-        public static User CreateNewUser(string email, string firstName, string name)
+        public static User CreateNewUser(in string email, in string firstName, in string name)
         {
-            User? user = SQLLoginAndSignUp.GetUserWithEmail(email);
+            User? user = SQLAccount.GetUserWithEmail(email);
             if (user != null)
             {
                 throw new AccountTakenException();
@@ -53,6 +53,11 @@ namespace IncredibleFit.IncredibleFit.SQL
             user = new User(email, firstName, name);
             OracleDatabase.InsertObject(user);
             return user;
+        }
+
+        public static void DeleteAccount(in User account)
+        {
+            OracleDatabase.DeleteObject(account);
         }
     }
 }

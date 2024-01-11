@@ -66,7 +66,7 @@ namespace IncredibleFit.ViewModels
             User user;
             try
             {
-                user = SQLLoginAndSignUp.CreateNewUser(Email, FirstName, Name);
+                user = SQLAccount.CreateNewUser(Email, FirstName, Name);
             }
             catch (AccountTakenException)
             {
@@ -76,7 +76,7 @@ namespace IncredibleFit.ViewModels
             
             try
             {
-                SQLLoginAndSignUp.UpdatePassword(user, Password);
+                SQLAccount.UpdatePassword(user, Password);
             }
             catch (UserInvalidException e)
             {
