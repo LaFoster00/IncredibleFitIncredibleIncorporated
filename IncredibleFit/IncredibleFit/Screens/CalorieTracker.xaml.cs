@@ -2,7 +2,6 @@ using IncredibleFit.PopUps;
 using IncredibleFit.SQL;
 using IncredibleFit.Models;
 using CommunityToolkit.Maui.Views;
-using static System.Net.Mime.MediaTypeNames;
 using System.Collections.ObjectModel;
 
 namespace IncredibleFit.Screens;

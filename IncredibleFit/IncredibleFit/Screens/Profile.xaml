@@ -37,21 +37,38 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label Text="Ziel:" Grid.Column="0" FontAttributes="Bold"/>
-                    <Label Text="Beschreibung:" Grid.Column="0" Grid.Row="1"/>
-                    <Label x:Name="cardAimDescription"
-                           Text=""
-                           Grid.Column="1"
-                           Grid.Row="1"/>
-                    <Label Text="Gewichtsziel:" Grid.Column="0" Grid.Row="2"/>
-                    <Label x:Name="cardAimWeight"
-                           Text=""
-                           Grid.Column="1"
+                    <Label x:Name="cardName" FontAttributes="Bold" 
+                           FontSize="Large" HorizontalOptions="Center"
+                           Grid.ColumnSpan="2" TextColor="{StaticResource Primary}"/>
+                    <Line HorizontalOptions="Fill" BackgroundColor="{StaticResource Primary}" 
+                          Grid.Row="1" Grid.ColumnSpan="2"/>
+                    <Image Source="icon_scale.png" HeightRequest="20" WidthRequest="20"
                            Grid.Row="2"/>
-                    <ImageButton Grid.Column="2" 
-                                 Source="icon_edit.png" 
-                                 MaximumHeightRequest="20"/>
+                    <Label x:Name="cardWeight" Grid.Row="2" Grid.Column="1"/>
+                    <Image Source="icon_ruler.png" HeightRequest="20" WidthRequest="20"
+                            Grid.Row="3"/>
+                    <Label x:Name="cardHeight" Grid.Row="3" Grid.Column="1"/>
+                    <Image Source="icon_percent.png" HeightRequest="20" WidthRequest="20"
+                            Grid.Row="4"/>
+                    <Label x:Name="cardBodyFatPercentage" Grid.Row="4" Grid.Column="1"/>
+                    <Image Source="icon_biceps.png" HeightRequest="20" WidthRequest="20"
+                            Grid.Row="5"/>
+                    <Label x:Name="cardFitnesslevel" Grid.Row="5" Grid.Column="1"/>
+                    <Image Source="icon_goal.png" HeightRequest="20" WidthRequest="20"
+                            Grid.Row="6"/>
+                    <Label x:Name="cardAimDescription" Grid.Row="6" Grid.Column="1"/>
+                    <Label x:Name="cardAimWeight" Grid.Row="7" Grid.Column="1" Margin="0, -20, 0,0"/>
+                    <Line HorizontalOptions="Fill" BackgroundColor="{StaticResource Primary}" 
+                        Grid.Row="8" Grid.ColumnSpan="2"/>
+                    <Button Text="Bearbeiten" Grid.Row="9" Grid.ColumnSpan="2"/>
                 </Grid>
             </Border>
         </StackLayout>

@@ -3,9 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="IncredibleFit.Screens.Trainingplan"
              Shell.NavBarIsVisible="False">
+    <ScrollView>
     <VerticalStackLayout>
+            <Label Text="Aktueller Trainingsplan" FontAttributes="Bold" FontSize="Large" Margin="10"/>
+            <ListView ItemsSource="{Binding trainingUnits}" HasUnevenRows="True" 
+              SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
         <Border>
-            <Label Text="Aktueller Trainingsplan" FontAttributes="Bold" FontSize="Large"/>
+                                <Grid RowSpacing="10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding weekday}" FontSize="Medium" FontAttributes="Bold" Grid.ColumnSpan="2"/>
+                                    <Label Text="{Binding trainingUnit.name}" Grid.Row="1" Grid.ColumnSpan="2"/>
+                                    <Label Text="{Binding trainingUnit.description}" IsVisible="{Binding visibility}" Grid.Row="2" Grid.ColumnSpan="2"/>
+                                    <Line Grid.Row="3" Grid.ColumnSpan="2" Background="White" IsVisible="{Binding visibility}"/>
+                                    <Label Text="Schwierigkeitsgrad: " Grid.Row="4" IsVisible="{Binding visibility}"/>
+                                    <Label Text="{Binding trainingUnit.difficulty}" Grid.Row="4" Grid.Column="1" IsVisible="{Binding visibility}"/>
+                                    <Label Text="Anzahl Übungen: " Grid.Row="5" Grid.Column="0" IsVisible="{Binding visibility}"/>
+                                    <Label Text="{Binding exerciseCount}" Grid.Row="5" Grid.Column="1" IsVisible="{Binding visibility}"/>
+                                </Grid>
         </Border>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
     </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
