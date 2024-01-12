@@ -3,10 +3,11 @@ using System.Data;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using IncredibleFit.SQL.Entities;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 
-namespace IncredibleFit.IncredibleFit.SQL
+namespace IncredibleFit.SQL
 { 
     class OracleDatabase : IDisposable, IAsyncDisposable
     {
@@ -16,15 +17,23 @@ namespace IncredibleFit.IncredibleFit.SQL
             public readonly PropertyInfo PropertyInfo;
             public readonly ParameterDirection Direction;
             public readonly OracleDbType Type;
-            public readonly bool Nullable;
+            public readonly int Size;
+            public readonly string? CreateRoutine;
 
-            public CommandParameter(string name, PropertyInfo propertyInfo, ParameterDirection direction, OracleDbType type, bool nullable)
+            public CommandParameter(
+                string name,
+                PropertyInfo propertyInfo,
+                ParameterDirection direction,
+                OracleDbType type,
+                int size,
+                string? createRoutine)
             {
                 Name = name;
                 PropertyInfo = propertyInfo;
                 Direction = direction;
                 Type = type;
-                Nullable = nullable;
+                Size = size;
+                CreateRoutine = createRoutine;
             }
         }
 
@@ -132,19 +141,23 @@ namespace IncredibleFit.IncredibleFit.SQL
                 Instance.connection.Open();
                 Debug.WriteLine("Connected to Oracle Database");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 Instance.connection = null;
-                Debug.WriteLine($"Error: {ex.Message}");
-                if (ex.InnerException != null)
+                Debug.WriteLine(e);
+                var inner = e.InnerException;
+                while (inner != null)
                 {
-                    Debug.WriteLine(ex.InnerException.Message);
-                    if (ex.InnerException.InnerException != null)
-                    {
-                        Debug.WriteLine(ex.InnerException.InnerException);
-                    }
+                    Debug.WriteLine(inner);
+                    inner = inner.InnerException;
                 }
             }
+        }
+        public static OracleCommand CreateCommand(in string command)
+        {
+            var cmd = new OracleCommand(command, Instance.connection);
+            cmd.BindByName = true;
+            return cmd;
         }
 
         public static OracleDataReader? ExecuteQuery(in OracleCommand command)
@@ -157,147 +170,39 @@ namespace IncredibleFit.IncredibleFit.SQL
                 var reader = command!.ExecuteReader();
                 return reader;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine($"Error executing query: {ex.Message}");
+                Debug.WriteLine(e);
+                var inner = e.InnerException;
+                while (inner != null)
+                {
+                    Debug.WriteLine(inner);
+                    inner = inner.InnerException;
+                }
             }
 
             return null;
         }
 
-        public static OracleCommand CreateCommand(in string command)
-        {
-            var cmd = new OracleCommand(command, Instance.connection);
-            cmd.BindByName = true;
-            return cmd;
-        }
-
-        public static Entity? GetEntityAttribute(in TypeInfo info)
-        {
-            return info.GetCustomAttribute<Entity>();
-        }
-
-        public static void InsertObject<T>(in T? o)
-        {
-            if (Instance.connection == null || o == null)
-                return;
-
-            var entityName = GetEntityAttribute(typeof(T).GetTypeInfo());
-            if (entityName == null)
-                return;
-
-            ExecuteCommandWithObjectData(GetInsertCommand<T>(), o);
-        }
-
-
-        public static void InsertObjects<T>(in IReadOnlyList<T> objects)
+        public static void ExecuteNonQuery(in OracleCommand command)
         {
             if (Instance.connection == null)
                 return;
 
-            using var transaction = Instance.connection.BeginTransaction();
-            foreach (var o in objects)
+            try
             {
-                InsertObject(o);
+                command!.ExecuteNonQuery();
             }
-            transaction.Commit();
-        }
-
-        public static void UpdateObject<T>(in T? o)
-        {
-            if (Instance.connection == null || o == null)
-                return;
-
-            var entityName = GetEntityAttribute(typeof(T).GetTypeInfo());
-            if (entityName == null)
-                return;
-
-            ExecuteCommandWithObjectData(GetUpdateCommand<T>(), o);
-
-        }
-
-        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeInsertCommands = new();
-        private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetInsertCommand<T>()
-        {
-            if (TypeInsertCommands.ContainsKey(typeof(T)))
-                return TypeInsertCommands[typeof(T)];
-
-            var commandBuilder = new StringBuilder();
-            commandBuilder.Append("INSERT INTO ");
-
-            #region RetreiveTableName
-            var typeInfo = typeof(T).GetTypeInfo();
-            var entityName = GetEntityAttribute(typeInfo);
-            commandBuilder.Append(entityName!.name).Append(' ');
-            #endregion
-
-            var parameters = GetParameterList(typeof(T), true);
-
-            #region AddParamsAndValueParams
-            commandBuilder.Append("(\n");
-            for (var i = 0; i < parameters.Count; i++)
+            catch (Exception e)
             {
-                var param = parameters[i];
-                if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
-                    continue;
-                commandBuilder.Append('\t').Append(param.Name).Append(i < parameters.Count - 1 ? ",\n" : "");
+                Debug.WriteLine(e);
+                var inner = e.InnerException;
+                while (inner != null)
+                {
+                    Debug.WriteLine(inner);
+                    inner = inner.InnerException;
+                }
             }
-
-            commandBuilder.Append(")\nVALUES (");
-            for (var i = 0; i < parameters.Count; i++)
-            {
-                var param = parameters[i];
-                if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
-                    continue;
-                commandBuilder.Append(':').Append(param.Name).Append(i < parameters.Count - 1 ? ", " : "");
-            }
-
-            commandBuilder.Append(')');
-
-            commandBuilder.Append(CreateReturnStatement(parameters));
-            #endregion
-
-            TypeInsertCommands.Add(
-                typeof(T),
-                (SetupCommandWithParams(commandBuilder, parameters), parameters));
-            return TypeInsertCommands[typeof(T)];
-        }
-
-        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeUpdateCommands = new();
-        private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetUpdateCommand<T>()
-        {
-            if (TypeUpdateCommands.ContainsKey(typeof(T)))
-                return TypeUpdateCommands[typeof(T)];
-
-            var commandBuilder = new StringBuilder();
-            commandBuilder.Append("UPDATE ");
-
-            #region RetreiveTableName
-            var typeInfo = typeof(T).GetTypeInfo();
-            var entityName = GetEntityAttribute(typeInfo);
-            commandBuilder.Append(entityName!.name).Append(' ');
-            #endregion
-
-            var parameters = GetParameterList(typeof(T), false);
-
-            #region AddParamsAndValueParams
-            commandBuilder.Append("\nSET");
-            for (var i = 0; i < parameters.Count; i++)
-            {
-                var param = parameters[i];
-                commandBuilder.Append($"\t{param.Name} = :{param.Name}").Append(i < parameters.Count - 1 ? ",\n" : "\n");
-            }
-
-            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
-            parameters.Add(idProperty);
-
-            commandBuilder.Append($"WHERE {entityName.name}.{idProperty.Name} = :{idProperty.Name}");
-            #endregion
-
-            TypeUpdateCommands.Add(
-                typeof(T),
-                (SetupCommandWithParams(commandBuilder, parameters), parameters));
-            return TypeUpdateCommands[typeof(T)];
         }
 
         private static void ExecuteCommandWithObjectData(
@@ -307,9 +212,9 @@ namespace IncredibleFit.IncredibleFit.SQL
             foreach (var param in c.parameters)
             {
                 if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
-                {
                     continue;
-                }
+                if (param.CreateRoutine != null)
+                    continue;
 
                 var value = param.PropertyInfo.GetValue(o);
                 c.command.Parameters[param.Name].Value = value ?? DBNull.Value;
@@ -340,6 +245,56 @@ namespace IncredibleFit.IncredibleFit.SQL
             }
         }
 
+        public static void InsertObject<T>(in T? o)
+        {
+            if (Instance.connection == null || o == null)
+                return;
+
+            var entityName = typeof(T).GetEntity();
+            if (entityName == null)
+                return;
+
+            ExecuteCommandWithObjectData(GetInsertCommand<T>(), o);
+        }
+
+
+        public static void InsertObjects<T>(in IReadOnlyList<T> objects)
+        {
+            if (Instance.connection == null)
+                return;
+
+            using var transaction = Instance.connection.BeginTransaction();
+            foreach (var o in objects)
+            {
+                InsertObject(o);
+            }
+            transaction.Commit();
+        }
+
+        public static void UpdateObject<T>(in T? o)
+        {
+            if (Instance.connection == null || o == null)
+                return;
+
+            var entityName = typeof(T).GetEntity();
+            if (entityName == null)
+                return;
+
+            ExecuteCommandWithObjectData(GetUpdateCommand<T>(), o);
+
+        }
+
+        public static void DeleteObject<T>(in T? o)
+        {
+            if (Instance.connection == null || o == null)
+                return;
+            var entityName = typeof(T).GetEntity();
+            if (entityName == null)
+                return;
+            
+            ExecuteCommandWithObjectData(GetDeleteCommand<T>(), o);
+        }
+
         private static OracleCommand SetupCommandWithParams(
             in StringBuilder commandBuilder,
             in IReadOnlyList<CommandParameter> parameters)
@@ -351,12 +306,12 @@ namespace IncredibleFit.IncredibleFit.SQL
                 if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
                 {
                     command.Parameters.Add($"{GeneratedExt}{param.Name}", param.Type, param.Direction);
+                    command.Parameters[$"{GeneratedExt}{param.Name}"].Size = param.Size;
                 }
 
                 if (param.Direction is not (ParameterDirection.Output or ParameterDirection.ReturnValue))
                 {
                     command.Parameters.Add($"{param.Name}", param.Type, param.Direction);
-                    command.Parameters[$"{param.Name}"].IsNullable = param.Nullable;
                 }
             }
 
@@ -376,7 +331,7 @@ namespace IncredibleFit.IncredibleFit.SQL
                     else
                         continue;
 
-                var fieldAttribute = propertyInfo.GetCustomAttribute<Field>();
+                var fieldAttribute = propertyInfo.GetField();
                 if (fieldAttribute == null)
                     continue;
 
@@ -385,7 +340,8 @@ namespace IncredibleFit.IncredibleFit.SQL
                     propertyInfo,
                     direction,
                     GetOracleDbType(propertyInfo, fieldAttribute),
-                    IsNullable(propertyInfo.PropertyType))
+                    fieldAttribute.Size,
+                    propertyInfo.GetSubroutine())
                 );
 
             }
@@ -393,16 +349,148 @@ namespace IncredibleFit.IncredibleFit.SQL
             return parameters;
         }
 
+        private static string CreateReturnStatement(IReadOnlyList<CommandParameter> parameters)
+        {
+            StringBuilder vars = new("\nRETURNING ");
+            StringBuilder ids = new(" INTO ");
+            var numParams = 0;
+            foreach (var param in parameters)
+            {
+                if (param.Direction is ParameterDirection.Input)
+                    continue;
+                vars.Append(numParams > 0 ? ", " : "").Append(param.Name);
+                ids.Append(numParams > 0 ? ", " : "").Append($":{GeneratedExt}{param.Name}");
+                numParams++;
+            }
+
+            return vars.Append(ids).ToString();
+        }
+
+        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeInsertCommands = new();
+        private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetInsertCommand<T>()
+        {
+            if (TypeInsertCommands.ContainsKey(typeof(T)))
+                return TypeInsertCommands[typeof(T)];
+
+            var commandBuilder = new StringBuilder();
+            commandBuilder.Append("INSERT INTO ");
+
+            #region RetreiveTableName
+            var type = typeof(T);
+            var entityName = typeof(T).GetEntity();
+            commandBuilder.Append("\"").Append(entityName!.Name).Append("\" ");
+            #endregion
+
+            var parameters = GetParameterList(typeof(T), true);
+
+            #region AddParamsAndValueParams
+            commandBuilder.Append("(\n");
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                var param = parameters[i];
+                if (param.CreateRoutine == null && param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
+                    continue;
+                commandBuilder.Append('\t').Append(param.Name).Append(i < parameters.Count - 1 ? ",\n" : "");
+            }
+
+            commandBuilder.Append(")\nVALUES (");
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                var param = parameters[i];
+                if (param.CreateRoutine == null && param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
+                    continue;
+
+                if (param.CreateRoutine == null)
+                    commandBuilder.Append(':').Append(param.Name).Append(i < parameters.Count - 1 ? ", " : "");
+                else
+                    commandBuilder.Append(param.CreateRoutine).Append(i < parameters.Count - 1 ? ", " : "");
+            }
+
+            commandBuilder.Append(')');
+
+            commandBuilder.Append(CreateReturnStatement(parameters));
+            #endregion
+
+            TypeInsertCommands.Add(
+                typeof(T),
+                (SetupCommandWithParams(commandBuilder, parameters), parameters));
+            return TypeInsertCommands[typeof(T)];
+        }
+
+        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeUpdateCommands = new();
+        private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetUpdateCommand<T>()
+        {
+            if (TypeUpdateCommands.ContainsKey(typeof(T)))
+                return TypeUpdateCommands[typeof(T)];
+
+            var commandBuilder = new StringBuilder();
+            commandBuilder.Append("UPDATE ");
+
+            #region RetreiveTableName
+            var entityName = typeof(T).GetEntity();
+            commandBuilder.Append("\"").Append(entityName!.Name).Append("\" ");
+            #endregion
+
+            var parameters = GetParameterList(typeof(T), false);
+
+            #region AddParamsAndValueParams
+            commandBuilder.Append("\nSET");
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                var param = parameters[i];
+                commandBuilder.Append($"\t{param.Name} = :{param.Name}").Append(i < parameters.Count - 1 ? ",\n" : "\n");
+            }
+
+            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
+            parameters.Add(idProperty);
+
+            commandBuilder.Append($"WHERE \"{entityName.Name}\".{idProperty.Name} = :{idProperty.Name}");
+            #endregion
+
+            TypeUpdateCommands.Add(
+                typeof(T),
+                (SetupCommandWithParams(commandBuilder, parameters), parameters));
+            return TypeUpdateCommands[typeof(T)];
+        }
+
+        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeDeleteCommands = new();
+        private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetDeleteCommand<T>()
+        {
+            if (TypeDeleteCommands.ContainsKey(typeof(T))) 
+                return TypeDeleteCommands[typeof(T)];
+
+            var commandBuilder = new StringBuilder();
+            commandBuilder.Append("DELETE FROM ");
+
+            #region RetreiveTableName
+            var entityName = typeof(T).GetEntity();
+            commandBuilder.Append('"').Append(entityName!.Name).Append("\"\n");
+            #endregion
+
+            #region AddParamsAndValueParams
+            var parameters = new List<CommandParameter>();
+            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
+            parameters.Add(idProperty);
+
+            commandBuilder.Append($"WHERE \"{entityName.Name}\".{idProperty.Name} = :{idProperty.Name}");
+            #endregion
+
+            TypeDeleteCommands.Add(
+                typeof(T),
+                (SetupCommandWithParams(commandBuilder, parameters), parameters));
+            return TypeDeleteCommands[typeof(T)];
+        }
+
         private static CommandParameter GetIdProperty<T>(ParameterDirection direction)
         {
             try
             {
                 var info = typeof(T).GetProperties().First(info =>
-                    info.GetCustomAttribute<Field>() != null && info.GetCustomAttribute<ID>() != null);
-                var field = info.GetCustomAttribute<Field>()!;
+                    info.GetField() != null && info.GetCustomAttribute<ID>() != null);
+                var field = info.GetField()!;
                 var name = field.Name;
                 var type = GetOracleDbType(info, field);
-                return new CommandParameter(name, info, direction, type, IsNullable(info.PropertyType));
+                return new CommandParameter(name, info, direction, type, field.Size, info.GetSubroutine());
             }
             catch (InvalidOperationException)
             {
@@ -431,23 +519,6 @@ namespace IncredibleFit.IncredibleFit.SQL
             }
         }
 
-        private static string CreateReturnStatement(IReadOnlyList<CommandParameter> parameters)
-        {
-            StringBuilder vars = new("\nRETURNING ");
-            StringBuilder ids = new(" INTO ");
-            var numParams = 0;
-            foreach (var param in parameters)
-            {
-                if (param.Direction is ParameterDirection.Input)
-                    continue;
-                vars.Append(numParams > 0 ? ", " : "").Append(param.Name);
-                ids.Append(numParams > 0 ? ", " : "").Append($":{GeneratedExt}{param.Name}");
-                numParams++;
-            }
-
-            return vars.Append(ids).ToString();
-        }
-
         public static void CloseConnection()
         {
             Instance.connection?.Close();
@@ -463,6 +534,8 @@ namespace IncredibleFit.IncredibleFit.SQL
             {
                 case OracleDecimal or:
                     return or.Value;
+                case OracleString os:
+                    return os.Value;
                 default:
                     return o;
             }

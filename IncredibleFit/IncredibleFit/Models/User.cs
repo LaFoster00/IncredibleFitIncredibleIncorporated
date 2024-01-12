@@ -1,4 +1,4 @@
-﻿namespace IncredibleFit.IncredibleFit.Models
+﻿namespace IncredibleFit.Models
 {
     public class User
     {

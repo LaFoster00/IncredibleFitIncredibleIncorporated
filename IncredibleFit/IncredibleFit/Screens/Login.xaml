@@ -1,0 +1,21 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:IncredibleFit.ViewModels"
+             x:Class="IncredibleFit.Screens.Login"
+             x:DataType="viewModels:LoginViewModel">
+
+    <StackLayout Padding="20">
+
+        <Label Text="Login" FontSize="30" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+
+        <Entry Text="{Binding UserName}" Placeholder="Email" Margin="0,10,0,0" IsReadOnly="{Binding IsBusy}"/>
+        <Entry Text="{Binding Password}" Placeholder="Password" IsPassword="True" Margin="0,10,0,0" IsReadOnly="{Binding IsBusy}"/>
+        <Label Text="Wrong Username Or Password" IsVisible="{Binding WrongCredentials}" TextColor="DarkGoldenrod"/>
+
+        <Button Text="Login" Command="{Binding LoginCommand}" Margin="0,20,0,0"/>
+        <Button Text="Sign Up" Command="{Binding SignUpCommand}" Margin="0,10,0,0"/>
+
+    </StackLayout>
+
+</ContentPage>

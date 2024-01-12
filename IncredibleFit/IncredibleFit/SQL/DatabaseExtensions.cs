@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 
-namespace IncredibleFit.IncredibleFit.SQL
+namespace IncredibleFit.SQL
 {
     public static class DatabaseExtensions
     {
@@ -44,12 +44,22 @@ namespace IncredibleFit.IncredibleFit.SQL
                             break;
                         if (Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null)
                         {
-                            var toNullableConverter = ToNullableInfo!.MakeGenericMethod(propertyInfo.PropertyType);
-                            propertyInfo.SetValue(newInstance,
-                                toNullableConverter.Invoke(null, new[]
+                            var toNullableConverter = ToNullableInfo!.MakeGenericMethod(Nullable.GetUnderlyingType(propertyInfo.PropertyType)!);
+                            object nullable = null;
+                            try
+                            {
+                                nullable = toNullableConverter.Invoke(null, new[]
                                 {
                                     reader.GetValue(i)
-                                }));
+                                });
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                                throw;
+                            }
+                            
+                            propertyInfo.SetValue(newInstance, nullable);
                         }
                         else
                         {

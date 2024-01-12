@@ -1,8 +1,8 @@
 using CommunityToolkit.Maui.Views;
-using IncredibleFit.IncredibleFit.Screens;
-using IncredibleFit.IncredibleFit.SQL;
+using IncredibleFit.Screens;
+using IncredibleFit.SQL;
 
-namespace IncredibleFit.IncredibleFit.PopUps;
+namespace IncredibleFit.PopUps;
 
 public partial class EditRecipeSearchFilterPopUp : Popup
 {

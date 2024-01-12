@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IncredibleFit.ContentViews.EditableField"
+             xmlns:contentViews="clr-namespace:IncredibleFit.ContentViews"
+             x:Name="view">
+    <Border>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" 
+                   x:Name="MLabel" 
+                   Text="Undefined" 
+                   FontAttributes="Bold"/>
+            <Label Grid.Column="1" 
+                   x:Name="MValue" 
+                   Text="Undefined" 
+                   IsVisible="{Binding Source={x:Reference view}, Path=IsLabelVisible}" />
+            <Entry Grid.Column="1" 
+                   x:Name="MEditValue"
+                   Text="{Binding Source={x:Reference view}, Path=EditValue}" 
+                   IsVisible="{Binding Source={x:Reference view}, Path=IsEditMode}" 
+                   Placeholder="Undefined" />
+            <ImageButton Grid.Column="2"
+                         x:Name="MEditCommand"
+				         Source="icon_edit.png"
+				         MaximumHeightRequest="20"
+				         Command = "{Binding Source={x:Reference view},Path= EditCommand}"
+				         IsVisible="{Binding Source={x:Reference view}, Path=IsLabelVisible}"/>
+            <ImageButton Grid.Column="2"
+                         x:Name="MApplyCommand"
+				         Source="icon_plus.png"
+				         MaximumHeightRequest="20"
+				         Command = "{Binding Source={x:Reference view}, Path=ApplyCommand}"
+				         IsVisible = "{Binding Source={x:Reference view}, Path=IsEditMode}"/>
+        </Grid>
+    </Border>
+</ContentView>

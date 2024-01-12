@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IncredibleFit.IncredibleFit.SQL;
 
-namespace IncredibleFit.IncredibleFit.Models
+namespace IncredibleFit.Models
 {
     [Entity("EXERCISE")]
     public class Exercise
