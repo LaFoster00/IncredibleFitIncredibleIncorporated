@@ -38,6 +38,9 @@ namespace IncredibleFit.ViewModels
                 return;
 
             User? user = SQLAccount.GetUserWithEmail(UserName);
+
+            var users = OracleDatabase.ExecuteQuery(OracleDatabase.CreateCommand("SELECT * FROM \"USER\"")).ToObjectList<User>();
+
             
             if (user == null)
             {
@@ -67,6 +70,13 @@ namespace IncredibleFit.ViewModels
             // Navigate to the signup page
             // You might need to adjust the navigation method based on your application's structure
             await Application.Current!.MainPage!.Navigation.PushAsync(_signUp);
+        }
+
+        public void ClearLogin()
+        {
+            UserName = string.Empty;
+            Password = string.Empty;
+            WrongCredentials = false;
         }
     }
 }
