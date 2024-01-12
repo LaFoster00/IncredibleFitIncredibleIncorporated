@@ -14,10 +14,10 @@ namespace IncredibleFit.SQL.Entities
         [Field("PASSWORD", OracleDbType.Varchar2)]
         public string Password { get; set; } = string.Empty;
 
-        [Field("NAME", OracleDbType.Varchar2)]
+        [Field("LASTNAME", OracleDbType.Varchar2)]
         public string Name { get; set; } = string.Empty;
 
-        [Field("FIRST_NAME", OracleDbType.Varchar2)]
+        [Field("FIRSTNAME", OracleDbType.Varchar2)]
         public string FirstName { get; set; } = string.Empty;
 
         [Field("WEIGHT", OracleDbType.Double)]
@@ -26,10 +26,10 @@ namespace IncredibleFit.SQL.Entities
         [Field("HEIGHT", OracleDbType.Double)]
         public float? Height { get; set; }
 
-        [Field("BODY_FAT_PERCENTAGE", OracleDbType.Double)]
+        [Field("BODYFATPERCENTAGE", OracleDbType.Double)]
         public float? BodyFatPercentage { get; set; }
 
-        [Field("BASAL_METABOLIC_RATE", OracleDbType.Int64)]
+        [Field("BASALMETABOLICRATE", OracleDbType.Int64)]
         public int? BasalMetabolicRate { get; set; }
 
         private User() {}
