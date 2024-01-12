@@ -11,16 +11,20 @@ namespace IncredibleFit.ViewModels
     public partial class SettingsViewModel : BaseViewModel
     {
         private readonly SessionInfo _info;
+        private readonly LoginViewModel _loginViewModel;
 
-        public SettingsViewModel(SessionInfo info)
+
+        public SettingsViewModel(SessionInfo info, LoginViewModel loginViewModel)
         {
             this._info = info;
+            _loginViewModel = loginViewModel;
         }
 
         [RelayCommand]
         public async Task Logout()
         {
             _info.User = null;
+            _loginViewModel.ClearLogin();
             await Shell.Current.GoToAsync("//Login");
         }
 

@@ -3,13 +3,14 @@ using System.Data;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using CommunityToolkit.Mvvm.ComponentModel;
 using IncredibleFit.SQL.Entities;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 
 namespace IncredibleFit.SQL
 { 
-    class OracleDatabase : IDisposable, IAsyncDisposable
+    public partial class OracleDatabase : ObservableObject, IDisposable, IAsyncDisposable
     {
         private struct CommandParameter
         {
@@ -36,6 +37,17 @@ namespace IncredibleFit.SQL
                 CreateRoutine = createRoutine;
             }
         }
+
+        [ObservableProperty]
+        private bool _connected = false;
+
+        [ObservableProperty] 
+        private bool _connecting = false;
+
+        [ObservableProperty] 
+        private bool _connectionFailed = false;
+
+        private OracleConnection? connection = null;
 
         private static OracleDatabase? _instance = null;
         private static readonly string GeneratedExt = "generated";
@@ -96,19 +108,19 @@ namespace IncredibleFit.SQL
             { typeof(DateTimeOffset), OracleDbType.TimeStampTZ },
         };
 
-        private OracleConnection? connection = null;
-
         private OracleDatabase()
         {
         }
 
-        public static void Connect(in string username, in string password)
+        public static async Task Connect(string username, string password)
         {
             if (Instance.connection != null)
             {
                 Debug.WriteLine("Oracle Connection already established.");
                 return;
             }
+
+            Instance.Connecting = true;
 
             OracleConfiguration.TraceFileLocation = "E:\\";
 
@@ -138,11 +150,16 @@ namespace IncredibleFit.SQL
             Instance.connection = new OracleConnection(connectionString);
             try
             {
-                Instance.connection.Open();
+                await Task.Delay(2000);
+                await Instance.connection.OpenAsync();
                 Debug.WriteLine("Connected to Oracle Database");
+                Instance.Connected = true;
+                Instance.ConnectionFailed = false;
             }
             catch (Exception e)
             {
+                Instance.Connecting = false;
+                Instance.ConnectionFailed = true;
                 Instance.connection = null;
                 Debug.WriteLine(e);
                 var inner = e.InnerException;
@@ -522,6 +539,7 @@ namespace IncredibleFit.SQL
         public static void CloseConnection()
         {
             Instance.connection?.Close();
+            Instance.Connected = false;
         }
 
         // Converts oracle objects to their .net equivalent in case it is an oracle object
@@ -543,12 +561,17 @@ namespace IncredibleFit.SQL
 
         public void Dispose()
         {
+            Connected = false;
             connection?.Dispose();
+            connection = null;
         }
 
         public async ValueTask DisposeAsync()
         {
-            if (connection != null) await connection.DisposeAsync();
+            Connected = false;
+            if (connection != null) 
+                await connection.DisposeAsync();
+            connection = null;
         }
     }
 }

@@ -88,6 +88,9 @@
       <MauiXaml Update="IncredibleFit\Screens\CalorieTracker.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\Connecting.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
       <MauiXaml Update="IncredibleFit\Screens\DietPlan.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>

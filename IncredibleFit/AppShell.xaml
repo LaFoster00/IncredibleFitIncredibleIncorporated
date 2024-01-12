@@ -6,6 +6,11 @@
     xmlns:screens="clr-namespace:IncredibleFit.Screens"
     Shell.FlyoutBehavior="Disabled">
 
+    <ShellContent
+        Title="Connecting"
+        ContentTemplate="{DataTemplate screens:Connecting}"
+        Route="Connecting"/>
+
     <ShellContent 
         Title="Login"
         ContentTemplate="{DataTemplate screens:Login}"
