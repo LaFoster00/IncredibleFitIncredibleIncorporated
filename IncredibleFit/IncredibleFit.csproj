@@ -82,6 +82,9 @@
       <MauiXaml Update="IncredibleFit\PopUps\EditRecipeSearchFilterPopUp.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
+      <MauiXaml Update="IncredibleFit\PopUps\ExerciseDonePopOup.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
       <MauiXaml Update="IncredibleFit\Screens\CalorieTracker.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
