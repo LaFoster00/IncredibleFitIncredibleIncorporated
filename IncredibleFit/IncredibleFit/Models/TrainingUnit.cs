@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +8,8 @@ using IncredibleFit.IncredibleFit.SQL;
 
 namespace IncredibleFit.IncredibleFit.Models
 {
-    [Entity("EXERCISE")]
-    public class Exercise
+    [Entity("TRAINING UNIT")]
+    public class TrainingUnit
     {
         [Field("id")]
         public int id { get; private set; }
@@ -16,22 +17,16 @@ namespace IncredibleFit.IncredibleFit.Models
         public string name { get; set; }
         [Field("description")]
         public string description { get; set; }
-        [Field("duration")]
-        public double duration { get; set; }
+        [Field("difficulty")]
+        public string difficulty { get; set; }
 
-        public int[][] setsAndReps { get; set; }
+        public List<Exercise> exercises { get; set; } = new List<Exercise>();
 
-        public Color strokeColor { get; set; } = Color.FromArgb("#00000000");
-        public Color textColor { get; set; } = Color.FromArgb("#6E6E6E");
-
-        public bool isFinished { get; set; } = false;
-
-        public Exercise(string name, string description, double duration) 
+        public TrainingUnit(string name, string description, string difficulty)
         {
-            this.id = id;
             this.name = name;
             this.description = description;
-            this.duration = duration;
+            this.difficulty = difficulty;
         }
     }
 }

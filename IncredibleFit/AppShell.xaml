@@ -11,7 +11,6 @@
         <Tab Title="Ernährung"
              Icon="icon_food.png">
             <ShellContent Title="Kalorientracker" ContentTemplate="{DataTemplate screens:CalorieTracker}" />
-            <ShellContent Title="Ernährungsplan" ContentTemplate="{DataTemplate screens:DietPlan}" />
             <ShellContent Title="Rezepte finden" ContentTemplate="{DataTemplate screens:RecipeSearch}" />
         </Tab>
         <Tab Title="Training"
