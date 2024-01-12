@@ -10,12 +10,17 @@ namespace IncredibleFit.SQL
 {
     public class SQLTraining
     {
-        private SQLProfile _sqlProfile = new SQLProfile();
-        private User _currentUser = null;
+        private User? _currentUser;
+        private readonly SessionInfo _sessionInfo;
 
-        public SQLTraining() 
+        public SQLTraining(SessionInfo info) 
         {
-            _currentUser = _sqlProfile.getUser();
+            _sessionInfo = info;
+
+            if (_sessionInfo.User is null)
+                return;
+
+            _currentUser = _sessionInfo.User;
         }
 
         public TrainingPlan getCurrentTrainingPlan()

@@ -8,12 +8,13 @@ namespace IncredibleFit.Screens;
 
 public partial class Training : ContentPage
 {
-    private SQLTraining _sqlTraining = new SQLTraining();
+	private SQLTraining _sqlTraining;
     public ObservableCollection<Exercise> exercises { get; set; } = new ObservableCollection<Exercise>();
 
     private TrainingUnit _nextTrainingUnit = null;
-    public Training()
+    public Training(SQLTraining sQLTraining)
     {
+		_sqlTraining = sQLTraining;
         InitializeComponent();
         _nextTrainingUnit = _sqlTraining.getNextTrainingUnit();
 		for(int i=0; i<_nextTrainingUnit.exercises.Count; i++)
@@ -36,7 +37,7 @@ public partial class Training : ContentPage
 		{
             btn.Text = "Training starten";
             setStrokeAndTextColors(Color.FromArgb("#00000000"), Color.FromArgb("#6E6E6E"));
-			_sqlTraining.setTrainingUnitDone(_nextTrainingUnit);
+            _sqlTraining.setTrainingUnitDone(_nextTrainingUnit);
         }
 	}
 
