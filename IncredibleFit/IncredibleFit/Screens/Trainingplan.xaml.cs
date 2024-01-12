@@ -6,11 +6,12 @@ namespace IncredibleFit.Screens;
 
 public partial class Trainingplan : ContentPage
 {
-    private SQLTraining _sqlTraining = new SQLTraining();
+    private SQLTraining _sqlTraining;
 	private TrainingPlan _currentTrainingPlan = null;
     public ObservableCollection<TrainingPlanUnit> trainingUnits { get; set; } = new ObservableCollection<TrainingPlanUnit>();
-	public Trainingplan()
+	public Trainingplan(SQLTraining sQLTraining)
 	{
+		_sqlTraining = sQLTraining;
 		_currentTrainingPlan = _sqlTraining.getCurrentTrainingPlan();
 		for(int i = 0; i<_currentTrainingPlan.trainingUnits.Length; i++)
 		{

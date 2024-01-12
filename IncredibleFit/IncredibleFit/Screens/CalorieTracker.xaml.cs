@@ -9,13 +9,18 @@ namespace IncredibleFit.Screens;
 
 public partial class CalorieTracker : ContentPage
 {
-    private SQLProfile _sqlP = new SQLProfile();
-    private User _currentUser = null;
+    private User? _currentUser;
+    private readonly SessionInfo _sessionInfo;
     public ObservableCollection<CalorieTrack> weekCalorieTracks { get; set; } = new ObservableCollection<CalorieTrack>();
-    public CalorieTracker()
+    public CalorieTracker(SessionInfo info)
 	{
-		InitializeComponent();
-        _currentUser = _sqlP.getUser();
+        _sessionInfo = info;
+
+        if (_sessionInfo.User is null)
+            return;
+
+        _currentUser = _sessionInfo.User;
+        InitializeComponent();
         DateTime monday = getStartOfWeek();
         for (int i = 0; i < 7; i++)
         {
@@ -27,7 +32,10 @@ public partial class CalorieTracker : ContentPage
 
     private void ChangeLabel()
     {
-        UserBasalMetabolicRate.Text = _currentUser.BasalMetabolicRate + " kcal";
+        if(_currentUser != null)
+        {
+            UserBasalMetabolicRate.Text = _currentUser.BasalMetabolicRate + " kcal";
+        }
         ChangeAverageData();
     }
 
