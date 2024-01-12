@@ -28,6 +28,7 @@ namespace IncredibleFit.IncredibleFit.Models
 
         public Exercise(string name, string description, double duration) 
         {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.duration = duration;

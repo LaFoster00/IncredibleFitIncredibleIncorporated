@@ -9,7 +9,7 @@ public partial class Trainingplan : ContentPage
     private SQLTraining _sqlTraining = new SQLTraining();
 	private TrainingPlan _currentTrainingPlan = null;
     public ObservableCollection<TrainingPlanUnit> trainingUnits { get; set; } = new ObservableCollection<TrainingPlanUnit>();
-    public Trainingplan()
+	public Trainingplan()
 	{
 		_currentTrainingPlan = _sqlTraining.getCurrentTrainingPlan();
 		for(int i = 0; i<_currentTrainingPlan.trainingUnits.Length; i++)

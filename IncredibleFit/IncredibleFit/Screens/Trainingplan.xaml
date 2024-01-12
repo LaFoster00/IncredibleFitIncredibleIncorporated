@@ -4,14 +4,14 @@
              x:Class="IncredibleFit.IncredibleFit.Screens.Trainingplan"
              Shell.NavBarIsVisible="False">
     <ScrollView>
-        <VerticalStackLayout>
+    <VerticalStackLayout>
             <Label Text="Aktueller Trainingsplan" FontAttributes="Bold" FontSize="Large" Margin="10"/>
             <ListView ItemsSource="{Binding trainingUnits}" HasUnevenRows="True" 
               SeparatorVisibility="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Border>
+        <Border>
                                 <Grid RowSpacing="10">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
@@ -34,11 +34,11 @@
                                     <Label Text="Anzahl Übungen: " Grid.Row="5" Grid.Column="0" IsVisible="{Binding visibility}"/>
                                     <Label Text="{Binding exerciseCount}" Grid.Row="5" Grid.Column="1" IsVisible="{Binding visibility}"/>
                                 </Grid>
-                            </Border>
+        </Border>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </VerticalStackLayout>
+    </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
