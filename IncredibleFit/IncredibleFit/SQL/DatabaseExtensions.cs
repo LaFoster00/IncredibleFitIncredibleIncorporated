@@ -12,7 +12,7 @@ namespace IncredibleFit.IncredibleFit.SQL
 {
     public static class DatabaseExtensions
     {
-        /*public static List<T> ToObjectList<T>(this OracleDataReader reader)
+        public static List<T> ToObjectList<T>(this OracleDataReader reader)
         {
             TypeInfo typeInfo = typeof(T).GetTypeInfo();
             var entityName = typeInfo.GetCustomAttribute(typeof(Entity));
@@ -46,6 +46,6 @@ namespace IncredibleFit.IncredibleFit.SQL
                 list.Add(newInstance);
             }
             return list;
-        }*/
+        }
     }
 }
