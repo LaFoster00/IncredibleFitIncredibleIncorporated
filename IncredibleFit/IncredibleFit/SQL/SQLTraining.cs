@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IncredibleFit.Models;
+using IncredibleFit.SQL.Entities;
 
 namespace IncredibleFit.SQL
 {

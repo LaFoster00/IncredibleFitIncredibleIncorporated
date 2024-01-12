@@ -45,7 +45,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label x:Name="cardName" FontAttributes="Bold" 
+                    <Label Text="{Binding FirstName}" FontAttributes="Bold" 
                            FontSize="Large" HorizontalOptions="Center"
                            Grid.ColumnSpan="2" TextColor="{StaticResource Primary}"/>
                     <Line HorizontalOptions="Fill" BackgroundColor="{StaticResource Primary}" 

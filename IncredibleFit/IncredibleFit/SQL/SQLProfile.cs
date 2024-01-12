@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IncredibleFit.SQL.Entities;
 
 namespace IncredibleFit.SQL
 {
@@ -14,7 +15,7 @@ namespace IncredibleFit.SQL
         public SQLProfile()
         {
             //Get User fron Database
-            _currentUser = new User("Max Mustermann", 100.5, 1.87, 15.4, 4302, new Aim("Zunehmen", 110.0), "Fortgeschritten");
+            _currentUser = new User("maxmustermann@test.de","Mustermann","Max", 100.5f, 1.87f, 15.4f, 4302);
         }
         public User getUser()
         {
