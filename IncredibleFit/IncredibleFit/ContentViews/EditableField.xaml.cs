@@ -13,6 +13,12 @@ namespace IncredibleFit.ContentViews
             set => SetValue(LabelProperty, value);
         }
 
+        public string Icon
+        {
+            get => (string)GetValue(IconProperty);
+            set => SetValue(IconProperty, value);
+        }
+
         public string Placeholder
         {
             get => (string)GetValue(PlaceholderProperty);
@@ -46,6 +52,12 @@ namespace IncredibleFit.ContentViews
 
         public static readonly BindableProperty LabelProperty = BindableProperty.Create(
             nameof(Label),
+            typeof(string),
+            typeof(EditableField),
+            string.Empty, BindingMode.TwoWay);
+
+        public static readonly BindableProperty IconProperty = BindableProperty.Create(
+            nameof(Icon),
             typeof(string),
             typeof(EditableField),
             string.Empty, BindingMode.TwoWay);
@@ -96,6 +108,9 @@ namespace IncredibleFit.ContentViews
                     break;
                 case nameof(Value):
                     MValue.Text = Value;
+                    break;
+                case nameof(Icon):
+                    MIcon.Source = Icon;
                     break;
                 case nameof(Placeholder):
                     MEditValue.Placeholder = Placeholder;

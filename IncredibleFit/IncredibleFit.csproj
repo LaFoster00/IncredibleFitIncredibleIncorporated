@@ -50,10 +50,13 @@
 
     <ItemGroup>
       <None Remove="Resources\Images\icon_average.png" />
+      <None Remove="Resources\Images\icon_basalmetabolicrate.png" />
+      <None Remove="Resources\Images\icon_check.png" />
       <None Remove="Resources\Images\icon_edit.png" />
       <None Remove="Resources\Images\icon_food.png" />
       <None Remove="Resources\Images\icon_heart.png" />
       <None Remove="Resources\Images\icon_heart_filled.png" />
+      <None Remove="Resources\Images\icon_mail.png" />
       <None Remove="Resources\Images\icon_minus.png" />
       <None Remove="Resources\Images\icon_plus.png" />
       <None Remove="Resources\Images\icon_profile.png" />
