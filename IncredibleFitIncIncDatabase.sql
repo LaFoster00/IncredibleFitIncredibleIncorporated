@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     11.01.2024 18:51:24                          */
+/* Created on:     12.01.2024 14:08:36                          */
 /*==============================================================*/
 
 
@@ -1106,7 +1106,6 @@ create index IS_A_PART_OF_FK on UNIT_TO_PLAN (
 /*==============================================================*/
 create table "USER" (
    EMAIL                VARCHAR2(50)          not null,
-   ID                   NUMBER(6),
    AIM_ID               NUMBER(6),
    FIT_ID               NUMBER(6),
    SALT                 VARCHAR2(20)          not null,
@@ -1154,7 +1153,7 @@ create index OWNS2_FK on "USER" (
 /* Index: USER_EMPLOYEE_FK                                      */
 /*==============================================================*/
 create index USER_EMPLOYEE_FK on "USER" (
-   ID ASC
+   
 )
 /
 
@@ -1405,7 +1404,7 @@ alter table "USER"
 /
 
 alter table "USER"
-   add constraint FK_USER_USER_EMPL_EMPLOYEE foreign key (ID)
+   add constraint FK_USER_USER_EMPL_EMPLOYEE foreign key ()
       references EMPLOYEE (ID)
 /
 
