@@ -45,7 +45,7 @@ namespace IncredibleFit.SQL
                         if (Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null)
                         {
                             var toNullableConverter = ToNullableInfo!.MakeGenericMethod(Nullable.GetUnderlyingType(propertyInfo.PropertyType)!);
-                            object nullable = null;
+                            object? nullable = null;
                             try
                             {
                                 nullable = toNullableConverter.Invoke(null, new[]
