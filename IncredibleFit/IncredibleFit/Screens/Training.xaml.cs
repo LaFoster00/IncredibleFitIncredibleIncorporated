@@ -1,10 +1,10 @@
 using System.Collections.ObjectModel;
-using IncredibleFit.IncredibleFit.Models;
-using IncredibleFit.IncredibleFit.PopUps;
-using IncredibleFit.IncredibleFit.SQL;
+using IncredibleFit.Models;
+using IncredibleFit.PopUps;
+using IncredibleFit.SQL;
 using CommunityToolkit.Maui.Views;
 
-namespace IncredibleFit.IncredibleFit.Screens;
+namespace IncredibleFit.Screens;
 
 public partial class Training : ContentPage
 {

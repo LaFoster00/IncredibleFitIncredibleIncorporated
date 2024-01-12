@@ -1,8 +1,8 @@
 using CommunityToolkit.Maui.Views;
-using IncredibleFit.IncredibleFit.Models;
-using IncredibleFit.IncredibleFit.Screens;
+using IncredibleFit.Models;
+using IncredibleFit.Screens;
 
-namespace IncredibleFit.IncredibleFit.PopUps;
+namespace IncredibleFit.PopUps;
 
 public partial class ExerciseDonePopOup : Popup
 {

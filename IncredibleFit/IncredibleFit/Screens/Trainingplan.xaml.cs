@@ -1,8 +1,8 @@
-using IncredibleFit.IncredibleFit.Models;
-using IncredibleFit.IncredibleFit.SQL;
+using IncredibleFit.Models;
+using IncredibleFit.SQL;
 using System.Collections.ObjectModel;
 
-namespace IncredibleFit.IncredibleFit.Screens;
+namespace IncredibleFit.Screens;
 
 public partial class Trainingplan : ContentPage
 {

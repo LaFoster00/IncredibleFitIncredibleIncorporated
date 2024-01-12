@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IncredibleFit.IncredibleFit.SQL;
+using IncredibleFit.SQL;
 
-namespace IncredibleFit.IncredibleFit.Models
+namespace IncredibleFit.Models
 {
     [Entity("TRAINING UNIT")]
     public class TrainingUnit
