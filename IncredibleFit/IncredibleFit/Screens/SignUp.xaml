@@ -1,17 +1,31 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="IncredibleFit.Screens.SignUp">
+             xmlns:viewModels="clr-namespace:IncredibleFit.ViewModels"
+             x:Class="IncredibleFit.Screens.SignUp"
+             x:DataType="viewModels:SignUpViewModel">
 
 	<StackLayout Padding="20">
 
 		<Label Text="Sign Up" FontSize="30" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
 
 		<Entry Text="{Binding Email}" Placeholder="Email" Margin="0,10,0,0"/>
-		<Entry Text="{Binding FirstName}" Placeholder="First Name" Margin="0,10,0,0"/>
+        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="DarkGoldenrod"/>
+        <Label Text="Email Address Already Registered" IsVisible="{Binding AccountTaken}" TextColor="DarkGoldenrod"/>
+        <Label Text="Email Invalid" IsVisible="{Binding EmailInvalid}" TextColor="DarkGoldenrod"/>
+
+        <Entry Text="{Binding FirstName}" Placeholder="First Name" Margin="0,10,0,0"/>
+        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="DarkGoldenrod"/>
+
 		<Entry Text="{Binding Name}" Placeholder="Last Name" Margin="0,10,0,0"/>
+        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="DarkGoldenrod"/>
+
 		<Entry Text="{Binding Password}" Placeholder="Password" IsPassword="True" Margin="0,10,0,0"/>
+        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="DarkGoldenrod"/>
+
 		<Entry Text="{Binding ConfirmPassword}" Placeholder="Confirm Password" IsPassword="True" Margin="0,10,0,0"/>
+        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="DarkGoldenrod"/>
+        <Label Text="Password Doesn't Match" IsVisible="{Binding PasswordDoesntMatch}" TextColor="DarkGoldenrod"/>
 
 		<Button Text="Sign Up" Command="{Binding SignUpCommand}" Margin="0,20,0,0"/>
 

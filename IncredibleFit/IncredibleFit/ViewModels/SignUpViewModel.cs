@@ -1,13 +1,17 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using IncredibleFit.SQL;
-using IncredibleFit.SQL.Entities;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using IncredibleFit.IncredibleFit.SQL;
+using IncredibleFit.SQL.Entities;
 
 namespace IncredibleFit.ViewModels
 {
     public partial class SignUpViewModel : BaseViewModel
     {
+        [GeneratedRegex("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")]
+        private static partial Regex EmailRegex();
+
         [ObservableProperty]
         private string _email = string.Empty;
         [ObservableProperty]
@@ -35,6 +39,8 @@ namespace IncredibleFit.ViewModels
         [RelayCommand]
         private async Task SignUp()
         {
+            Reset(false);
+
             if (string.IsNullOrWhiteSpace(Email)
                 || string.IsNullOrWhiteSpace(FirstName)
                 || string.IsNullOrWhiteSpace(Name)
@@ -45,9 +51,7 @@ namespace IncredibleFit.ViewModels
                 return;
             }
 
-            bool validEmail = Regex.IsMatch(Email, "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
-
-            if (!validEmail)
+            if (!EmailRegex().IsMatch(Email))
             {
                 EmailInvalid = true;
                 return;
@@ -59,52 +63,46 @@ namespace IncredibleFit.ViewModels
                 return;
             }
 
-            var reader = OracleDatabase.ExecuteQuery(OracleDatabase.CreateCommand(
-                $"""
-                SELECT * FROM "USER"
-                WHERE EMAIL = '{Email}'
-                """))!;
-
-            var users = reader.ToObjectList<User>();
-            if (users.Any())
+            User user;
+            try
+            {
+                user = SQLAccount.CreateNewUser(Email, FirstName, Name);
+            }
+            catch (AccountTakenException)
             {
                 AccountTaken = true;
                 return;
             }
-
-            var commandText =
-                $"""
-                INSERT INTO "USER" (SALT, EMAIL, FIRST_NAME, NAME)
-                VALUES (GENERATESALT, '{Email}', '{FirstName}', '{Name}')
-                """;
-            OracleDatabase.ExecuteNonQuery(OracleDatabase.CreateCommand(commandText));
-
-            reader = OracleDatabase.ExecuteQuery(OracleDatabase.CreateCommand(
-                $"""
-                SELECT * FROM "USER"
-                WHERE EMAIL = '{Email}'
-                """))!;
-
-            users = reader.ToObjectList<User>();
-            if (!users.Any())
+            
+            try
             {
+                SQLAccount.UpdatePassword(user, Password);
+            }
+            catch (UserInvalidException e)
+            {
+                Debug.WriteLine(e);
                 ErrorCreatingAcount = true;
                 return;
             }
 
-            var newUser = users[0];
-            newUser.Password = PasswordUtil.Hash(Password, newUser.Salt);
-
-            commandText =
-                $"""
-                UPDATE "USER"
-                SET PASSWORD = '{newUser.Password}'
-                WHERE EMAIL = '{Email}'
-                """;
-
-            OracleDatabase.ExecuteNonQuery(OracleDatabase.CreateCommand(commandText));
-
             await Application.Current!.MainPage!.Navigation.PopAsync();
+        }
+
+        internal void Reset(bool text)
+        {
+            NotAllFilledOut = false;
+            EmailInvalid = false;
+            PasswordDoesntMatch = false;
+            AccountTaken = false;
+            ErrorCreatingAcount = false;
+
+            if (!text) return;
+
+            Email = string.Empty;
+            FirstName = string.Empty;
+            Name = string.Empty;
+            Password = string.Empty;
+            ConfirmPassword = string.Empty;
         }
     }
 }

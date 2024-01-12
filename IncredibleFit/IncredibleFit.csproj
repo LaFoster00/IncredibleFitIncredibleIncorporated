@@ -57,6 +57,8 @@
       <None Remove="Resources\Images\icon_minus.png" />
       <None Remove="Resources\Images\icon_plus.png" />
       <None Remove="Resources\Images\icon_profile.png" />
+      <None Remove="Resources\Images\icon_ruler.png" />
+      <None Remove="Resources\Images\icon_scale.png" />
       <None Remove="Resources\Images\icon_settings.png" />
       <None Remove="Resources\Images\icon_timeline.png" />
       <None Remove="Resources\Images\icon_training.png" />
@@ -85,10 +87,10 @@
       <MauiXaml Update="IncredibleFit\PopUps\EditRecipeSearchFilterPopUp.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="IncredibleFit\Screens\CalorieTracker.xaml">
+      <MauiXaml Update="IncredibleFit\PopUps\ExerciseDonePopOup.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="IncredibleFit\Screens\DietPlan.xaml">
+      <MauiXaml Update="IncredibleFit\Screens\CalorieTracker.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\Screens\Profile.xaml">

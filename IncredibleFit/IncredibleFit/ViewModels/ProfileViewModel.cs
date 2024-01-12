@@ -24,13 +24,13 @@ namespace IncredibleFit.ViewModels
         private string _email = string.Empty;
 
         [ObservableProperty]
-        private int? _weight = null;
+        private float? _weight = null;
 
         [ObservableProperty]
-        private int? _height = null;
+        private float? _height = null;
 
         [ObservableProperty]
-        private int? _bodyFatPercentage = null;
+        private float? _bodyFatPercentage = null;
 
         [ObservableProperty]
         private int? _basalMetabolicRate = null;
@@ -42,7 +42,6 @@ namespace IncredibleFit.ViewModels
             _sessionInfo = info;
             _sessionInfo.PropertyChanged += SessionInfoPropertyChanged;
             PopulateProperties();
-            PropertyChanged += ProfileViewModel_PropertyChanged;
         }
 
         private void ProfileViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -86,9 +85,11 @@ namespace IncredibleFit.ViewModels
 
         private void SessionInfoPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(SessionInfo.User))
+            switch (e.PropertyName)
             {
-                PopulateProperties();
+                case nameof(SessionInfo.User):
+                    PopulateProperties();
+                    return;
             }
         }
 
@@ -104,9 +105,11 @@ namespace IncredibleFit.ViewModels
                 Height = _sessionInfo.User.Height;
                 BodyFatPercentage = _sessionInfo.User.BodyFatPercentage;
                 BasalMetabolicRate = _sessionInfo.User.BasalMetabolicRate;
+                PropertyChanged += ProfileViewModel_PropertyChanged;
             }
             else
             {
+                PropertyChanged -= ProfileViewModel_PropertyChanged;
                 FirstName = "Undefined";
                 FirstName = "Undefined";
                 Name = "Undefined";

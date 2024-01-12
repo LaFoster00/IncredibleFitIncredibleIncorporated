@@ -3,6 +3,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using IncredibleFit.SQL.Entities;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 
@@ -152,6 +153,12 @@ namespace IncredibleFit.SQL
                 }
             }
         }
+        public static OracleCommand CreateCommand(in string command)
+        {
+            var cmd = new OracleCommand(command, Instance.connection);
+            cmd.BindByName = true;
+            return cmd;
+        }
 
         public static OracleDataReader? ExecuteQuery(in OracleCommand command)
         {
@@ -198,11 +205,44 @@ namespace IncredibleFit.SQL
             }
         }
 
-        public static OracleCommand CreateCommand(in string command)
+        private static void ExecuteCommandWithObjectData(
+            in (OracleCommand command, IReadOnlyList<CommandParameter> parameters) c,
+            in object o)
         {
-            var cmd = new OracleCommand(command, Instance.connection);
-            cmd.BindByName = true;
-            return cmd;
+            foreach (var param in c.parameters)
+            {
+                if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
+                    continue;
+                if (param.CreateRoutine != null)
+                    continue;
+
+                var value = param.PropertyInfo.GetValue(o);
+                c.command.Parameters[param.Name].Value = value ?? DBNull.Value;
+            }
+
+            try
+            {
+                c.command.ExecuteNonQuery();
+
+                foreach (var param in c.parameters)
+                {
+                    if (param.Direction is ParameterDirection.Input)
+                    {
+                        continue;
+                    }
+                    param.PropertyInfo.SetValue(o, ToSystemObject(c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value));
+                }
+            }
+            catch (OracleException e)
+            {
+                Debug.WriteLine(e);
+                var inner = e.InnerException;
+                while (inner != null)
+                {
+                    Debug.WriteLine(inner);
+                    inner = inner.InnerException;
+                }
+            }
         }
 
         public static void InsertObject<T>(in T? o)
@@ -244,132 +284,15 @@ namespace IncredibleFit.SQL
 
         }
 
-        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeInsertCommands = new();
-        private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetInsertCommand<T>()
+        public static void DeleteObject<T>(in T? o)
         {
-            if (TypeInsertCommands.ContainsKey(typeof(T)))
-                return TypeInsertCommands[typeof(T)];
-
-            var commandBuilder = new StringBuilder();
-            commandBuilder.Append("INSERT INTO \"");
-
-            #region RetreiveTableName
-            var type = typeof(T);
+            if (Instance.connection == null || o == null)
+                return;
             var entityName = typeof(T).GetEntity();
-            commandBuilder.Append(entityName!.Name).Append("\" ");
-            #endregion
-
-            var parameters = GetParameterList(typeof(T), true);
-
-            #region AddParamsAndValueParams
-            commandBuilder.Append("(\n");
-            for (var i = 0; i < parameters.Count; i++)
-            {
-                var param = parameters[i];
-                if (param.CreateRoutine == null && param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
-                    continue;
-                commandBuilder.Append('\t').Append(param.Name).Append(i < parameters.Count - 1 ? ",\n" : "");
-            }
-
-            commandBuilder.Append(")\nVALUES (");
-            for (var i = 0; i < parameters.Count; i++)
-            {
-                var param = parameters[i];
-                if (param.CreateRoutine == null && param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
-                    continue;
-
-                if (param.CreateRoutine == null)
-                    commandBuilder.Append(':').Append(param.Name).Append(i < parameters.Count - 1 ? ", " : "");
-                else
-                    commandBuilder.Append(param.CreateRoutine).Append(i < parameters.Count - 1 ? ", " : "");
-            }
-
-            commandBuilder.Append(')');
-
-            commandBuilder.Append(CreateReturnStatement(parameters));
-            #endregion
-
-            TypeInsertCommands.Add(
-                typeof(T),
-                (SetupCommandWithParams(commandBuilder, parameters), parameters));
-            return TypeInsertCommands[typeof(T)];
-        }
-
-        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeUpdateCommands = new();
-        private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetUpdateCommand<T>()
-        {
-            if (TypeUpdateCommands.ContainsKey(typeof(T)))
-                return TypeUpdateCommands[typeof(T)];
-
-            var commandBuilder = new StringBuilder();
-            commandBuilder.Append("UPDATE \"");
-
-            #region RetreiveTableName
-            var type = typeof(T);
-            var entityName = type.GetEntity();
-            commandBuilder.Append(entityName!.Name).Append("\" ");
-            #endregion
-
-            var parameters = GetParameterList(typeof(T), false);
-
-            #region AddParamsAndValueParams
-            commandBuilder.Append("\nSET");
-            for (var i = 0; i < parameters.Count; i++)
-            {
-                var param = parameters[i];
-                commandBuilder.Append($"\t{param.Name} = :{param.Name}").Append(i < parameters.Count - 1 ? ",\n" : "\n");
-            }
-
-            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
-            parameters.Add(idProperty);
-
-            commandBuilder.Append($"WHERE \"{entityName.Name}\".{idProperty.Name} = :{idProperty.Name}");
-            #endregion
-
-            TypeUpdateCommands.Add(
-                typeof(T),
-                (SetupCommandWithParams(commandBuilder, parameters), parameters));
-            return TypeUpdateCommands[typeof(T)];
-        }
-
-        private static void ExecuteCommandWithObjectData(
-            in (OracleCommand command, IReadOnlyList<CommandParameter> parameters) c,
-            in object o)
-        {
-            foreach (var param in c.parameters)
-            {
-                if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
-                    continue;
-                if (param.CreateRoutine != null)
-                    continue;
-
-                var value = param.PropertyInfo.GetValue(o);
-                c.command.Parameters[param.Name].Value = value ?? DBNull.Value;
-            }
-
-            try
-            {
-                c.command.ExecuteNonQuery();
-
-                foreach (var param in c.parameters)
-                {
-                    if (param.Direction is ParameterDirection.Input)
-                    {
-                        continue;
-                    }
-                    param.PropertyInfo.SetValue(o, ToSystemObject(c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value));
-                }
-            }
-            catch (OracleException e)
-            {
-                Debug.WriteLine(e);
-                var inner = e.InnerException;
-                while (inner != null)
-                {
-                    Debug.WriteLine(inner);
-                    inner = inner.InnerException;
-                }
-            }
+            if (entityName == null)
+                return;
+            
+            ExecuteCommandWithObjectData(GetDeleteCommand<T>(), o);
         }
 
         private static OracleCommand SetupCommandWithParams(
@@ -426,6 +349,138 @@ namespace IncredibleFit.SQL
             return parameters;
         }
 
+        private static string CreateReturnStatement(IReadOnlyList<CommandParameter> parameters)
+        {
+            StringBuilder vars = new("\nRETURNING ");
+            StringBuilder ids = new(" INTO ");
+            var numParams = 0;
+            foreach (var param in parameters)
+            {
+                if (param.Direction is ParameterDirection.Input)
+                    continue;
+                vars.Append(numParams > 0 ? ", " : "").Append(param.Name);
+                ids.Append(numParams > 0 ? ", " : "").Append($":{GeneratedExt}{param.Name}");
+                numParams++;
+            }
+
+            return vars.Append(ids).ToString();
+        }
+
+        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeInsertCommands = new();
+        private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetInsertCommand<T>()
+        {
+            if (TypeInsertCommands.ContainsKey(typeof(T)))
+                return TypeInsertCommands[typeof(T)];
+
+            var commandBuilder = new StringBuilder();
+            commandBuilder.Append("INSERT INTO ");
+
+            #region RetreiveTableName
+            var type = typeof(T);
+            var entityName = typeof(T).GetEntity();
+            commandBuilder.Append("\"").Append(entityName!.Name).Append("\" ");
+            #endregion
+
+            var parameters = GetParameterList(typeof(T), true);
+
+            #region AddParamsAndValueParams
+            commandBuilder.Append("(\n");
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                var param = parameters[i];
+                if (param.CreateRoutine == null && param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
+                    continue;
+                commandBuilder.Append('\t').Append(param.Name).Append(i < parameters.Count - 1 ? ",\n" : "");
+            }
+
+            commandBuilder.Append(")\nVALUES (");
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                var param = parameters[i];
+                if (param.CreateRoutine == null && param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
+                    continue;
+
+                if (param.CreateRoutine == null)
+                    commandBuilder.Append(':').Append(param.Name).Append(i < parameters.Count - 1 ? ", " : "");
+                else
+                    commandBuilder.Append(param.CreateRoutine).Append(i < parameters.Count - 1 ? ", " : "");
+            }
+
+            commandBuilder.Append(')');
+
+            commandBuilder.Append(CreateReturnStatement(parameters));
+            #endregion
+
+            TypeInsertCommands.Add(
+                typeof(T),
+                (SetupCommandWithParams(commandBuilder, parameters), parameters));
+            return TypeInsertCommands[typeof(T)];
+        }
+
+        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeUpdateCommands = new();
+        private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetUpdateCommand<T>()
+        {
+            if (TypeUpdateCommands.ContainsKey(typeof(T)))
+                return TypeUpdateCommands[typeof(T)];
+
+            var commandBuilder = new StringBuilder();
+            commandBuilder.Append("UPDATE ");
+
+            #region RetreiveTableName
+            var entityName = typeof(T).GetEntity();
+            commandBuilder.Append("\"").Append(entityName!.Name).Append("\" ");
+            #endregion
+
+            var parameters = GetParameterList(typeof(T), false);
+
+            #region AddParamsAndValueParams
+            commandBuilder.Append("\nSET");
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                var param = parameters[i];
+                commandBuilder.Append($"\t{param.Name} = :{param.Name}").Append(i < parameters.Count - 1 ? ",\n" : "\n");
+            }
+
+            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
+            parameters.Add(idProperty);
+
+            commandBuilder.Append($"WHERE \"{entityName.Name}\".{idProperty.Name} = :{idProperty.Name}");
+            #endregion
+
+            TypeUpdateCommands.Add(
+                typeof(T),
+                (SetupCommandWithParams(commandBuilder, parameters), parameters));
+            return TypeUpdateCommands[typeof(T)];
+        }
+
+        private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeDeleteCommands = new();
+        private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetDeleteCommand<T>()
+        {
+            if (TypeDeleteCommands.ContainsKey(typeof(T))) 
+                return TypeDeleteCommands[typeof(T)];
+
+            var commandBuilder = new StringBuilder();
+            commandBuilder.Append("DELETE FROM ");
+
+            #region RetreiveTableName
+            var entityName = typeof(T).GetEntity();
+            commandBuilder.Append('"').Append(entityName!.Name).Append("\"\n");
+            #endregion
+
+            #region AddParamsAndValueParams
+            var parameters = new List<CommandParameter>();
+            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
+            parameters.Add(idProperty);
+
+            commandBuilder.Append($"WHERE \"{entityName.Name}\".{idProperty.Name} = :{idProperty.Name}");
+            #endregion
+
+            TypeDeleteCommands.Add(
+                typeof(T),
+                (SetupCommandWithParams(commandBuilder, parameters), parameters));
+            return TypeDeleteCommands[typeof(T)];
+        }
+
         private static CommandParameter GetIdProperty<T>(ParameterDirection direction)
         {
             try
@@ -462,23 +517,6 @@ namespace IncredibleFit.SQL
             {
                 return field.Mapping.Value;
             }
-        }
-
-        private static string CreateReturnStatement(IReadOnlyList<CommandParameter> parameters)
-        {
-            StringBuilder vars = new("\nRETURNING ");
-            StringBuilder ids = new(" INTO ");
-            var numParams = 0;
-            foreach (var param in parameters)
-            {
-                if (param.Direction is ParameterDirection.Input)
-                    continue;
-                vars.Append(numParams > 0 ? ", " : "").Append(param.Name);
-                ids.Append(numParams > 0 ? ", " : "").Append($":{GeneratedExt}{param.Name}");
-                numParams++;
-            }
-
-            return vars.Append(ids).ToString();
         }
 
         public static void CloseConnection()

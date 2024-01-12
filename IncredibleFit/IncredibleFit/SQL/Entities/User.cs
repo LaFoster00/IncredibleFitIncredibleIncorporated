@@ -21,20 +21,20 @@ namespace IncredibleFit.SQL.Entities
         public string FirstName { get; set; } = string.Empty;
 
         [Field("WEIGHT", OracleDbType.Double)]
-        public int? Weight { get; set; }
+        public float? Weight { get; set; }
 
         [Field("HEIGHT", OracleDbType.Double)]
-        public int? Height { get; set; }
+        public float? Height { get; set; }
 
         [Field("BODY_FAT_PERCENTAGE", OracleDbType.Double)]
-        public int? BodyFatPercentage { get; set; }
+        public float? BodyFatPercentage { get; set; }
 
         [Field("BASAL_METABOLIC_RATE", OracleDbType.Int64)]
         public int? BasalMetabolicRate { get; set; }
 
         private User() {}
 
-        public User(string email, string name, string firstName, int? weight = null, int? height = null, int? bodyFatPercentage = null, int? basalMetabolicRate = null)
+        public User(string email, string name, string firstName, float? weight = null, float? height = null, float? bodyFatPercentage = null, int? basalMetabolicRate = null)
         {
             Email = email;
             Name = name;

@@ -5,6 +5,7 @@ using IncredibleFit.SQL.Entities;
 using IncredibleFit.Screens;
 using System.Text;
 using System.Diagnostics;
+using IncredibleFit.IncredibleFit.SQL;
 
 namespace IncredibleFit.ViewModels
 {
@@ -18,6 +19,9 @@ namespace IncredibleFit.ViewModels
 
         [ObservableProperty]
         private string _password = "123";
+
+        [ObservableProperty] 
+        private bool _wrongCredentials = false;
 
         public LoginViewModel(SessionInfo sessionInfo, SignUp signUp)
         {
@@ -33,35 +37,28 @@ namespace IncredibleFit.ViewModels
             if (string.IsNullOrWhiteSpace(UserName) && string.IsNullOrWhiteSpace(Password))
                 return;
 
-            var reader = OracleDatabase.ExecuteQuery(OracleDatabase.CreateCommand(
-                $"""
-                SELECT * FROM "USER"
-                WHERE EMAIl = '{UserName}'
-                """));
-
-            var users = reader.ToObjectList<User>();
-            if (!users.Any()) {
-                HandleIncorrectUserData();
-                return;
-            }
-
-            string hashedPassword = PasswordUtil.Hash(Password, users[0].Salt);
-            if (!hashedPassword.Equals(users[0].Password))
+            User? user = SQLAccount.GetUserWithEmail(UserName);
+            
+            if (user == null)
             {
-                HandleIncorrectUserData();
+                WrongCredentials = true;
+                IsBusy = false;
                 return;
             }
 
-            _sessionInfo.User = users[0];
+            string hashedPassword = PasswordUtil.Hash(Password, user.Salt);
+            if (!hashedPassword.Equals(user.Password))
+            {
+                WrongCredentials = true;
+                IsBusy = false;
+                return;
+            }
+
+            _sessionInfo.User = user;
 
             await Shell.Current.GoToAsync("//Profile");
 
             IsBusy = false;
-        }
-
-        private void HandleIncorrectUserData()
-        {
-            Debug.WriteLine("Incorrect user data");
         }
 
         [RelayCommand]

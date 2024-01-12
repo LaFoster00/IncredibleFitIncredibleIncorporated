@@ -6,6 +6,6 @@ namespace IncredibleFit
     public partial class SessionInfo : ObservableObject
     {
         [ObservableProperty]
-        private User? _user; 
+        private User? _user = null; 
     }
 }

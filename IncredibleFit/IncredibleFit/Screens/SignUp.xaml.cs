@@ -13,6 +13,7 @@ namespace IncredibleFit.Screens
         {
             InitializeComponent();
             BindingContext = signUpViewModel;
+            Appearing += (sender, args) => signUpViewModel.Reset(true);
         }
     }
 }
