@@ -47,7 +47,7 @@
                 <Image Source="icon_goal.png" HeightRequest="20" WidthRequest="20"
                             Grid.Row="8"/>
                 <Label x:Name="cardAimDescription" Grid.Row="8" Grid.Column="1"/>
-                <Label x:Name="cardAimWeight" Grid.Row="9" Grid.Column="1" Margin="0, -20, 0,0"/>
+                <Label x:Name="cardAimWeight" Grid.Row="9" Grid.Column="0" Margin="0, -20, 0,0"/>
                 <Line HorizontalOptions="Fill" BackgroundColor="{StaticResource Primary}" 
                         Grid.Row="10" Grid.ColumnSpan="2"/>
             </Grid>
