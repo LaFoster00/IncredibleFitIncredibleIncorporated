@@ -9,14 +9,14 @@ using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 
 namespace IncredibleFit.SQL
-{ 
+{
     public partial class OracleDatabase : ObservableObject, IDisposable, IAsyncDisposable
     {
         private struct CommandParameter
         {
             public readonly string Name;
             public readonly PropertyInfo PropertyInfo;
-            public readonly ParameterDirection Direction;
+            public ParameterDirection Direction;
             public readonly OracleDbType Type;
             public readonly int Size;
             public readonly string? CreateRoutine;
@@ -230,11 +230,9 @@ namespace IncredibleFit.SQL
             {
                 if (param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
                     continue;
-                if (param.CreateRoutine != null)
-                    continue;
 
                 var value = param.PropertyInfo.GetValue(o);
-                c.command.Parameters[param.Name].Value = value ?? DBNull.Value;
+                c.command.Parameters[$"P{param.Name}"].Value = value ?? DBNull.Value;
             }
 
             try
@@ -328,7 +326,7 @@ namespace IncredibleFit.SQL
 
                 if (param.Direction is not (ParameterDirection.Output or ParameterDirection.ReturnValue))
                 {
-                    command.Parameters.Add($"{param.Name}", param.Type, param.Direction);
+                    command.Parameters.Add($"P{param.Name}", param.Type, param.Direction);
                 }
             }
 
@@ -368,6 +366,7 @@ namespace IncredibleFit.SQL
 
         private static string CreateReturnStatement(IReadOnlyList<CommandParameter> parameters)
         {
+            bool hasReturn = false;
             StringBuilder vars = new("\nRETURNING ");
             StringBuilder ids = new(" INTO ");
             var numParams = 0;
@@ -375,12 +374,13 @@ namespace IncredibleFit.SQL
             {
                 if (param.Direction is ParameterDirection.Input)
                     continue;
-                vars.Append(numParams > 0 ? ", " : "").Append(param.Name);
+                hasReturn = true;
+                vars.Append(numParams > 0 ? ", " : "").Append($"\"{param.Name}\"");
                 ids.Append(numParams > 0 ? ", " : "").Append($":{GeneratedExt}{param.Name}");
                 numParams++;
             }
 
-            return vars.Append(ids).ToString();
+            return hasReturn ? vars.Append(ids).ToString() : string.Empty;
         }
 
         private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeInsertCommands = new();
@@ -395,7 +395,7 @@ namespace IncredibleFit.SQL
             #region RetreiveTableName
             var type = typeof(T);
             var entityName = typeof(T).GetEntity();
-            commandBuilder.Append("\"").Append(entityName!.Name).Append("\" ");
+            commandBuilder.Append($"\"{entityName!.Name}\" ");
             #endregion
 
             var parameters = GetParameterList(typeof(T), true);
@@ -407,7 +407,7 @@ namespace IncredibleFit.SQL
                 var param = parameters[i];
                 if (param.CreateRoutine == null && param.Direction is ParameterDirection.Output or ParameterDirection.ReturnValue)
                     continue;
-                commandBuilder.Append('\t').Append(param.Name).Append(i < parameters.Count - 1 ? ",\n" : "");
+                commandBuilder.Append($"\t\"{param.Name}\"").Append(i < parameters.Count - 1 ? ",\n" : "");
             }
 
             commandBuilder.Append(")\nVALUES (");
@@ -418,9 +418,15 @@ namespace IncredibleFit.SQL
                     continue;
 
                 if (param.CreateRoutine == null)
-                    commandBuilder.Append(':').Append(param.Name).Append(i < parameters.Count - 1 ? ", " : "");
+                {
+                    commandBuilder.Append(":P").Append(param.Name).Append(i < parameters.Count - 1 ? ", " : "");
+                }
                 else
+                {
                     commandBuilder.Append(param.CreateRoutine).Append(i < parameters.Count - 1 ? ", " : "");
+                    param.Direction = ParameterDirection.Output;
+                    parameters[i] = param;
+                }
             }
 
             commandBuilder.Append(')');
@@ -445,7 +451,7 @@ namespace IncredibleFit.SQL
 
             #region RetreiveTableName
             var entityName = typeof(T).GetEntity();
-            commandBuilder.Append("\"").Append(entityName!.Name).Append("\" ");
+            commandBuilder.Append($"\"{entityName!.Name}\"");
             #endregion
 
             var parameters = GetParameterList(typeof(T), false);
@@ -455,13 +461,13 @@ namespace IncredibleFit.SQL
             for (var i = 0; i < parameters.Count; i++)
             {
                 var param = parameters[i];
-                commandBuilder.Append($"\t{param.Name} = :{param.Name}").Append(i < parameters.Count - 1 ? ",\n" : "\n");
+                commandBuilder.Append($"\t\"{param.Name}\" = :P{param.Name}").Append(i < parameters.Count - 1 ? ",\n" : "\n");
             }
 
             var idProperty = GetIdProperty<T>(ParameterDirection.Input);
             parameters.Add(idProperty);
 
-            commandBuilder.Append($"WHERE \"{entityName.Name}\".{idProperty.Name} = :{idProperty.Name}");
+            commandBuilder.Append($"WHERE \"{entityName.Name}\".\"{idProperty.Name}\" = :P{idProperty.Name}");
             #endregion
 
             TypeUpdateCommands.Add(
@@ -481,7 +487,7 @@ namespace IncredibleFit.SQL
 
             #region RetreiveTableName
             var entityName = typeof(T).GetEntity();
-            commandBuilder.Append('"').Append(entityName!.Name).Append("\"\n");
+            commandBuilder.Append($"\"{entityName!.Name}\"\n");
             #endregion
 
             #region AddParamsAndValueParams
@@ -489,7 +495,7 @@ namespace IncredibleFit.SQL
             var idProperty = GetIdProperty<T>(ParameterDirection.Input);
             parameters.Add(idProperty);
 
-            commandBuilder.Append($"WHERE \"{entityName.Name}\".{idProperty.Name} = :{idProperty.Name}");
+            commandBuilder.Append($"WHERE \"{entityName.Name}\".\"{idProperty.Name}\" = :P{idProperty.Name}");
             #endregion
 
             TypeDeleteCommands.Add(
