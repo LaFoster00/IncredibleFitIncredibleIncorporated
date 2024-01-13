@@ -9,7 +9,7 @@ using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 
 namespace IncredibleFit.SQL
-{ 
+{
     public partial class OracleDatabase : ObservableObject, IDisposable, IAsyncDisposable
     {
         private struct CommandParameter
