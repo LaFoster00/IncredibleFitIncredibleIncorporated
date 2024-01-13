@@ -4,73 +4,53 @@
              x:Class="IncredibleFit.Screens.Profile"
              xmlns:viewModels ="clr-namespace:IncredibleFit.ViewModels"
              xmlns:contentViews = "clr-namespace:IncredibleFit.ContentViews"
-             Title="Profile"
-             x:DataType="viewModels:ProfileViewModel">
+             x:DataType="viewModels:ProfileViewModel"
+             Shell.NavBarIsVisible="False">
 
-    <ScrollView>
-        <StackLayout>
-            <contentViews:EditableField Label = "First Name"
-                                        Value = "{Binding FirstName}"/>
-            <contentViews:EditableField Label = "Last Name"
-                                        Value = "{Binding Name}"/>
-            <contentViews:EditableField Label = "Password"
-                                        Value = "{Binding Password}"/>
-            <contentViews:EditableField Label = "Email"
-                                        Value = "{Binding Email}"/>
-            <contentViews:EditableField Label = "Weight"
-                                        Value = "{Binding Weight}"
-                                        Placeholder="0"/>
-            <contentViews:EditableField Label = "Body Fat Percentage"
-                                        Value = "{Binding BodyFatPercentage}"
-                                        Placeholder="0"/>
-            <contentViews:EditableField Label = "Basal Metabolic Rate"
-                                        Value = "{Binding BasalMetabolicRate}"
-                                        Placeholder="0"/>
-            <Border>
-                <Grid RowSpacing="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Label x:Name="cardName" FontAttributes="Bold" 
+    <StackLayout>
+        <Border Margin="20">
+            <Grid RowSpacing="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Text="{Binding FirstName}" FontAttributes="Bold" 
                            FontSize="Large" HorizontalOptions="Center"
-                           Grid.ColumnSpan="2" TextColor="{StaticResource Primary}"/>
-                    <Line HorizontalOptions="Fill" BackgroundColor="{StaticResource Primary}" 
-                          Grid.Row="1" Grid.ColumnSpan="2"/>
-                    <Image Source="icon_scale.png" HeightRequest="20" WidthRequest="20"
-                           Grid.Row="2"/>
-                    <Label x:Name="cardWeight" Grid.Row="2" Grid.Column="1"/>
-                    <Image Source="icon_ruler.png" HeightRequest="20" WidthRequest="20"
-                            Grid.Row="3"/>
-                    <Label x:Name="cardHeight" Grid.Row="3" Grid.Column="1"/>
-                    <Image Source="icon_percent.png" HeightRequest="20" WidthRequest="20"
-                            Grid.Row="4"/>
-                    <Label x:Name="cardBodyFatPercentage" Grid.Row="4" Grid.Column="1"/>
-                    <Image Source="icon_biceps.png" HeightRequest="20" WidthRequest="20"
-                            Grid.Row="5"/>
-                    <Label x:Name="cardFitnesslevel" Grid.Row="5" Grid.Column="1"/>
-                    <Image Source="icon_goal.png" HeightRequest="20" WidthRequest="20"
-                            Grid.Row="6"/>
-                    <Label x:Name="cardAimDescription" Grid.Row="6" Grid.Column="1"/>
-                    <Label x:Name="cardAimWeight" Grid.Row="7" Grid.Column="1" Margin="0, -20, 0,0"/>
-                    <Line HorizontalOptions="Fill" BackgroundColor="{StaticResource Primary}" 
-                        Grid.Row="8" Grid.ColumnSpan="2"/>
-                    <Button Text="Bearbeiten" Grid.Row="9" Grid.ColumnSpan="2"/>
-                </Grid>
-            </Border>
-        </StackLayout>
-    </ScrollView>
+                           TextColor="{StaticResource Primary}"/>
+                <Label Text="{Binding Name}" FontAttributes="Bold" 
+                           FontSize="Large" HorizontalOptions="Center"
+                           Grid.Row="1" TextColor="{StaticResource Primary}" Margin="0,0,0,10"/>
+                <Line HorizontalOptions="Fill" BackgroundColor="{StaticResource Primary}" 
+                            Grid.Row="2"/>
+                <contentViews:EditableField Icon="icon_mail.png"
+                            Value = "{Binding Email}" Grid.Row="3" />
+                <contentViews:EditableField Icon="icon_scale.png"
+                            Value = "{Binding Weight}" Grid.Row="4"
+                            Placeholder="0"/>
+                <contentViews:EditableField Icon="icon_ruler.png"
+                            Value = "{Binding Height}"
+                            Placeholder="0" Grid.Row="5"/>
+                <contentViews:EditableField Icon="icon_percent.png"
+                            Value = "{Binding BodyFatPercentage}"
+                            Placeholder="0" Grid.Row="6"/>
+                <contentViews:EditableField Icon="icon_basalmetabolicrate.png"
+                            Value = "{Binding BasalMetabolicRate}"
+                            Placeholder="0" Grid.Row="7"/>
+                <Image Source="icon_goal.png" HeightRequest="20" WidthRequest="20"
+                            Grid.Row="8"/>
+                <Label x:Name="cardAimDescription" Grid.Row="8" Grid.Column="1"/>
+                <Label x:Name="cardAimWeight" Grid.Row="9" Grid.Column="0" Margin="0, -20, 0,0"/>
+                <Line HorizontalOptions="Fill" BackgroundColor="{StaticResource Primary}" 
+                        Grid.Row="10" Grid.ColumnSpan="2"/>
+            </Grid>
+        </Border>
+    </StackLayout>
 </ContentPage>

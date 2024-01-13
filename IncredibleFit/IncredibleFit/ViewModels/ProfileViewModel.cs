@@ -111,7 +111,6 @@ namespace IncredibleFit.ViewModels
             {
                 PropertyChanged -= ProfileViewModel_PropertyChanged;
                 FirstName = "Undefined";
-                FirstName = "Undefined";
                 Name = "Undefined";
                 Password = "Undefined";
                 Email = "Undefined";

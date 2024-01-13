@@ -11,8 +11,8 @@ public partial class RecipeSearch : ContentPage
 {
     private string _filterIngredient = "";
     private string _filterKeyword = "";
-    public ObservableCollection<Recipe> recipeList { get; set; }
-	public RecipeSearch()
+    public ObservableCollection<Recipe> recipeList { get; set; } = SQLNutrition.getAllRecipes();
+    public RecipeSearch()
 	{
         InitializeComponent();
         BindingContext = this;

@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Maui;
 using IncredibleFit.ViewModels;
 using IncredibleFit.Screens;
-using IncredibleFit.ViewModels;
+using IncredibleFit.SQL;
 using Microsoft.Extensions.Logging;
 using IncredibleFit.ContentViews;
-using IncredibleFit.ViewModels;
 
 namespace IncredibleFit;
 
@@ -33,6 +32,11 @@ public static class MauiProgram
         builder.Services.AddSingleton<SignUp>();
         builder.Services.AddSingleton<Profile>();
         builder.Services.AddSingleton<Settings>();
+        builder.Services.AddSingleton<CalorieTracker>();
+        builder.Services.AddSingleton<Training>();
+        builder.Services.AddSingleton<Trainingplan>();
+
+        builder.Services.AddSingleton<SQLTraining>();
 
         builder.Services.AddTransient<EditableField>();
         
