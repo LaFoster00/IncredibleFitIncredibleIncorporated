@@ -5,7 +5,7 @@ namespace IncredibleFit.SQL.Entities
     [Entity("RECIPE")]
     public class Recipe
     {
-        [ID, Field("RECIPEID", OracleDbType.Int32)] //Correct data type for serial?
+        [ID, Field("RECIPEID", OracleDbType.Int32), AutoIncrement]
         public int RecipeID { get; private set; } = -1;
 
         [Field("NAME", OracleDbType.Varchar2, 128)]
