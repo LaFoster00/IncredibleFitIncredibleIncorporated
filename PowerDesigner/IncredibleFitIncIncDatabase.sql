@@ -1,14 +1,14 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     12.01.2024 18:33:20                          */
+/* Created on:     13.01.2024 13:30:44                          */
 /*==============================================================*/
 
 
 drop procedure GENERATESALT
 /
 
-alter table AIM
-   drop constraint FK_AIM_USER_AIM_USER
+alter table APPOINTMENT
+   drop constraint FK_APPOINTM_TRAINING__TRAINING
 /
 
 alter table EMPLOYEE
@@ -21,18 +21,6 @@ alter table EXERCISE
 
 alter table EXERCISEUNIT
    drop constraint FK_EXERCISE_UNIT_EXER_EXERCISE
-/
-
-alter table EXERCISE_UNITS_FOR_TRAINING_UN
-   drop constraint FK_EXERCISE_EXERCISE__EXERCISE
-/
-
-alter table EXERCISE_UNITS_FOR_TRAINING_UN
-   drop constraint FK_EXERCISE_EXERCISE__TRAINING
-/
-
-alter table FITNESSLEVEL
-   drop constraint FK_FITNESSL_USER_FITN_USER
 /
 
 alter table INGREDIENT
@@ -99,16 +87,16 @@ alter table TRAININGPLAN
    drop constraint FK_TRAINING_PLAN_SPOR_SPORT
 /
 
-alter table TRAININGPLAN
-   drop constraint FK_TRAINING_USER_PLAN_USER
+alter table TRAINING_UNIT_UNIT
+   drop constraint FK_TRAINING_TRAINING__EXERCISE
+/
+
+alter table TRAINING_UNIT_UNIT
+   drop constraint FK_TRAINING_TRAINING__TRAINING
 /
 
 alter table "USER"
    drop constraint FK_USER_IS_EMPLOY_EMPLOYEE
-/
-
-alter table "USER"
-   drop constraint FK_USER_USER_AIM2_AIM
 /
 
 alter table "USER"
@@ -123,6 +111,14 @@ alter table USER_APPOINTMENT
    drop constraint FK_USER_APP_USER_APPO_USER
 /
 
+alter table USER_PLAN
+   drop constraint FK_USER_PLA_USER_PLAN_TRAINING
+/
+
+alter table USER_PLAN
+   drop constraint FK_USER_PLA_USER_PLAN_USER
+/
+
 alter table USER_SAVED_RECIPES
    drop constraint FK_USER_SAV_USER_SAVE_RECIPE
 /
@@ -131,10 +127,7 @@ alter table USER_SAVED_RECIPES
    drop constraint FK_USER_SAV_USER_SAVE_USER
 /
 
-drop index USER_AIM_FK
-/
-
-drop table AIM cascade constraints
+drop index TRAINING_UNIT_APPOINTMENT_FK
 /
 
 drop table APPOINTMENT cascade constraints
@@ -156,18 +149,6 @@ drop index UNIT_EXERCISE_FK
 /
 
 drop table EXERCISEUNIT cascade constraints
-/
-
-drop index EXERCISE_UNITS_FOR_TRAINING_UN
-/
-
-drop index EXERCISE_UNITS_FOR_TRAINING_UN
-/
-
-drop table EXERCISE_UNITS_FOR_TRAINING_UN cascade constraints
-/
-
-drop index USER_FITNESS_LEVEL_FK
 /
 
 drop table FITNESSLEVEL cascade constraints
@@ -224,7 +205,7 @@ drop table RECIPECATEGORY cascade constraints
 drop index QUANTITY_OF_INGREDIENT_FK
 /
 
-drop index RECIPE_INGRIDIENTS_FK
+drop index RECIPE_INGREDIENTS_FK
 /
 
 drop table RECIPEINGRIDIENT cascade constraints
@@ -254,19 +235,22 @@ drop index PLAN_SPORTART_FK
 drop index PLAN_CREATED_BY_FK
 /
 
-drop index USER_PLAN_FK
-/
-
 drop table TRAININGPLAN cascade constraints
 /
 
 drop table TRAININGUNIT cascade constraints
 /
 
-drop index USER_FITNESS_LEVEL2_FK
+drop index TRAINING_UNIT_UNIT2_FK
 /
 
-drop index USER_AIM2_FK
+drop index TRAINING_UNIT_UNIT_FK
+/
+
+drop table TRAINING_UNIT_UNIT cascade constraints
+/
+
+drop index USER_FITNESS_LEVEL_FK
 /
 
 drop index IS_EMPLOYEE_FK
@@ -284,6 +268,15 @@ drop index USER_APPOINTMENT_FK
 drop table USER_APPOINTMENT cascade constraints
 /
 
+drop index USER_PLAN2_FK
+/
+
+drop index USER_PLAN_FK
+/
+
+drop table USER_PLAN cascade constraints
+/
+
 drop index USER_SAVED_RECIPES2_FK
 /
 
@@ -294,36 +287,24 @@ drop table USER_SAVED_RECIPES cascade constraints
 /
 
 /*==============================================================*/
-/* Table: AIM                                                   */
-/*==============================================================*/
-create table AIM (
-   EMAIL                VARCHAR2(128)         not null,
-   AIMID                NUMBER(6)           
-      generated as identity ( start with 1 nocycle noorder)  not null,
-   TARGETDESCRIPTION    VARCHAR2(1024)        not null,
-   TARGETWEIGHT         NUMBER(5,2),
-   constraint PK_AIM primary key (EMAIL, AIMID)
-)
-/
-
-/*==============================================================*/
-/* Index: USER_AIM_FK                                           */
-/*==============================================================*/
-create index USER_AIM_FK on AIM (
-   EMAIL ASC
-)
-/
-
-/*==============================================================*/
 /* Table: APPOINTMENT                                           */
 /*==============================================================*/
 create table APPOINTMENT (
    APPOINTMENTID        NUMBER(6)           
       generated as identity ( start with 1 nocycle noorder)  not null,
+   TRAININGUNITID       NUMBER(6),
    "DATE"               DATE                  not null,
-   STATUS               NUMBER(1)            default 1  not null
-      constraint CKC_STATUS_APPOINTM check (STATUS between 1 and 2 and STATUS in (1,2)),
+   STATUS               NUMBER(1)            default 0  not null
+      constraint CKC_STATUS_APPOINTM check (STATUS between 0 and 1 and STATUS in (0,1)),
    constraint PK_APPOINTMENT primary key (APPOINTMENTID)
+)
+/
+
+/*==============================================================*/
+/* Index: TRAINING_UNIT_APPOINTMENT_FK                          */
+/*==============================================================*/
+create index TRAINING_UNIT_APPOINTMENT_FK on APPOINTMENT (
+   TRAININGUNITID ASC
 )
 /
 
@@ -379,10 +360,9 @@ create table EXERCISEUNIT (
       generated as identity ( start with 1 nocycle noorder)  not null,
    EXERCISEID           NUMBER(6)             not null,
    DESCRIPTION          VARCHAR2(1024)        not null,
-   DIFFICULTY           NUMBER(1)             not null
-      constraint CKC_DIFFICULTY_EXERCISE check (DIFFICULTY between 0 and 2 and DIFFICULTY in (0,1,2)),
+   EXERCISEDIFFICULTY   NUMBER(1)             not null
+      constraint CKC_EXERCISEDIFFICULT_EXERCISE check (EXERCISEDIFFICULTY between 0 and 2 and EXERCISEDIFFICULTY in (0,1,2)),
    REPETITIONS          NUMBER(4)             not null,
-   SETS                 NUMBER(2)             not null,
    constraint PK_EXERCISEUNIT primary key (EXERCISEUNITID)
 )
 /
@@ -396,49 +376,13 @@ create index UNIT_EXERCISE_FK on EXERCISEUNIT (
 /
 
 /*==============================================================*/
-/* Table: EXERCISE_UNITS_FOR_TRAINING_UN                        */
-/*==============================================================*/
-create table EXERCISE_UNITS_FOR_TRAINING_UN (
-   EXERCISEUNITID       NUMBER(6)             not null,
-   TRAININGUNITID       NUMBER(6)             not null,
-   constraint PK_EXERCISE_UNITS_FOR_TRAINING primary key (EXERCISEUNITID, TRAININGUNITID)
-)
-/
-
-/*==============================================================*/
-/* Index: EXERCISE_UNITS_FOR_TRAINING_UN                        */
-/*==============================================================*/
-create index EXERCISE_UNITS_FOR_TRAINING_UN on EXERCISE_UNITS_FOR_TRAINING_UN (
-   EXERCISEUNITID ASC
-)
-/
-
-/*==============================================================*/
-/* Index: EXERCISE_UNITS_FOR_TRAINING_UN                        */
-/*==============================================================*/
-create index EXERCISE_UNITS_FOR_TRAINING_UN on EXERCISE_UNITS_FOR_TRAINING_UN (
-   TRAININGUNITID ASC
-)
-/
-
-/*==============================================================*/
 /* Table: FITNESSLEVEL                                          */
 /*==============================================================*/
 create table FITNESSLEVEL (
-   EMAIL                VARCHAR2(128)         not null,
    FITNESSLEVELID       NUMBER(6)           
       generated as identity ( start with 1 nocycle noorder)  not null,
-   STATUS               NUMBER(1)            default 1  not null
-      constraint CKC_STATUS_FITNESSL check (STATUS between 1 and 2 and STATUS in (1,2)),
-   constraint PK_FITNESSLEVEL primary key (EMAIL, FITNESSLEVELID)
-)
-/
-
-/*==============================================================*/
-/* Index: USER_FITNESS_LEVEL_FK                                 */
-/*==============================================================*/
-create index USER_FITNESS_LEVEL_FK on FITNESSLEVEL (
-   EMAIL ASC
+   FITNESSSTATUS        VARCHAR2(256)         not null,
+   constraint PK_FITNESSLEVEL primary key (FITNESSLEVELID)
 )
 /
 
@@ -454,7 +398,7 @@ create table INGREDIENT (
    CALORIES             NUMBER(4)             not null,
    PROTEIN              NUMBER(3),
    FAT                  NUMBER(3),
-   CARBONHYDRATES       NUMBER(3,2),
+   CARBONHYDRATES       NUMBER(3),
    constraint PK_INGREDIENT primary key (INGREDIENTNAME)
 )
 /
@@ -501,9 +445,9 @@ create table PLANTRAININGUNIT (
    TRAININGPLANID       NUMBER(6)             not null,
    PLANTRAININGUNITID   NUMBER(6)           
       generated as identity ( start with 1 nocycle noorder)  not null,
-   DESCRIPTION          VARCHAR2(1024)        not null,
-   WEEKDAY              NUMBER(1)           
-      constraint CKC_WEEKDAY_PLANTRAI check (WEEKDAY is null or (WEEKDAY between 0 and 6 and WEEKDAY in (0,1,2,3,4,5,6))),
+   DESCRIPTION          VARCHAR2(1024),
+   WEEKDAY              NUMBER(1)             not null
+      constraint CKC_WEEKDAY_PLANTRAI check (WEEKDAY between 0 and 6 and WEEKDAY in (0,1,2,3,4,5,6)),
    constraint PK_PLANTRAININGUNIT primary key (TRAININGPLANID, PLANTRAININGUNITID)
 )
 /
@@ -553,8 +497,8 @@ create table QUANTITYPRICE (
       generated as identity ( start with 1 nocycle noorder)  not null,
    QUANTITYUNIT         NUMBER(1)             not null
       constraint CKC_QUANTITYUNIT_QUANTITY check (QUANTITYUNIT between 0 and 3 and QUANTITYUNIT in (0,1,2,3)),
-   PRIVELOWER           NUMBER(4,2)           not null,
-   PRIVEUPPER           NUMBER(4,2)           not null,
+   PRICELOWER           NUMBER(4,2)           not null,
+   PRICEUPPER           NUMBER(4,2)           not null,
    constraint PK_QUANTITYPRICE primary key (INGREDIENTNAME, QUANTITYPRICEID)
 )
 /
@@ -620,17 +564,17 @@ create table RECIPECATEGORY (
 create table RECIPEINGRIDIENT (
    RECIPEID             NUMBER(6)             not null,
    INGREDIENTNAME       VARCHAR2(64)          not null,
-   RECIPEINGRIDIENTID   NUMBER(6)           
+   RECIPEINGREDIENTID   NUMBER(6)           
       generated as identity ( start with 1 nocycle noorder)  not null,
    QUANTITY             NUMBER                not null,
-   constraint PK_RECIPEINGRIDIENT primary key (RECIPEID, INGREDIENTNAME, RECIPEINGRIDIENTID)
+   constraint PK_RECIPEINGRIDIENT primary key (RECIPEID, INGREDIENTNAME, RECIPEINGREDIENTID)
 )
 /
 
 /*==============================================================*/
-/* Index: RECIPE_INGRIDIENTS_FK                                 */
+/* Index: RECIPE_INGREDIENTS_FK                                 */
 /*==============================================================*/
-create index RECIPE_INGRIDIENTS_FK on RECIPEINGRIDIENT (
+create index RECIPE_INGREDIENTS_FK on RECIPEINGRIDIENT (
    RECIPEID ASC
 )
 /
@@ -690,8 +634,9 @@ create table TRACK (
       generated as identity ( start with 1 nocycle noorder)  not null,
    "DATE"               DATE                  not null,
    CALORIES             NUMBER(4)             not null,
-   PROTEINS             NUMBER(6,2)           not null,
+   PROTEIN              NUMBER(3)             not null,
    FAT                  NUMBER(3)             not null,
+   CARBONHYDRATES       NUMBER(3),
    constraint PK_TRACK primary key (EMAIL, TRACKID)
 )
 /
@@ -712,20 +657,11 @@ create table TRAININGPLAN (
       generated as identity ( start with 1 nocycle noorder)  not null,
    EMPLOYEEID           NUMBER(3)             not null,
    SPORTID              NUMBER(4)             not null,
-   EMAIL                VARCHAR2(128)         not null,
    NAME                 VARCHAR2(128)         not null,
    DESCRIPTION          VARCHAR2(1024)        not null,
-   DIFFICULTY           NUMBER(1)             not null
-      constraint CKC_DIFFICULTY_TRAINING check (DIFFICULTY between 0 and 2 and DIFFICULTY in (0,1,2)),
+   TRAININGPLANDIFFICULTY NUMBER(1)           
+      constraint CKC_TRAININGPLANDIFFI_TRAINING check (TRAININGPLANDIFFICULTY is null or (TRAININGPLANDIFFICULTY between 0 and 2 and TRAININGPLANDIFFICULTY in (0,1,2))),
    constraint PK_TRAININGPLAN primary key (TRAININGPLANID)
-)
-/
-
-/*==============================================================*/
-/* Index: USER_PLAN_FK                                          */
-/*==============================================================*/
-create index USER_PLAN_FK on TRAININGPLAN (
-   EMAIL ASC
 )
 /
 
@@ -753,9 +689,35 @@ create table TRAININGUNIT (
       generated as identity ( start with 1 nocycle noorder)  not null,
    NAME                 VARCHAR2(128)         not null,
    DESCRIPTION          VARCHAR2(1024)        not null,
-   DIFFICULTY           NUMBER(1)             not null
-      constraint CKC_DIFFICULTY_TRAINING check (DIFFICULTY between 0 and 2 and DIFFICULTY in (0,1,2)),
+   TRAININGUNITDIFFICULTY NUMBER(1)             not null
+      constraint CKC_TRAININGUNITDIFFI_TRAINING check (TRAININGUNITDIFFICULTY between 0 and 2 and TRAININGUNITDIFFICULTY in (0,1,2)),
    constraint PK_TRAININGUNIT primary key (TRAININGUNITID)
+)
+/
+
+/*==============================================================*/
+/* Table: TRAINING_UNIT_UNIT                                    */
+/*==============================================================*/
+create table TRAINING_UNIT_UNIT (
+   EXERCISEUNITID       NUMBER(6)             not null,
+   TRAININGUNITID       NUMBER(6)             not null,
+   constraint PK_TRAINING_UNIT_UNIT primary key (EXERCISEUNITID, TRAININGUNITID)
+)
+/
+
+/*==============================================================*/
+/* Index: TRAINING_UNIT_UNIT_FK                                 */
+/*==============================================================*/
+create index TRAINING_UNIT_UNIT_FK on TRAINING_UNIT_UNIT (
+   EXERCISEUNITID ASC
+)
+/
+
+/*==============================================================*/
+/* Index: TRAINING_UNIT_UNIT2_FK                                */
+/*==============================================================*/
+create index TRAINING_UNIT_UNIT2_FK on TRAINING_UNIT_UNIT (
+   TRAININGUNITID ASC
 )
 /
 
@@ -765,19 +727,18 @@ create table TRAININGUNIT (
 create table "USER" (
    EMAIL                VARCHAR2(128)         not null,
    EMPLOYEEID           NUMBER(3),
-   FIT_EMAIL            VARCHAR2(128),
    FITNESSLEVELID       NUMBER(6),
-   AIM_EMAIL            VARCHAR2(128),
-   AIMID                NUMBER(6),
    SALT                 VARCHAR2(10)          not null,
    FIRSTNAME            VARCHAR2(32)          not null,
-   LASTNAME             VARCHAR2(32),
+   LASTNAME             VARCHAR2(32)          not null,
    WEIGHT               NUMBER(6,2),
    HEIGHT               NUMBER(6,2),
    BODYFATPERCENTAGE    NUMBER(3,1)         
       constraint CKC_BODYFATPERCENTAGE_USER check (BODYFATPERCENTAGE is null or (BODYFATPERCENTAGE between 0 and 100)),
    BASALMETABOLICRATE   NUMBER(6),
    PASSWORD             VARCHAR2(128),
+   TARGETDESCRIPTION    VARCHAR2(1024),
+   TARGETWEIGHT         NUMBER(5,2),
    constraint PK_USER primary key (EMAIL)
 )
 /
@@ -791,19 +752,9 @@ create index IS_EMPLOYEE_FK on "USER" (
 /
 
 /*==============================================================*/
-/* Index: USER_AIM2_FK                                          */
+/* Index: USER_FITNESS_LEVEL_FK                                 */
 /*==============================================================*/
-create index USER_AIM2_FK on "USER" (
-   AIM_EMAIL ASC,
-   AIMID ASC
-)
-/
-
-/*==============================================================*/
-/* Index: USER_FITNESS_LEVEL2_FK                                */
-/*==============================================================*/
-create index USER_FITNESS_LEVEL2_FK on "USER" (
-   FIT_EMAIL ASC,
+create index USER_FITNESS_LEVEL_FK on "USER" (
    FITNESSLEVELID ASC
 )
 /
@@ -835,6 +786,32 @@ create index USER_APPOINTMENT2_FK on USER_APPOINTMENT (
 /
 
 /*==============================================================*/
+/* Table: USER_PLAN                                             */
+/*==============================================================*/
+create table USER_PLAN (
+   TRAININGPLANID       NUMBER(6)             not null,
+   EMAIL                VARCHAR2(128)         not null,
+   constraint PK_USER_PLAN primary key (TRAININGPLANID, EMAIL)
+)
+/
+
+/*==============================================================*/
+/* Index: USER_PLAN_FK                                          */
+/*==============================================================*/
+create index USER_PLAN_FK on USER_PLAN (
+   TRAININGPLANID ASC
+)
+/
+
+/*==============================================================*/
+/* Index: USER_PLAN2_FK                                         */
+/*==============================================================*/
+create index USER_PLAN2_FK on USER_PLAN (
+   EMAIL ASC
+)
+/
+
+/*==============================================================*/
 /* Table: USER_SAVED_RECIPES                                    */
 /*==============================================================*/
 create table USER_SAVED_RECIPES (
@@ -860,9 +837,9 @@ create index USER_SAVED_RECIPES2_FK on USER_SAVED_RECIPES (
 )
 /
 
-alter table AIM
-   add constraint FK_AIM_USER_AIM_USER foreign key (EMAIL)
-      references "USER" (EMAIL)
+alter table APPOINTMENT
+   add constraint FK_APPOINTM_TRAINING__TRAINING foreign key (TRAININGUNITID)
+      references TRAININGUNIT (TRAININGUNITID)
 /
 
 alter table EMPLOYEE
@@ -878,21 +855,6 @@ alter table EXERCISE
 alter table EXERCISEUNIT
    add constraint FK_EXERCISE_UNIT_EXER_EXERCISE foreign key (EXERCISEID)
       references EXERCISE (EXERCISEID)
-/
-
-alter table EXERCISE_UNITS_FOR_TRAINING_UN
-   add constraint FK_EXERCISE_EXERCISE__EXERCISE foreign key (EXERCISEUNITID)
-      references EXERCISEUNIT (EXERCISEUNITID)
-/
-
-alter table EXERCISE_UNITS_FOR_TRAINING_UN
-   add constraint FK_EXERCISE_EXERCISE__TRAINING foreign key (TRAININGUNITID)
-      references TRAININGUNIT (TRAININGUNITID)
-/
-
-alter table FITNESSLEVEL
-   add constraint FK_FITNESSL_USER_FITN_USER foreign key (EMAIL)
-      references "USER" (EMAIL)
 /
 
 alter table INGREDIENT
@@ -975,9 +937,14 @@ alter table TRAININGPLAN
       references SPORT (SPORTID)
 /
 
-alter table TRAININGPLAN
-   add constraint FK_TRAINING_USER_PLAN_USER foreign key (EMAIL)
-      references "USER" (EMAIL)
+alter table TRAINING_UNIT_UNIT
+   add constraint FK_TRAINING_TRAINING__EXERCISE foreign key (EXERCISEUNITID)
+      references EXERCISEUNIT (EXERCISEUNITID)
+/
+
+alter table TRAINING_UNIT_UNIT
+   add constraint FK_TRAINING_TRAINING__TRAINING foreign key (TRAININGUNITID)
+      references TRAININGUNIT (TRAININGUNITID)
 /
 
 alter table "USER"
@@ -986,13 +953,8 @@ alter table "USER"
 /
 
 alter table "USER"
-   add constraint FK_USER_USER_AIM2_AIM foreign key (AIM_EMAIL, AIMID)
-      references AIM (EMAIL, AIMID)
-/
-
-alter table "USER"
-   add constraint FK_USER_USER_FITN_FITNESSL foreign key (FIT_EMAIL, FITNESSLEVELID)
-      references FITNESSLEVEL (EMAIL, FITNESSLEVELID)
+   add constraint FK_USER_USER_FITN_FITNESSL foreign key (FITNESSLEVELID)
+      references FITNESSLEVEL (FITNESSLEVELID)
 /
 
 alter table USER_APPOINTMENT
@@ -1002,6 +964,16 @@ alter table USER_APPOINTMENT
 
 alter table USER_APPOINTMENT
    add constraint FK_USER_APP_USER_APPO_USER foreign key (EMAIL)
+      references "USER" (EMAIL)
+/
+
+alter table USER_PLAN
+   add constraint FK_USER_PLA_USER_PLAN_TRAINING foreign key (TRAININGPLANID)
+      references TRAININGPLAN (TRAININGPLANID)
+/
+
+alter table USER_PLAN
+   add constraint FK_USER_PLA_USER_PLAN_USER foreign key (EMAIL)
       references "USER" (EMAIL)
 /
 
@@ -1016,7 +988,7 @@ alter table USER_SAVED_RECIPES
 /
 
 
-create or replace function GENERATESALT
+create or replace function GENERATESALT()
 RETURN VARCHAR2
 IS
   SALT VARCHAR2(10);
