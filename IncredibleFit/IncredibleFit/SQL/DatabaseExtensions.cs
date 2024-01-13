@@ -42,6 +42,7 @@ namespace IncredibleFit.SQL
                             continue;
                         if (reader.GetValue(i).Equals(DBNull.Value))
                             break;
+                        object? readerValue = reader.GetValue(i);
                         if (Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null)
                         {
                             var toNullableConverter = ToNullableInfo!.MakeGenericMethod(Nullable.GetUnderlyingType(propertyInfo.PropertyType)!);
@@ -50,7 +51,7 @@ namespace IncredibleFit.SQL
                             {
                                 nullable = toNullableConverter.Invoke(null, new[]
                                 {
-                                    reader.GetValue(i)
+                                    readerValue
                                 });
                             }
                             catch (Exception e)
@@ -63,7 +64,7 @@ namespace IncredibleFit.SQL
                         }
                         else
                         {
-                            propertyInfo.SetValue(newInstance, reader.GetValue(i));
+                            propertyInfo.SetValue(newInstance, readerValue);
                         }
 
                         break;

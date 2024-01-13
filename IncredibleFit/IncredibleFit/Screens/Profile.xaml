@@ -4,9 +4,13 @@
              x:Class="IncredibleFit.Screens.Profile"
              xmlns:viewModels ="clr-namespace:IncredibleFit.ViewModels"
              xmlns:contentViews = "clr-namespace:IncredibleFit.ContentViews"
+             xmlns:valueConverters="using:IncredibleFit.ValueConverters"
              x:DataType="viewModels:ProfileViewModel"
              Shell.NavBarIsVisible="False">
 
+    <ContentPage.Resources>
+        <valueConverters:NullableConverter x:Key="NullableConverter" />
+    </ContentPage.Resources>
     <StackLayout>
         <Border Margin="20">
             <Grid RowSpacing="5">
@@ -33,16 +37,17 @@
                 <contentViews:EditableField Icon="icon_mail.png"
                             Value = "{Binding Email}" Grid.Row="3" />
                 <contentViews:EditableField Icon="icon_scale.png"
-                            Value = "{Binding Weight}" Grid.Row="4"
+                            Value = "{Binding Weight, Converter={StaticResource NullableConverter}}"
+                            Grid.Row="4"
                             Placeholder="0"/>
                 <contentViews:EditableField Icon="icon_ruler.png"
-                            Value = "{Binding Height}"
+                            Value = "{Binding Height, Converter={StaticResource NullableConverter}}"
                             Placeholder="0" Grid.Row="5"/>
                 <contentViews:EditableField Icon="icon_percent.png"
-                            Value = "{Binding BodyFatPercentage}"
+                            Value = "{Binding BodyFatPercentage, Converter={StaticResource NullableConverter}}"
                             Placeholder="0" Grid.Row="6"/>
                 <contentViews:EditableField Icon="icon_basalmetabolicrate.png"
-                            Value = "{Binding BasalMetabolicRate}"
+                            Value = "{Binding BasalMetabolicRate, Converter={StaticResource NullableConverter}}"
                             Placeholder="0" Grid.Row="7"/>
                 <Image Source="icon_goal.png" HeightRequest="20" WidthRequest="20"
                             Grid.Row="8"/>
