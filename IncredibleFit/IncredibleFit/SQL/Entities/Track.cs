@@ -23,11 +23,14 @@ namespace IncredibleFit.SQL.Entities
         [Field("CARBONHYDRATES", OracleDbType.Int16)]
         public Int16 Carbonhydrates { get; set; } = -1;
 
+        public string Weekday { get; set; } = "";
+
         private Track() { }
 
-        public Track(DateTime date, short calories, short protein, short fat, short carbonhydrates)
+        public Track(DateTime date, string weekday, short calories, short protein, short fat, short carbonhydrates)
         {
             Date = date;
+            Weekday = weekday;
             Calories = calories;
             Protein = protein;
             Fat = fat;

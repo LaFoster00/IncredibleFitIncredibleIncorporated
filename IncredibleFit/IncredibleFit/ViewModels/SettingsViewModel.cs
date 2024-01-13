@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
-using IncredibleFit.IncredibleFit.SQL;
+using IncredibleFit.SQL;
 
 namespace IncredibleFit.ViewModels
 {

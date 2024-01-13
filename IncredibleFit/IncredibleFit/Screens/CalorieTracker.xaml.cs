@@ -1,7 +1,5 @@
 using IncredibleFit.PopUps;
 using IncredibleFit.SQL.Entities;
-using IncredibleFit.SQL;
-using IncredibleFit.Models;
 using CommunityToolkit.Maui.Views;
 using System.Collections.ObjectModel;
 
@@ -9,17 +7,12 @@ namespace IncredibleFit.Screens;
 
 public partial class CalorieTracker : ContentPage
 {
-    private User? _currentUser;
     private readonly SessionInfo _sessionInfo;
     public ObservableCollection<Track> weekCalorieTracks { get; set; } = new ObservableCollection<Track>();
     public CalorieTracker(SessionInfo info)
 	{
         _sessionInfo = info;
 
-        if (_sessionInfo.User is null)
-            return;
-
-        _currentUser = _sessionInfo.User;
         InitializeComponent();
         DateTime monday = getStartOfWeek();
         for (int i = 0; i < 7; i++)
@@ -32,9 +25,9 @@ public partial class CalorieTracker : ContentPage
 
     private void ChangeLabel()
     {
-        if(_currentUser != null)
+        if(_sessionInfo.User != null)
         {
-            UserBasalMetabolicRate.Text = _currentUser.BasalMetabolicRate + " kcal";
+            UserBasalMetabolicRate.Text = _sessionInfo.User.BasalMetabolicRate + " kcal";
         }
         ChangeAverageData();
     }
@@ -49,10 +42,10 @@ public partial class CalorieTracker : ContentPage
         for(int i=0; i<7; i++)
         {
             Track current = weekCalorieTracks[i];
-            averageKcal += current.Kcal;
-            averageKh += current.Kh;
-            averageP += current.P;
-            averageF += current.F;
+            averageKcal += current.Calories;
+            averageKh += current.Carbonhydrates;
+            averageP += current.Protein;
+            averageF += current.Fat;
         }
 
         averageKcal = Math.Round(averageKcal/7, 2);

@@ -11,12 +11,10 @@ public partial class RecipeSearch : ContentPage
 {
     private string _filterIngredient = "";
     private string _filterKeyword = "";
-    private SQLNutrition _sqlNutrition = new SQLNutrition();
-    public ObservableCollection<Recipe> recipeList { get; set; } = new ObservableCollection<Recipe>();
+    public ObservableCollection<Recipe> recipeList { get; set; } = SQLNutrition.getAllRecipes();
     public RecipeSearch()
 	{
         InitializeComponent();
-        recipeList = _sqlNutrition.getAllRecipes();
         BindingContext = this;
     }
 

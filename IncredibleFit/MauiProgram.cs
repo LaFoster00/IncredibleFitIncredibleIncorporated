@@ -36,8 +36,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<Training>();
         builder.Services.AddSingleton<Trainingplan>();
 
-        builder.Services.AddSingleton<SQLTraining>();
-
         builder.Services.AddTransient<EditableField>();
         
 

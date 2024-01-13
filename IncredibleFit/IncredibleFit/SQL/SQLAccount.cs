@@ -1,7 +1,7 @@
 ﻿using IncredibleFit.SQL;
 using IncredibleFit.SQL.Entities;
 
-namespace IncredibleFit.IncredibleFit.SQL
+namespace IncredibleFit.SQL
 {
     public class AccountTakenException : Exception
     {

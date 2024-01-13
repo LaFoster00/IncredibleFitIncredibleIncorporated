@@ -1,5 +1,4 @@
-﻿
-using Oracle.ManagedDataAccess.Client;
+﻿using Oracle.ManagedDataAccess.Client;
 
 namespace IncredibleFit.SQL.Entities
 {

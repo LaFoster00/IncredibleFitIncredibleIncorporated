@@ -1,4 +1,5 @@
 ﻿using IncredibleFit.SQL.Entities;
+using Oracle.ManagedDataAccess.Client;
 using System.Collections.ObjectModel;
 
 namespace IncredibleFit.SQL
@@ -28,6 +29,21 @@ namespace IncredibleFit.SQL
             ObservableCollection<Ingredient> ingredients = new ObservableCollection<Ingredient>();
             //TODO Get Ingredients from Database
             return ingredients;
+        }
+
+        public static Track getTrackByDate(DateTime date)
+        {
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "TRACK"
+                 WHERE DATE = :Date
+                 """);
+            command.Parameters.Add("Date", OracleDbType.Date).Value = date;
+            
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Track>();
+            return track.Any() ? track[0] : null;
         }
 
         public static void SaveCalorieTrack(Track calorieTrack)

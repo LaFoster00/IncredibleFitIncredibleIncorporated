@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using IncredibleFit.IncredibleFit.SQL;
+using IncredibleFit.SQL;
 using IncredibleFit.SQL.Entities;
 
 namespace IncredibleFit.ViewModels

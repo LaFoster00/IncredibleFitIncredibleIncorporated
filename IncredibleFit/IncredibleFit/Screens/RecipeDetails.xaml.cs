@@ -7,13 +7,12 @@ namespace IncredibleFit.Screens;
 
 public partial class RecipeDetails : ContentPage
 {
-	private SQLNutrition _sqlNutrition;
 	private Recipe _recipe;
     public ObservableCollection<Ingredient> ingredientsList { get; set; } = new ObservableCollection<Ingredient> { };
     public RecipeDetails(Recipe recipe)
 	{
 		InitializeComponent();
-		ingredientsList = _sqlNutrition.getIngredientsByRecipe(recipe);
+		ingredientsList = SQLNutrition.getIngredientsByRecipe(recipe);
 
         this._recipe = recipe;
 		BindingContext = this;
@@ -25,7 +24,7 @@ public partial class RecipeDetails : ContentPage
         RecipeDetailsPage.Title = _recipe.Name;
         RecipeDescription.Text = _recipe.Description;
         RecipeInstructions.Text = _recipe.Instructions;
-		RecipeEnergy.Text = _recipe.Energy.ToString();
+		RecipeEnergy.Text = _recipe.Calories.ToString();
 
 		int? proteins = 0;
 		int? fat = 0;
