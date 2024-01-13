@@ -5,29 +5,31 @@ namespace IncredibleFit.SQL.Entities
     [Entity("TRACK")]
     public class Track
     {
-        [ID, Field("TRACKID", OracleDbType.Int64)] //correct type for serial?
-        public int TrackID { get; private set; } = 0;
+        [ID, Field("TRACKID", OracleDbType.Int32)]
+        public int TrackID { get; private set; } = -1;
 
-        [Field("DATE", OracleDbType.TimeStamp)]
-        public DateTime Date { get; set;} = DateTime.Now; //? Default value?
+        [Field("DATE", OracleDbType.Date)]
+        public DateTime Date { get; set;} = DateTime.MinValue;
 
-        [Field("CALORIES", OracleDbType.Int64)]
-        public int Calories { get; set; } = 0;
+        [Field("CALORIES", OracleDbType.Int16)]
+        public Int16 Calories { get; set; } = -1;
 
-        [Field("PROTEINS", OracleDbType.Int64)] //current NUMBER(6,2) in ERD
-        public int Proteins { get; set; } = 0;
+        [Field("PROTEIN", OracleDbType.Int16)] 
+        public Int16 Protein { get; set; } = -1;
 
-        [Field("FAT", OracleDbType.Int64)]
-        public int Fat { get; set; } = 0;
+        [Field("FAT", OracleDbType.Int16)]
+        public Int16 Fat { get; set; } = -1;
 
-        [Field("CARBONHYDRATES", OracleDbType.Int64)]
-        public int Carbonhydrates { get; set; } = 0;
+        [Field("CARBONHYDRATES", OracleDbType.Int16)]
+        public Int16 Carbonhydrates { get; set; } = -1;
 
-        public Track(DateTime date, int calories, int proteins, int fat, int carbonhydrates)
+        private Track() { }
+
+        public Track(DateTime date, short calories, short protein, short fat, short carbonhydrates)
         {
             Date = date;
             Calories = calories;
-            Proteins = proteins;
+            Protein = protein;
             Fat = fat;
             Carbonhydrates = carbonhydrates;
         }
@@ -35,10 +37,9 @@ namespace IncredibleFit.SQL.Entities
         public override bool Equals(object? obj)
         {
             return obj is Track track &&
-                   TrackID == track.TrackID &&
                    Date == track.Date &&
                    Calories == track.Calories &&
-                   Proteins == track.Proteins &&
+                   Protein == track.Protein &&
                    Fat == track.Fat &&
                    Carbonhydrates == track.Carbonhydrates;
         }

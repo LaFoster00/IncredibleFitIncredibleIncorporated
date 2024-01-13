@@ -1,4 +1,4 @@
-using IncredibleFit.Models;
+using IncredibleFit.SQL.Entities;
 using IncredibleFit.PopUps;
 using IncredibleFit.SQL;
 using CommunityToolkit.Maui.Views;
@@ -11,10 +11,12 @@ public partial class RecipeSearch : ContentPage
 {
     private string _filterIngredient = "";
     private string _filterKeyword = "";
-    public ObservableCollection<Recipe> recipeList { get; set; } = SQLNutrition.getAllRecipes();
+    private SQLNutrition _sqlNutrition = new SQLNutrition();
+    public ObservableCollection<Recipe> recipeList { get; set; } = new ObservableCollection<Recipe>();
     public RecipeSearch()
 	{
         InitializeComponent();
+        recipeList = _sqlNutrition.getAllRecipes();
         BindingContext = this;
     }
 

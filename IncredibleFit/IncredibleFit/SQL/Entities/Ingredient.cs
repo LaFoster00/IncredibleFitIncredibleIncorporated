@@ -5,25 +5,27 @@ namespace IncredibleFit.SQL.Entities
     [Entity("INGREDIENT")]
     public class Ingredient
     {
-        [ID, Field("INGREDIENTNAME", OracleDbType.Varchar2)]
-        public string IngredientName { get; private set; } = String.Empty;
+        [ID, Field("INGREDIENTNAME", OracleDbType.Varchar2 ,64)]
+        public string IngredientName { get; set; } = String.Empty;
 
-        [Field("FOODCATEGORY", OracleDbType.Varchar2)] //Domain in ERD
-        public string Foodcategory { get; set; } = String.Empty;
+        [Field("FOODCATEGORY", OracleDbType.Int16)] //Domain in ERD
+        public Int16 Foodcategory { get; set; } = -1;
 
-        [Field("CALORIES", OracleDbType.Int64)]
-        public int Calories { get; set; } = 0;
+        [Field("CALORIES", OracleDbType.Int16)]
+        public Int16 Calories { get; set; } = -1;
 
-        [Field("PROTEIN", OracleDbType.Int64)]
-        public int? Protein { get; set; } = 0;
+        [Field("PROTEIN", OracleDbType.Int16)]
+        public Int16? Protein { get; set; } = 0;
 
-        [Field("FAT", OracleDbType.Int64)]
-        public int Fat { get; set; } = 0;
+        [Field("FAT", OracleDbType.Int16)]
+        public Int16? Fat { get; set; } = 0;
 
-        [Field("CARBONHYDRATES", OracleDbType.Int64)]
-        public int Carbonhydrates { get; set; } = 0;
+        [Field("CARBONHYDRATES", OracleDbType.Int16)]
+        public Int16? Carbonhydrates { get; set; } = 0;
 
-        public Ingredient(string ingredientName, string foodcategory, int calories, int? protein, int fat, int carbonhydrates)
+        private Ingredient() { }
+
+        public Ingredient(string ingredientName, short foodcategory, short calories, short? protein, short? fat, short? carbonhydrates)
         {
             IngredientName = ingredientName;
             Foodcategory = foodcategory;

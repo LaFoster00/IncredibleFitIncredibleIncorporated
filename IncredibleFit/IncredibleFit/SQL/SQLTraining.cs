@@ -8,40 +8,27 @@ using IncredibleFit.SQL.Entities;
 
 namespace IncredibleFit.SQL
 {
-    public class SQLTraining
+    public static class SQLTraining
     {
-        private User? _currentUser;
-        private readonly SessionInfo _sessionInfo;
-
-        public SQLTraining(SessionInfo info) 
-        {
-            _sessionInfo = info;
-
-            if (_sessionInfo.User is null)
-                return;
-
-            _currentUser = _sessionInfo.User;
-        }
-
-        public TrainingPlan getCurrentTrainingPlan()
+        public static TrainingPlan getCurrentTrainingPlan()
         {
             //Get selected plan by user
             return getDummyTrainingPlan();
         }
 
-        public TrainingUnit getNextTrainingUnit()
+        public static TrainingUnit getNextTrainingUnit()
         {
             //Get next Exercise for the currentUser from Database
 
             return getDummyTrainingUnit();
         }
 
-        public void setTrainingUnitDone(TrainingUnit unit)
+        public static void setTrainingUnitDone(TrainingUnit unit)
         {
             //Set Appointment with unit done in database
         }
 
-        private TrainingUnit getDummyTrainingUnit()
+        private static TrainingUnit getDummyTrainingUnit()
         {
             TrainingUnit tU = new TrainingUnit("Legs", "Training für die Beine", "Schwer");
             Exercise e1 = new Exercise("Squats", "Stehe mit den Füßen schulterbreit auseinander, die Zehen zeigen leicht nach außen. Senke deinen Körper, indem du die Hüften nach hinten bewegst, als ob du dich setzen würdest. Achte darauf, dass die Knie nicht über die Zehen hinausragen. Drücke dich dann durch die Fersen nach oben, um in die Ausgangsposition zurückzukehren.", 2.5);
@@ -58,7 +45,7 @@ namespace IncredibleFit.SQL
             return tU;
         }
 
-        private TrainingPlan getDummyTrainingPlan()
+        private static TrainingPlan getDummyTrainingPlan()
         {
             TrainingPlan tP = new TrainingPlan("Dummy", "Hilfstrainingsplan zum testen. Wird später wieder gelöscht.", "Schwierig");
 

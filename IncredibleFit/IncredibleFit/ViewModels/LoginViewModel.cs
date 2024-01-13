@@ -3,9 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using IncredibleFit.SQL;
 using IncredibleFit.SQL.Entities;
 using IncredibleFit.Screens;
-using System.Text;
-using System.Diagnostics;
-using IncredibleFit.IncredibleFit.SQL;
 
 namespace IncredibleFit.ViewModels
 {

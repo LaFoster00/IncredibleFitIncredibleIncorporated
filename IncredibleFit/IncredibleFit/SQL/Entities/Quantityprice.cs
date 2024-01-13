@@ -5,19 +5,21 @@ namespace IncredibleFit.SQL.Entities
     [Entity("QUANTITYPRICE")]
     public class Quantityprice
     {
-        [ID, Field("QUANTITYPRICEID", OracleDbType.Int64)] //Correct data type for serial?
-        public int QuantitypriceID { get; private set; } = 0;
+        [ID, Field("QUANTITYPRICEID", OracleDbType.Int32)]
+        public int QuantitypriceID { get; private set; } = -1;
 
-        [Field("QUANTITYUNIT", OracleDbType.Varchar2)] //Domain in ERD
-        public string Quantityunit { get; set; } = String.Empty;
+        [Field("QUANTITYUNIT", OracleDbType.Int16)] //Domain in ERD
+        public Int16 Quantityunit { get; set; } = -1;
 
-        [Field("PRICELOWER", OracleDbType.Decimal)] //Number(4,2) in ERD
-        public decimal PriceLower { get; set; } = 0;
+        [Field("PRICELOWER", OracleDbType.Double)] 
+        public double PriceLower { get; set; } = -1;
 
-        [Field("PRICEUPPER", OracleDbType.Decimal)] //Number(4,2) in ERD
-        public decimal PriceUpper { get; set; } = 0;
+        [Field("PRICEUPPER", OracleDbType.Double)]
+        public double PriceUpper { get; set; } = -1;
 
-        public Quantityprice(string quantityunit, decimal priceLower, decimal priceUpper)
+        private Quantityprice() { }
+
+        public Quantityprice(short quantityunit, double priceLower, double priceUpper)
         {
             Quantityunit = quantityunit;
             PriceLower = priceLower;

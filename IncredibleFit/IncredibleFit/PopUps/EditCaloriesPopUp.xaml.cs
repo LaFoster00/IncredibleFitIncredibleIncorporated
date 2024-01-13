@@ -1,6 +1,6 @@
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Views;
-using IncredibleFit.Models;
+using IncredibleFit.SQL.Entities;
 using IncredibleFit.Screens;
 using IncredibleFit.SQL;
 using System.Globalization;
@@ -10,10 +10,10 @@ namespace IncredibleFit.PopUps;
 public partial class EditCaloriesPopUp : Popup
 {
 	private CalorieTracker _calorieTracker;
-	private CalorieTrack _calorieTrack;
+	private Track _calorieTrack;
 	private int _index;
 
-    public EditCaloriesPopUp(CalorieTracker calorieTracker, CalorieTrack calorieTrack, int index)
+    public EditCaloriesPopUp(CalorieTracker calorieTracker, Track calorieTrack, int index)
 	{
 		InitializeComponent();
 		this._calorieTrack = calorieTrack;
@@ -25,30 +25,30 @@ public partial class EditCaloriesPopUp : Popup
 
 	private void ChangeEntryTexts()
 	{
-        NewKCAL.Text = _calorieTrack.Kcal.ToString();
-		NewKH.Text = _calorieTrack.Kh.ToString();
-		NewP.Text = _calorieTrack.P.ToString();
-		NewF.Text = _calorieTrack.F.ToString();
+        NewKCAL.Text = _calorieTrack.Calories.ToString();
+		NewKH.Text = _calorieTrack.Carbonhydrates.ToString();
+		NewP.Text = _calorieTrack.Protein.ToString();
+		NewF.Text = _calorieTrack.Fat.ToString();
     }
 
 	void KcalEntryChanged(object sender, TextChangedEventArgs e)
 	{
-        _calorieTrack.Kcal = EntryStringToDouble(e.NewTextValue);
+        _calorieTrack.Calories = EntryStringToShort(e.NewTextValue);
 	}
 
     void KhEntryChanged(object sender, TextChangedEventArgs e)
     {
-        _calorieTrack.Kh = EntryStringToDouble(e.NewTextValue);
+        _calorieTrack.Carbonhydrates = EntryStringToShort(e.NewTextValue);
     }
 
     void PEntryChanged(object sender, TextChangedEventArgs e)
     {
-        _calorieTrack.P = EntryStringToDouble(e.NewTextValue);
+        _calorieTrack.Protein = EntryStringToShort(e.NewTextValue);
     }
 
     void FEntryChanged(object sender, TextChangedEventArgs e)
     {
-        _calorieTrack.F = EntryStringToDouble(e.NewTextValue);
+        _calorieTrack.Fat = EntryStringToShort(e.NewTextValue);
     }
 
 
@@ -58,12 +58,10 @@ public partial class EditCaloriesPopUp : Popup
         this.Close();
 	}
 
-    private double EntryStringToDouble(string str)
+    private short EntryStringToShort(string str)
     {
-        double number = 0;
-        NumberStyles style = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
-        CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
-        if (Double.TryParse(str, style, culture, out number))
+        short number = 0;
+        if (short.TryParse(str, out number))
             return number;
         else
             return -1;

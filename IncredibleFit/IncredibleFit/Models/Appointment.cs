@@ -10,6 +10,6 @@ namespace IncredibleFit.Models
     {
         private DateTime _date = new DateTime();
         private bool _isTraining;
-        private Recipe _recipe;
+        //private Recipe _recipe;
     }
 }

@@ -2,13 +2,20 @@
 
 namespace IncredibleFit.SQL.Entities
 {
-    [Entity("RECIPEINGRIDIENT")] //Need to correct typo later
-    class Recipeingredient
+    [Entity("RECIPEINGREDIENT")]
+    public class Recipeingredient
     {
-        [ID, Field("RECIPEINGRIDIENTID", OracleDbType.Int64)] //Correct data type for serial? Correct typo later
-        public int RecipeIngridientID { get; private set; } = 0;
+        [ID, Field("RECIPEINGREDIENTID", OracleDbType.Int32)] 
+        public int RecipeIngredientID { get; private set; } = -1;
 
-        [Field("QUANTITY", OracleDbType.Int64)] //Number in ERD
-        public int Quantity { get; set; } = 0; 
+        [Field("QUANTITY", OracleDbType.Decimal)]
+        public decimal Quantity { get; set; } = -1;
+
+        private Recipeingredient() { }
+
+        public Recipeingredient(decimal quantity)
+        {
+            Quantity = quantity;
+        }
     }
 }

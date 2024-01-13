@@ -11,7 +11,7 @@ public partial class CalorieTracker : ContentPage
 {
     private User? _currentUser;
     private readonly SessionInfo _sessionInfo;
-    public ObservableCollection<CalorieTrack> weekCalorieTracks { get; set; } = new ObservableCollection<CalorieTrack>();
+    public ObservableCollection<Track> weekCalorieTracks { get; set; } = new ObservableCollection<Track>();
     public CalorieTracker(SessionInfo info)
 	{
         _sessionInfo = info;
@@ -24,7 +24,7 @@ public partial class CalorieTracker : ContentPage
         DateTime monday = getStartOfWeek();
         for (int i = 0; i < 7; i++)
         {
-            weekCalorieTracks.Add(new CalorieTrack(monday.AddDays(i),getWeekdayByIndex(i), 100, 0, 0, 0));
+            weekCalorieTracks.Add(new Track(monday.AddDays(i),getWeekdayByIndex(i), 100, 0, 0, 0));
         }
         BindingContext = this;
         ChangeLabel();
@@ -48,7 +48,7 @@ public partial class CalorieTracker : ContentPage
 
         for(int i=0; i<7; i++)
         {
-            CalorieTrack current = weekCalorieTracks[i];
+            Track current = weekCalorieTracks[i];
             averageKcal += current.Kcal;
             averageKh += current.Kh;
             averageP += current.P;
@@ -67,7 +67,7 @@ public partial class CalorieTracker : ContentPage
     }
 
 
-    public void setWeekCalorieTracks(int index, CalorieTrack track)
+    public void setWeekCalorieTracks(int index, Track track)
     {
         this.weekCalorieTracks[index] = track;
         BindingContext = this;
@@ -77,7 +77,7 @@ public partial class CalorieTracker : ContentPage
     void EditCaloriesClicked(object sender, EventArgs e)
     {
         ImageButton imgBtn = (ImageButton)sender;
-        CalorieTrack currentTrack = (CalorieTrack)imgBtn.BindingContext;
+        Track currentTrack = (Track)imgBtn.BindingContext;
         int index = getIndexOfWeekCalorieTracks(currentTrack);
         var popup = new EditCaloriesPopUp(this, currentTrack, index);
         this.ShowPopup(popup);
@@ -106,7 +106,7 @@ public partial class CalorieTracker : ContentPage
         }
     }
 
-    private int getIndexOfWeekCalorieTracks(CalorieTrack track)
+    private int getIndexOfWeekCalorieTracks(Track track)
     {
         for(int i = 0;i<weekCalorieTracks.Count;i++)
         {

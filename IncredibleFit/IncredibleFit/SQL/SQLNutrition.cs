@@ -3,9 +3,9 @@ using System.Collections.ObjectModel;
 
 namespace IncredibleFit.SQL
 {
-    public class SQLNutrition
+    public static class SQLNutrition
     {
-        public ObservableCollection<Recipe> getAllRecipes()
+        public static ObservableCollection<Recipe> getAllRecipes()
         {
             ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
 
@@ -16,31 +16,31 @@ namespace IncredibleFit.SQL
             return recipes;
         }
 
-        public ObservableCollection<Recipe> getRecipesByIngredientAndKeyword(string keyword, string ingredient)
+        public static ObservableCollection<Recipe> getRecipesByIngredientAndKeyword(string keyword, string ingredient)
         {
             //TODO Get Recipes from Database
 
             return getDummyRecipes();
         }
 
-        public ObservableCollection<Ingredient> getIngredientsByRecipe(Recipe recipe)
+        public static ObservableCollection<Ingredient> getIngredientsByRecipe(Recipe recipe)
         {
             ObservableCollection<Ingredient> ingredients = new ObservableCollection<Ingredient>();
             //TODO Get Ingredients from Database
             return ingredients;
         }
 
-        public void SaveCalorieTrack(Track calorieTrack)
+        public static void SaveCalorieTrack(Track calorieTrack)
         {
             //TODO Save calorieTrack in Database
         }
 
 
-        private ObservableCollection<Recipe> getDummyRecipes()
+        private static ObservableCollection<Recipe> getDummyRecipes()
         {
             ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
 
-            recipes.Add(new Recipe("Lasagne", "Leckerer Auflauf mit Nudeln und Hackfleisch", "Bla", 1, "Fleischhaltig", 100, new List<Ingredient> { }));
+            /*recipes.Add(new Recipe("Lasagne", "Leckerer Auflauf mit Nudeln und Hackfleisch", "Bla", 1, "Fleischhaltig", 100, new List<Ingredient> { }));
             recipes.Add(new Recipe("Pfannkuchen", "Nach Wunsch belegte Teigfladen", "Bla", 1, "Vegetarisch", 50, new List<Ingredient> { }));
             List<Ingredient> ingredients = new List<Ingredient> { };
             ingredients.Add(new Ingredient("Zucchini", 1, 17.0, 1.2, 0.3, 1.5, 95.0, new Quantityprice(0, 400, 0.5, 1.0)));
@@ -58,7 +58,7 @@ namespace IncredibleFit.SQL
             recipes.Add(new Recipe("Knuspriges Gemüse-Ratatouille",
                 "Ein herzhaftes Gericht, das die Aromen verschiedener Gemüsesorten in einer knusprigen, würzigen und köstlichen Kombination vereint.",
                 "Vorbereitungszeit: 20 Minuten\nKochzeit: 40 Minuten\nGesamtdauer: 60 Minuten\nPortionen: 4\n\nOfen auf 180°C vorheizen. Zucchini, Aubergine, Paprika und Tomaten in gleichmäßige Scheiben schneiden. Gemüsescheiben auf einem Backblech verteilen, Knoblauch darüber streuen und mit Olivenöl beträufeln. Mit den Kräutern bestreuen und für 40 Minuten im Ofen backen, bis das Gemüse knusprig und goldbraun ist. Aus dem Ofen nehmen und heiß servieren.",
-                1, "Vegetarisch", wholeEnergy, ingredients));
+                1, "Vegetarisch", wholeEnergy, ingredients));*/
 
             return recipes;
         }

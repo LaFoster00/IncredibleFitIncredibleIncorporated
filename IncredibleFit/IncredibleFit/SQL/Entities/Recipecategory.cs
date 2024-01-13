@@ -4,18 +4,19 @@ using Oracle.ManagedDataAccess.Client;
 namespace IncredibleFit.SQL.Entities
 {
     [Entity("RECIPECATEGORY")]
-    class Recipecategory
+    public class Recipecategory
     {
-        [ID, Field("RECIPECATEGORYID", OracleDbType.Int64)] //Correct data type for serial?
-        public int RecipeCategoryID { get; private set; } = 0;
+        [ID, Field("RECIPECATEGORYID", OracleDbType.Int32)]
+        public int RecipeCategoryID { get; private set; } = -1;
 
-        [Field("MEALTYPE", OracleDbType.Varchar2)] //Domain in ERD
-        public string Mealtype { get; set; } = string.Empty;
+        [Field("MEALTYPE", OracleDbType.Int16)] //Domain in ERD
+        public Int16 Mealtype { get; set; } = -1;
 
-        [Field("FOODCATEGORY", OracleDbType.Varchar2)] //Domain in ERD
-        public string Foodcategory { get; set;} = string.Empty;
+        [Field("FOODCATEGORY", OracleDbType.Int16)] //Domain in ERD
+        public Int16 Foodcategory { get; set;} = -1;
 
-        public Recipecategory(string mealtype, string foodcategory)
+        private Recipecategory() { }
+        public Recipecategory(short mealtype, short foodcategory)
         {
             Mealtype = mealtype;
             Foodcategory = foodcategory;
