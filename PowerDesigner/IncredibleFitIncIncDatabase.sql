@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     13.01.2024 13:30:44                          */
+/* Created on:     13.01.2024 13:52:40                          */
 /*==============================================================*/
 
 
@@ -59,11 +59,11 @@ alter table RECIPE
    drop constraint FK_RECIPE_RECIPE_CR_USER
 /
 
-alter table RECIPEINGRIDIENT
+alter table RECIPEINGREDIENT
    drop constraint FK_RECIPEIN_QUANTITY__INGREDIE
 /
 
-alter table RECIPEINGRIDIENT
+alter table RECIPEINGREDIENT
    drop constraint FK_RECIPEIN_RECIPE_IN_RECIPE
 /
 
@@ -208,7 +208,7 @@ drop index QUANTITY_OF_INGREDIENT_FK
 drop index RECIPE_INGREDIENTS_FK
 /
 
-drop table RECIPEINGRIDIENT cascade constraints
+drop table RECIPEINGREDIENT cascade constraints
 /
 
 drop index RECIPE_APPOINTMENT2_FK
@@ -559,22 +559,22 @@ create table RECIPECATEGORY (
 /
 
 /*==============================================================*/
-/* Table: RECIPEINGRIDIENT                                      */
+/* Table: RECIPEINGREDIENT                                      */
 /*==============================================================*/
-create table RECIPEINGRIDIENT (
+create table RECIPEINGREDIENT (
    RECIPEID             NUMBER(6)             not null,
    INGREDIENTNAME       VARCHAR2(64)          not null,
    RECIPEINGREDIENTID   NUMBER(6)           
       generated as identity ( start with 1 nocycle noorder)  not null,
    QUANTITY             NUMBER                not null,
-   constraint PK_RECIPEINGRIDIENT primary key (RECIPEID, INGREDIENTNAME, RECIPEINGREDIENTID)
+   constraint PK_RECIPEINGREDIENT primary key (RECIPEID, INGREDIENTNAME, RECIPEINGREDIENTID)
 )
 /
 
 /*==============================================================*/
 /* Index: RECIPE_INGREDIENTS_FK                                 */
 /*==============================================================*/
-create index RECIPE_INGREDIENTS_FK on RECIPEINGRIDIENT (
+create index RECIPE_INGREDIENTS_FK on RECIPEINGREDIENT (
    RECIPEID ASC
 )
 /
@@ -582,7 +582,7 @@ create index RECIPE_INGREDIENTS_FK on RECIPEINGRIDIENT (
 /*==============================================================*/
 /* Index: QUANTITY_OF_INGREDIENT_FK                             */
 /*==============================================================*/
-create index QUANTITY_OF_INGREDIENT_FK on RECIPEINGRIDIENT (
+create index QUANTITY_OF_INGREDIENT_FK on RECIPEINGREDIENT (
    INGREDIENTNAME ASC
 )
 /
@@ -902,12 +902,12 @@ alter table RECIPE
       references "USER" (EMAIL)
 /
 
-alter table RECIPEINGRIDIENT
+alter table RECIPEINGREDIENT
    add constraint FK_RECIPEIN_QUANTITY__INGREDIE foreign key (INGREDIENTNAME)
       references INGREDIENT (INGREDIENTNAME)
 /
 
-alter table RECIPEINGRIDIENT
+alter table RECIPEINGREDIENT
    add constraint FK_RECIPEIN_RECIPE_IN_RECIPE foreign key (RECIPEID)
       references RECIPE (RECIPEID)
 /
@@ -988,7 +988,7 @@ alter table USER_SAVED_RECIPES
 /
 
 
-create or replace function GENERATESALT()
+create or replace function GENERATESALT
 RETURN VARCHAR2
 IS
   SALT VARCHAR2(10);
