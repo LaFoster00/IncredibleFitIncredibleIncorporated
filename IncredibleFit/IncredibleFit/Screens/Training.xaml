@@ -6,7 +6,7 @@
     <ScrollView>
         <VerticalStackLayout>
             <Button Text="Training starten" x:Name="BtnStartFinish" Clicked="BtnStartFinishClicked"/>
-            <ListView ItemsSource="{Binding exercises}" HasUnevenRows="True" 
+            <ListView ItemsSource="{Binding exerciseUnits}" HasUnevenRows="True" 
                       SeparatorVisibility="None" ItemTapped="ExerciseDoneClicked">
                 <ListView.ItemTemplate>
                     <DataTemplate>

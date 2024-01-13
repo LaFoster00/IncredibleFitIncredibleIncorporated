@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using IncredibleFit.Models;
+using IncredibleFit.SQL.Entities;
 using IncredibleFit.PopUps;
 using IncredibleFit.SQL;
 using CommunityToolkit.Maui.Views;
@@ -8,16 +8,13 @@ namespace IncredibleFit.Screens;
 
 public partial class Training : ContentPage
 {
-    public ObservableCollection<Exercise> exercises { get; set; } = new ObservableCollection<Exercise>();
+    public ObservableCollection<ExerciseUnit> exerciseUnits { get; set; } = new ObservableCollection<ExerciseUnit>();
 
     private TrainingUnit _nextTrainingUnit = SQLTraining.getNextTrainingUnit();
     public Training()
     {
         InitializeComponent();
-		for(int i=0; i<_nextTrainingUnit.exercises.Count; i++)
-		{
-			exercises.Add(_nextTrainingUnit.exercises[i]);
-		}	
+        exerciseUnits = SQLTraining.getExerciseUnits(_nextTrainingUnit);
         BindingContext = this;
     }
 
@@ -41,33 +38,33 @@ public partial class Training : ContentPage
 	void ExerciseDoneClicked(object sender, EventArgs e)
 	{
         ListView lV = (ListView)sender;
-        Exercise ex = (Exercise)lV.SelectedItem;
-        if (BtnStartFinish.Text == "Training beenden" && !ex.isFinished)
+        ExerciseUnit ex = (ExerciseUnit)lV.SelectedItem;
+        if (BtnStartFinish.Text == "Training beenden" && !ex.IsFinished)
 		{
             var popup = new ExerciseDonePopOup(ex, this);
 			this.ShowPopup(popup);
 		}
     }
 
-	public void ExerciseDone(Exercise ex)
+	public void ExerciseDone(ExerciseUnit ex)
 	{
-		exercises.Remove(ex);
-		ex.isFinished = true;
-		ex.strokeColor = Colors.Transparent;
-		ex.textColor = Color.FromArgb("#6E6E6E");
-		exercises.Add(ex);
+        exerciseUnits.Remove(ex);
+		ex.IsFinished = true;
+		ex.StrokeColor = Colors.Transparent;
+		ex.TextColor = Color.FromArgb("#6E6E6E");
+        exerciseUnits.Add(ex);
 		BindingContext = this;
     }
 
 
     private void setStrokeAndTextColors(Color strokeColor, Color textColor)
 	{
-		for(int i=0; i<exercises.Count(); i++)
+		for(int i=0; i< exerciseUnits.Count(); i++)
 		{
-			Exercise tmp = exercises[i];	
-			tmp.strokeColor = strokeColor;
-			tmp.textColor = textColor;
-			this.exercises[i] = tmp;
+			ExerciseUnit tmp = exerciseUnits[i];	
+			tmp.StrokeColor = strokeColor;
+			tmp.TextColor = textColor;
+			this.exerciseUnits[i] = tmp;
 		}
         BindingContext = this;
     }
