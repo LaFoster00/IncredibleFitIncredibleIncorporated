@@ -1,4 +1,5 @@
-using IncredibleFit.Models;
+using IncredibleFit.SQL;
+using IncredibleFit.SQL.Entities;
 using System.Collections;
 using System.Collections.ObjectModel;
 
@@ -6,16 +7,15 @@ namespace IncredibleFit.Screens;
 
 public partial class RecipeDetails : ContentPage
 {
+	private SQLNutrition _sqlNutrition;
 	private Recipe _recipe;
     public ObservableCollection<Ingredient> ingredientsList { get; set; } = new ObservableCollection<Ingredient> { };
     public RecipeDetails(Recipe recipe)
 	{
 		InitializeComponent();
-		this._recipe = recipe;
-		for (int i = 0; i < recipe.Ingredients.Count; i++)
-		{
-			ingredientsList.Add(recipe.Ingredients[i]);
-		}
+		ingredientsList = _sqlNutrition.getIngredientsByRecipe(recipe);
+
+        this._recipe = recipe;
 		BindingContext = this;
 		ChangeLabel();
 	}
@@ -27,23 +27,20 @@ public partial class RecipeDetails : ContentPage
         RecipeInstructions.Text = _recipe.Instructions;
 		RecipeEnergy.Text = _recipe.Energy.ToString();
 
-		double proteins = 0;
-		double fat = 0;
-		double roughage = 0;
-		double water = 0;
+		int? proteins = 0;
+		int? fat = 0;
+		int? carbonhydrates = 0;
 
-		for (int i = 0;i<_recipe.Ingredients.Count;i++)
+		for (int i = 0;i< ingredientsList.Count;i++)
 		{
-			proteins += _recipe.Ingredients[i].Proteincontent;
-			fat += _recipe.Ingredients[i].Fatcontent;
-			roughage += _recipe.Ingredients[i].Roughagecontent;
-			water += _recipe.Ingredients[i].Watercontent;
+			proteins += ingredientsList[i].Protein;
+			fat += ingredientsList[i].Fat;
+            carbonhydrates += ingredientsList[i].Carbonhydrates;
 		}
 
-        RecipeProteine.Text = Math.Round(proteins, 2).ToString();
-		RecipeFat.Text = Math.Round(fat, 2).ToString();
-		RecipeSugar.Text = Math.Round(roughage, 2).ToString();
-		RecipeWater.Text = Math.Round(water, 2).ToString();
+        RecipeProteine.Text = proteins.ToString();
+		RecipeFat.Text = fat.ToString();
+		RecipeSugar.Text = carbonhydrates.ToString();
     }
 
 }

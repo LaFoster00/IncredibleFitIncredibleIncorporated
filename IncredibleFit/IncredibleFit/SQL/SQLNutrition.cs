@@ -1,17 +1,11 @@
-﻿using IncredibleFit.Models;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using IncredibleFit.SQL.Entities;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IncredibleFit.SQL
 {
     public class SQLNutrition
     {
-        public static ObservableCollection<Recipe> getAllRecipes()
+        public ObservableCollection<Recipe> getAllRecipes()
         {
             ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
 
@@ -22,20 +16,27 @@ namespace IncredibleFit.SQL
             return recipes;
         }
 
-        public static ObservableCollection<Recipe> getRecipesByIngredientAndKeyword(string keyword, string ingredient)
+        public ObservableCollection<Recipe> getRecipesByIngredientAndKeyword(string keyword, string ingredient)
         {
             //TODO Get Recipes from Database
 
             return getDummyRecipes();
         }
 
-        public static void SaveCalorieTrack(CalorieTrack calorieTrack)
+        public ObservableCollection<Ingredient> getIngredientsByRecipe(Recipe recipe)
+        {
+            ObservableCollection<Ingredient> ingredients = new ObservableCollection<Ingredient>();
+            //TODO Get Ingredients from Database
+            return ingredients;
+        }
+
+        public void SaveCalorieTrack(Track calorieTrack)
         {
             //TODO Save calorieTrack in Database
         }
 
 
-        private static ObservableCollection<Recipe> getDummyRecipes()
+        private ObservableCollection<Recipe> getDummyRecipes()
         {
             ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
 
