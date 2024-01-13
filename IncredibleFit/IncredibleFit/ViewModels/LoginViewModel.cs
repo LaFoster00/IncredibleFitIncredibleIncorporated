@@ -32,7 +32,11 @@ namespace IncredibleFit.ViewModels
             IsBusy = true;
 
             if (string.IsNullOrWhiteSpace(UserName) && string.IsNullOrWhiteSpace(Password))
+            {
+                WrongCredentials = true;
+                IsBusy = false;
                 return;
+            }
 
             User? user = SQLAccount.GetUserWithEmail(UserName);
 
