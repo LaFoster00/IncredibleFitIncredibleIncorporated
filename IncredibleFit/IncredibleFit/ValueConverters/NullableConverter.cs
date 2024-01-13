@@ -19,7 +19,7 @@ namespace IncredibleFit.ValueConverters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value is string stringValue && string.IsNullOrEmpty(stringValue))
+            if (value is string stringValue && (string.IsNullOrEmpty(stringValue) || string.IsNullOrWhiteSpace(stringValue)))
             {
                 return null;
             }
