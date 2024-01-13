@@ -6,80 +6,234 @@ using System.Threading.Tasks;
 
 namespace IncredibleFit.SQL
 {
-    public enum AppointmentStatus : short
+    public struct AppointmentStatus
     {
-        Invalid = -1,
-        Open = 0,
-        Closed = 1,
+        public readonly short Value;
+
+        public static readonly short Invalid = -1;
+        public static readonly short Open = 0;
+        public static readonly short Closed = 1;
+
+        private AppointmentStatus(short status)
+        {
+            this.Value = status;
+        }
+
+        public static implicit operator short(AppointmentStatus value)
+        {
+            return value.Value;
+        }
+
+        public static implicit operator AppointmentStatus(short value)
+        {
+            return new AppointmentStatus(value);
+        }
     }
 
-    public enum Authorization : short
+    public struct Authorization
     {
-        Invalid = -1,
-        User = 0,
-        Admin = 1,
+        public readonly short Value;
+
+        public static readonly short Invalid = -1;
+        public static readonly short User = 0;
+        public static readonly short Admin = 1;
+
+        private Authorization(short status)
+        {
+            this.Value = status;
+        }
+
+        public static implicit operator short(Authorization value)
+        {
+            return value.Value;
+        }
+
+        public static implicit operator Authorization(short value)
+        {
+            return new Authorization(value);
+        }
     }
 
-    public enum ExerciseType : short
+    public struct ExerciseType
     {
-        Invalid = -1,
-        Warmup = 0,
-        Cooldown = 1,
-        Main = 2,
+        public readonly short Value;
+
+        public static readonly short Invalid = -1;
+        public static readonly short Warmup = 0;
+        public static readonly short Cooldown = 1;
+        public static readonly short Main = 2;
+
+        private ExerciseType(short status)
+        {
+            this.Value = status;
+        }
+
+        public static implicit operator short(ExerciseType value)
+        {
+            return value.Value;
+        }
+
+        public static implicit operator ExerciseType(short value)
+        {
+            return new ExerciseType(value);
+        }
     }
 
-    public enum FoodCategory : short
+    public struct FoodCategory
     {
-        Invalid = -1,
-        Meat = 0,
-        Vegetarian = 1,
-        Vegan = 2,
+        public readonly short Value;
+
+        public static readonly short Invalid = -1;
+        public static readonly short Meat = 0;
+        public static readonly short Vegetarian = 1;
+        public static readonly short Vegan = 2;
+
+        private FoodCategory(short status)
+        {
+            this.Value = status;
+        }
+
+        public static implicit operator short(FoodCategory value)
+        {
+            return value.Value;
+        }
+
+        public static implicit operator FoodCategory(short value)
+        {
+            return new FoodCategory(value);
+        }
     }
 
-    public enum MealType : short
+    public struct MealType
     {
-        Invalid = -1,
-        Breakfast = 0,
-        Supper = 1,
-        Dinner = 2,
-        Snack = 3,
-        Drink = 4,
+        public readonly short Value;
+
+        public static readonly short Invalid = -1;
+        public static readonly short Breakfast = 0;
+        public static readonly short Supper = 1;
+        public static readonly short Dinner = 2;
+        public static readonly short Snack = 3;
+        public static readonly short Drink = 4;
+
+        private MealType(short status)
+        {
+            this.Value = status;
+        }
+
+        public static implicit operator short(MealType value)
+        {
+            return value.Value;
+        }
+
+        public static implicit operator MealType(short value)
+        {
+            return new MealType(value);
+        }
     }
 
-    public enum QuantityUnit : short
+    public struct QuantityUnit
     {
-        Invalid = -1,
-        Gram = 0,
-        Liter = 1,
-        Pound = 2,
-        FluidOunce = 3,
+        public readonly short Value;
+
+        public static readonly short Invalid = -1;
+        public static readonly short Gram = 0;
+        public static readonly short Liter = 1;
+        public static readonly short Pound = 2;
+        public static readonly short FluidOunce = 3;
+
+        private QuantityUnit(short status)
+        {
+            this.Value = status;
+        }
+
+        public static implicit operator short(QuantityUnit value)
+        {
+            return value.Value;
+        }
+
+        public static implicit operator QuantityUnit(short value)
+        {
+            return new QuantityUnit(value);
+        }
+    }
+    
+
+    public struct Difficulty
+    {
+        public readonly short Value;
+
+        public static readonly short Invalid = -1;
+        public static readonly short Easy = 0;
+        public static readonly short Medium = 1;
+        public static readonly short Hard = 2;
+
+        private Difficulty(short status)
+        {
+            this.Value = status;
+        }
+
+        public static implicit operator short(Difficulty value)
+        {
+            return value.Value;
+        }
+
+        public static implicit operator Difficulty(short value)
+        {
+            return new Difficulty(value);
+        }
     }
 
-    public enum Difficulty : short
+    public struct Visibility
     {
-        Invalid = -1,
-        Easy = 0,
-        Medium = 1,
-        Hard = 2,
+        public readonly short Value;
+
+        public static readonly short Invalid = -1;
+        public static readonly short Private = 0;
+        public static readonly short Public = 1;
+        public static readonly short Friends = 2;
+
+        private Visibility(short status)
+        {
+            this.Value = status;
+        }
+
+        public static implicit operator short(Visibility value)
+        {
+            return value.Value;
+        }
+
+        public static implicit operator Visibility(short value)
+        {
+            return new Visibility(value);
+        }
     }
 
-    public enum Visibility : short
+    public struct Weekday
     {
-        Invalid = -1,
-        Private = 0,
-        Public = 1,
-        Friends = 2,
-    }
+        public readonly short Value;
 
-    public enum Weekday : short
-    {
-        FridayFridayGottaGetDownOnFriday = -1,
-        Monday = 0,
-        Tuesday = 1,
-        Wednesday = 2,
-        Thursday = 3,
-        Friday = 4,
-        Saturday = 5,
-        Sunday = 6,
+        public static readonly short FridayFridayGottaGetDownOnFriday = -1;
+        public static readonly short Monday = 0;
+        public static readonly short Tuesday = 1;
+        public static readonly short Wednesday = 2;
+        public static readonly short Thursday = 3;
+        public static readonly short Friday = 4;
+        public static readonly short Saturday = 5;
+        public static readonly short Sunday = 6;
+
+        private Weekday(short status)
+        {
+            this.Value = status;
+        }
+
+        public static implicit operator short(Weekday value)
+        {
+            return value.Value;
+        }
+
+        public static implicit operator Weekday(short value)
+        {
+            return new Weekday(value);
+        }
     }
 }
