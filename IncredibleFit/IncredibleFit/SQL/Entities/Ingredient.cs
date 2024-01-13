@@ -9,7 +9,7 @@ namespace IncredibleFit.SQL.Entities
         public string IngredientName { get; set; } = String.Empty;
 
         [Field("FOODCATEGORY", OracleDbType.Int16)] //Domain in ERD
-        public Int16 Foodcategory { get; set; } = -1;
+        public FoodCategory Foodcategory { get; set; } = FoodCategory.Invalid;
 
         [Field("CALORIES", OracleDbType.Int16)]
         public Int16 Calories { get; set; } = -1;

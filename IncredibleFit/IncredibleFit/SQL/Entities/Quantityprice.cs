@@ -9,7 +9,7 @@ namespace IncredibleFit.SQL.Entities
         public int QuantitypriceID { get; private set; } = -1;
 
         [Field("QUANTITYUNIT", OracleDbType.Int16)] //Domain in ERD
-        public Int16 Quantityunit { get; set; } = -1;
+        public QuantityUnit Quantityunit { get; set; } = QuantityUnit.Invalid;
 
         [Field("PRICELOWER", OracleDbType.Double)] 
         public double PriceLower { get; set; } = -1;

@@ -18,7 +18,7 @@ namespace IncredibleFit.SQL.Entities
         public string Instructions { get; set; } = string.Empty;
 
         [Field("VISIBILITY", OracleDbType.Int16)] //Domain in ERD
-        public Int16 Visibility { get; set; } = -1;
+        public Visibility Visibility { get; set; } = Visibility.Invalid;
 
         public int Calories { get; set; } = 0;
 

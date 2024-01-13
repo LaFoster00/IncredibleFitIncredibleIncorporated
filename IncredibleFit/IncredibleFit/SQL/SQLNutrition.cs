@@ -1,6 +1,8 @@
 ﻿using IncredibleFit.SQL.Entities;
 using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using System.Collections.ObjectModel;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace IncredibleFit.SQL
 {
@@ -11,8 +13,23 @@ namespace IncredibleFit.SQL
             ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
 
             //get all Recipes from Database
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "RECIPE"
+                 """);
 
-            recipes = getDummyRecipes();
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Recipe>();
+            if (track.Any())
+            {
+                foreach ( var item in track)
+                {
+                    recipes.Add(item);
+                }
+            }
+
+            getIngredientsByRecipe(new Recipe("ABC", "abc", "aaa", 0, 100));
 
             return recipes;
         }
@@ -28,17 +45,29 @@ namespace IncredibleFit.SQL
         {
             ObservableCollection<Ingredient> ingredients = new ObservableCollection<Ingredient>();
             //TODO Get Ingredients from Database
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "INGREDIENT", "RECIPEINGREDIENT", "RECIPE"
+                 WHERE RECIPEID = "{recipe.RecipeID}"
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Ingredient>();
+
             return ingredients;
         }
 
         public static Track getTrackByDate(DateTime date)
         {
+            DateTime date2 = new DateTime(date.Year, date.Month, date.Day);
+            
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "TRACK"
-                 WHERE DATE = :Date
+                 WHERE "DATE" = :PDATE
                  """);
-            command.Parameters.Add("Date", OracleDbType.Date).Value = date;
+            command.Parameters.Add(new OracleParameter("PDATE", OracleDbType.Date)).Value = date2;
             
             var reader = OracleDatabase.ExecuteQuery(command);
 
@@ -48,6 +77,28 @@ namespace IncredibleFit.SQL
 
         public static void SaveCalorieTrack(Track calorieTrack)
         {
+
+            DateTime date2 = new DateTime(calorieTrack.Date.Year, calorieTrack.Date.Month, calorieTrack.Date.Day);
+
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM TRACK
+                 WHERE "DATE" = :PDATE
+                 """);
+            command.Parameters.Add(new OracleParameter("PDATE", OracleDbType.Date)).Value = date2;
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Track>();
+            
+            if(!track.Any()) 
+            {
+                OracleDatabase.InsertObject(calorieTrack);
+            }
+            else
+            {
+                OracleDatabase.UpdateObject(calorieTrack);
+            }
             //TODO Save calorieTrack in Database
         }
 

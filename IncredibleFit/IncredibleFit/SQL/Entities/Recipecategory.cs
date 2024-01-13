@@ -9,10 +9,10 @@ namespace IncredibleFit.SQL.Entities
         public int RecipeCategoryID { get; private set; } = -1;
 
         [Field("MEALTYPE", OracleDbType.Int16)] //Domain in ERD
-        public Int16 Mealtype { get; set; } = -1;
+        public MealType Mealtype { get; set; } = MealType.Invalid;
 
         [Field("FOODCATEGORY", OracleDbType.Int16)] //Domain in ERD
-        public Int16 Foodcategory { get; set;} = -1;
+        public FoodCategory Foodcategory { get; set;} = MealType.Invalid;
 
         private Recipecategory() { }
         public Recipecategory(short mealtype, short foodcategory)

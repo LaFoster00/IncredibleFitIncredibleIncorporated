@@ -2,6 +2,7 @@ using IncredibleFit.PopUps;
 using IncredibleFit.SQL.Entities;
 using CommunityToolkit.Maui.Views;
 using System.Collections.ObjectModel;
+using IncredibleFit.SQL;
 
 namespace IncredibleFit.Screens;
 
@@ -17,7 +18,13 @@ public partial class CalorieTracker : ContentPage
         DateTime monday = getStartOfWeek();
         for (int i = 0; i < 7; i++)
         {
-            weekCalorieTracks.Add(new Track(monday.AddDays(i),getWeekdayByIndex(i), 100, 0, 0, 0));
+            Track currentTrack = SQLNutrition.getTrackByDate(monday.AddDays(i));
+            if(currentTrack == null ) 
+            {
+                currentTrack = new Track(monday.AddDays(i),0,0,0,0);
+            }
+            currentTrack.Weekday = getWeekdayByIndex(i);
+            weekCalorieTracks.Add(currentTrack);
         }
         BindingContext = this;
         ChangeLabel();
@@ -63,6 +70,7 @@ public partial class CalorieTracker : ContentPage
     public void setWeekCalorieTracks(int index, Track track)
     {
         this.weekCalorieTracks[index] = track;
+        SQLNutrition.SaveCalorieTrack(track);
         BindingContext = this;
         ChangeAverageData();
     }
