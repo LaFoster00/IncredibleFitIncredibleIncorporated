@@ -26,28 +26,28 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Label Text="{Binding FirstName}" FontAttributes="Bold" 
+                <Label Text="{Binding CurrentUser.FirstName, FallbackValue='Undefined'}" FontAttributes="Bold" 
                            FontSize="Large" HorizontalOptions="Center"
                            TextColor="{StaticResource Primary}"/>
-                <Label Text="{Binding Name}" FontAttributes="Bold" 
+                <Label Text="{Binding CurrentUser.Name, FallbackValue='Undefined'}" FontAttributes="Bold" 
                            FontSize="Large" HorizontalOptions="Center"
                            Grid.Row="1" TextColor="{StaticResource Primary}" Margin="0,0,0,10"/>
                 <Line HorizontalOptions="Fill" BackgroundColor="{StaticResource Primary}" 
                             Grid.Row="2"/>
                 <contentViews:EditableField Icon="icon_mail.png"
-                            Value = "{Binding Email}" Grid.Row="3" />
+                            Value = "{Binding CurrentUser.Email, FallbackValue='Undefined'}" Grid.Row="3" />
                 <contentViews:EditableField Icon="icon_scale.png"
-                            Value = "{Binding Weight, Converter={StaticResource NullableConverter}}"
+                            Value = "{Binding CurrentUser.Weight, FallbackValue='Undefined', Converter={StaticResource NullableConverter}}"
                             Grid.Row="4"
                             Placeholder="0"/>
                 <contentViews:EditableField Icon="icon_ruler.png"
-                            Value = "{Binding Height, Converter={StaticResource NullableConverter}}"
+                            Value = "{Binding CurrentUser.Height, FallbackValue='Undefined', Converter={StaticResource NullableConverter}}"
                             Placeholder="0" Grid.Row="5"/>
                 <contentViews:EditableField Icon="icon_percent.png"
-                            Value = "{Binding BodyFatPercentage, Converter={StaticResource NullableConverter}}"
+                            Value = "{Binding CurrentUser.BodyFatPercentage, FallbackValue='Undefined', Converter={StaticResource NullableConverter}}"
                             Placeholder="0" Grid.Row="6"/>
                 <contentViews:EditableField Icon="icon_basalmetabolicrate.png"
-                            Value = "{Binding BasalMetabolicRate, Converter={StaticResource NullableConverter}}"
+                            Value = "{Binding CurrentUser.BasalMetabolicRate, FallbackValue='Undefined', Converter={StaticResource NullableConverter}}"
                             Placeholder="0" Grid.Row="7"/>
                 <Image Source="icon_goal.png" HeightRequest="20" WidthRequest="20"
                             Grid.Row="8"/>

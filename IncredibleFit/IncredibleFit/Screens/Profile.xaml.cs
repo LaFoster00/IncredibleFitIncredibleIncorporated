@@ -5,12 +5,25 @@ namespace IncredibleFit.Screens
 {
 	public partial class Profile : ContentPage
 	{
-		private SessionInfo _sessionInfo;
-		public Profile(SessionInfo info, ProfileViewModel viewModel)
+        private readonly ProfileViewModel _viewModel;
+
+		public Profile(ProfileViewModel viewModel)
 		{
 			InitializeComponent();
-			_sessionInfo = info;
-			BindingContext = viewModel;
+            _viewModel = viewModel;
+            BindingContext = viewModel;
 		}
-	}
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _viewModel.IsActive = true;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _viewModel.IsActive = false;
+        }
+    }
 }
