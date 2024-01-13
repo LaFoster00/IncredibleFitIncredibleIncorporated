@@ -20,13 +20,13 @@ namespace IncredibleFit.SQL.Entities
         [Field("FIRSTNAME", OracleDbType.Varchar2)]
         public string FirstName { get; set; } = string.Empty;
 
-        [Field("WEIGHT", OracleDbType.Double)]
+        [Field("WEIGHT", OracleDbType.Single)]
         public float? Weight { get; set; }
 
-        [Field("HEIGHT", OracleDbType.Double)]
+        [Field("HEIGHT", OracleDbType.Single)]
         public float? Height { get; set; }
 
-        [Field("BODYFATPERCENTAGE", OracleDbType.Double)]
+        [Field("BODYFATPERCENTAGE", OracleDbType.Single)]
         public float? BodyFatPercentage { get; set; }
 
         [Field("BASALMETABOLICRATE", OracleDbType.Int64)]
