@@ -47,8 +47,12 @@ namespace IncredibleFit.SQL
             //TODO Get Ingredients from Database
             var command = OracleDatabase.CreateCommand(
                 $"""
-                 SELECT * FROM "INGREDIENT", "RECIPEINGREDIENT", "RECIPE"
-                 WHERE RECIPEID = "{recipe.RecipeID}"
+                 SELECT * FROM "INGREDIENT" 
+                 JOIN "RECIPEINGREDIENT" 
+                 ON RECIPEINGREDIENT.INGREDIENTNAME = INGREDIENT.INGREDIENTNAME
+                 JOIN "RECIPE"
+                 ON RECIPEINGREDIENT.RECIPEID = RECIPE.RECIPEID
+                 WHERE RECIPE.RECIPEID = {recipe.RecipeID}
                  """);
 
             var reader = OracleDatabase.ExecuteQuery(command);
