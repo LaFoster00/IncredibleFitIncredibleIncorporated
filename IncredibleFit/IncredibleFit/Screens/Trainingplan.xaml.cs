@@ -1,4 +1,4 @@
-using IncredibleFit.Models;
+using IncredibleFit.SQL.Entities;
 using IncredibleFit.SQL;
 using System.Collections.ObjectModel;
 
@@ -7,13 +7,15 @@ namespace IncredibleFit.Screens;
 public partial class Trainingplan : ContentPage
 {
 	private TrainingPlan _currentTrainingPlan = SQLTraining.getCurrentTrainingPlan();
-    public ObservableCollection<TrainingPlanUnit> trainingUnits { get; set; } = new ObservableCollection<TrainingPlanUnit>();
+    public ObservableCollection<PlanTrainingUnit> trainingUnits { get; set; } = new ObservableCollection<PlanTrainingUnit>();
 	public Trainingplan()
 	{
-		for(int i = 0; i<_currentTrainingPlan.trainingUnits.Length; i++)
+		trainingUnits = SQLTraining.getTrainingUnitsByTrainingPlan(_currentTrainingPlan);
+
+        /*for (int i = 0; i<trainingUnits.Count; i++)
 		{
-			TrainingPlanUnit unit = _currentTrainingPlan.trainingUnits[i];
-			if (unit.trainingUnit != null)
+			PlanTrainingUnit unit = _currentTrainingPlan.trainingUnits[i];
+			if (trainingUnits[i] != null)
 			{
 				unit.exerciseCount = unit.trainingUnit.exercises.Count;
 			}
@@ -24,7 +26,8 @@ public partial class Trainingplan : ContentPage
 				unit.trainingUnit = new TrainingUnit("Pause", "", "");
 			}
 			trainingUnits.Add(_currentTrainingPlan.trainingUnits[i]);
-		}
+		}*/
+
 		InitializeComponent();
 		BindingContext = this;
 	}

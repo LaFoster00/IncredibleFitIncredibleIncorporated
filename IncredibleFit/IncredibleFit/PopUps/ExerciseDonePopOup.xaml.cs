@@ -1,23 +1,23 @@
 using CommunityToolkit.Maui.Views;
-using IncredibleFit.Models;
+using IncredibleFit.SQL.Entities;
 using IncredibleFit.Screens;
 
 namespace IncredibleFit.PopUps;
 
 public partial class ExerciseDonePopOup : Popup
 {
-	private Exercise _exercise;
+	private ExerciseUnit _exerciseUnit;
 	private Training _training;
-	public ExerciseDonePopOup(Exercise ex, Training training)
+	public ExerciseDonePopOup(ExerciseUnit ex, Training training)
 	{
 		InitializeComponent();
-		_exercise = ex;
+        _exerciseUnit = ex;
 		_training = training;
 	}
 
 	void BtnYesClicked(object sender, EventArgs e)
 	{
-		_training.ExerciseDone(_exercise);
+		_training.ExerciseDone(_exerciseUnit);
 		this.Close();
     }
 
