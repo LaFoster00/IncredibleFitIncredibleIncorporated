@@ -1,10 +1,10 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     14.01.2024 14:13:31                          */
+/* Created on:     14.01.2024 14:55:38                          */
 /*==============================================================*/
 
 
-drop procedure GENERATESALT
+drop function GENERATESALT
 /
 
 drop procedure INSERTINGREDIENT
@@ -498,7 +498,7 @@ create table QUANTITYPRICE (
    QUANTITYPRICEID      NUMBER(6)           
       generated as identity ( start with 1 nocycle noorder)  not null,
    QUANTITYUNIT         NUMBER(1)             not null
-      constraint CKC_QUANTITYUNIT_QUANTITY check (QUANTITYUNIT between 0 and 3 and QUANTITYUNIT in (0,1,2,3)),
+      constraint CKC_QUANTITYUNIT_QUANTITY check (QUANTITYUNIT between 0 and 4 and QUANTITYUNIT in (0,1,2,3,4)),
    PRICELOWER           NUMBER(4,2)           not null,
    PRICEUPPER           NUMBER(4,2)           not null,
    constraint PK_QUANTITYPRICE primary key (INGREDIENTNAME, QUANTITYPRICEID)
@@ -1015,7 +1015,7 @@ alter table USER_SAVED_RECIPES
 /
 
 
-create or replace function GENERATESALT()
+create or replace function GENERATESALT
 RETURN VARCHAR2
 IS
   SALT VARCHAR2(10);
@@ -1026,18 +1026,18 @@ END GENERATESALT;
 /
 
 
-create or replace procedure INSERTINGREDIENT(P_INGREDIENTNAME IN VARCHAR2)
+create or replace procedure INSERTINGREDIENT(P_INGREDIENTNAME IN VARCHAR2,P_FOODCATEGORY IN NUMBER,P_CALORIES IN NUMBER,P_PROTEIN IN NUMBER,P_FAT IN NUMBER,P_CARBONHYDRATES IN NUMBER,P_QUANTITYUNIT IN NUMBER,P_PRICELOWER IN NUMERIC,P_PRICEUPPER IN NUMERIC)
 AS
    v_QuantityPriceID NUMBER(6);
 
 BEGIN
     -- Insert into INGREDIENT
-    INSERT INTO INGREDIENT (INGREDIENTNAME, QUA_INGREDIENTNAME, FOODCATEGORY, CALORIES, PROTEIN, FAT, CARBONHYDRATES)
-    VALUES (P_INGREDIENTNAME, P_INGREDIENTNAME, 1, 1, 1, 1, 1);
+    INSERT INTO INGREDIENT (INGREDIENTNAME, FOODCATEGORY, CALORIES, PROTEIN, FAT, CARBONHYDRATES)
+    VALUES (P_INGREDIENTNAME, P_FOODCATEGORY, P_CALORIES, P_PROTEIN, P_FAT, P_CARBONHYDRATES);
 
     -- Insert into QUANTITYPRICE
     INSERT INTO QUANTITYPRICE (INGREDIENTNAME, QUANTITYUNIT, PRICELOWER, PRICEUPPER)
-    VALUES (P_INGREDIENTNAME, 1, 1, 1)
+    VALUES (P_INGREDIENTNAME, P_QUANTITYUNIT, P_PRICELOWER, P_PRICEUPPER)
     RETURNING QUANTITYPRICEID INTO v_QuantityPriceID;
 
     UPDATE INGREDIENT
