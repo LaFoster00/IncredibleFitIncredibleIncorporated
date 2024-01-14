@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     13.01.2024 13:52:40                          */
+/* Created on:     14.01.2024 14:13:31                          */
 /*==============================================================*/
 
 
@@ -394,7 +394,6 @@ create table FITNESSLEVEL (
 /*==============================================================*/
 create table INGREDIENT (
    INGREDIENTNAME       VARCHAR2(64)          not null,
-   QUA_INGREDIENTNAME   VARCHAR2(64),
    QUANTITYPRICEID      NUMBER(6),
    FOODCATEGORY         NUMBER(1)             not null
       constraint CKC_FOODCATEGORY_INGREDIE check (FOODCATEGORY between 0 and 2 and FOODCATEGORY in (0,1,2)),
@@ -410,7 +409,7 @@ create table INGREDIENT (
 /* Index: INGREDIENT_PRICE2_FK                                  */
 /*==============================================================*/
 create index INGREDIENT_PRICE2_FK on INGREDIENT (
-   QUA_INGREDIENTNAME ASC,
+   INGREDIENTNAME ASC,
    QUANTITYPRICEID ASC
 )
 /
@@ -843,36 +842,42 @@ create index USER_SAVED_RECIPES2_FK on USER_SAVED_RECIPES (
 alter table APPOINTMENT
    add constraint FK_APPOINTM_TRAINING__TRAINING foreign key (TRAININGUNITID)
       references TRAININGUNIT (TRAININGUNITID)
+      on delete cascade
 /
 
 alter table EMPLOYEE
    add constraint FK_EMPLOYEE_IS_EMPLOY_USER foreign key (EMAIL)
       references "USER" (EMAIL)
+      on delete cascade
 /
 
 alter table EXERCISE
    add constraint FK_EXERCISE_SPORT_EXE_SPORT foreign key (SPORTID)
       references SPORT (SPORTID)
+      on delete set null
 /
 
 alter table EXERCISEUNIT
    add constraint FK_EXERCISE_UNIT_EXER_EXERCISE foreign key (EXERCISEID)
       references EXERCISE (EXERCISEID)
+      on delete cascade
 /
 
 alter table INGREDIENT
-   add constraint FK_INGREDIE_INGREDIEN_QUANTITY foreign key (QUA_INGREDIENTNAME, QUANTITYPRICEID)
+   add constraint FK_INGREDIE_INGREDIEN_QUANTITY foreign key (INGREDIENTNAME, QUANTITYPRICEID)
       references QUANTITYPRICE (INGREDIENTNAME, QUANTITYPRICEID)
 /
 
 alter table MANAGES_SPORT
    add constraint FK_MANAGES__MANAGES_S_SPORT foreign key (SPORTID)
       references SPORT (SPORTID)
+      on delete cascade
 /
 
 alter table MANAGES_SPORT
    add constraint FK_MANAGES__MANAGES_S_EMPLOYEE foreign key (EMPLOYEEID)
       references EMPLOYEE (EMPLOYEEID)
+      on delete cascade
 /
 
 alter table PLANTRAININGUNIT
@@ -883,16 +888,19 @@ alter table PLANTRAININGUNIT
 alter table PLAN_UNIT_UNIT
    add constraint FK_PLAN_UNI_PLAN_UNIT_PLANTRAI foreign key (TRAININGPLANID, PLANTRAININGUNITID)
       references PLANTRAININGUNIT (TRAININGPLANID, PLANTRAININGUNITID)
+      on delete cascade
 /
 
 alter table PLAN_UNIT_UNIT
    add constraint FK_PLAN_UNI_PLAN_UNIT_TRAINING foreign key (TRAININGUNITID)
       references TRAININGUNIT (TRAININGUNITID)
+      on delete cascade
 /
 
 alter table QUANTITYPRICE
    add constraint FK_QUANTITY_INGREDIEN_INGREDIE foreign key (INGREDIENTNAME)
       references INGREDIENT (INGREDIENTNAME)
+      on delete cascade
 /
 
 alter table RECIPE
@@ -903,6 +911,7 @@ alter table RECIPE
 alter table RECIPE
    add constraint FK_RECIPE_RECIPE_CR_USER foreign key (EMAIL)
       references "USER" (EMAIL)
+      on delete set null
 /
 
 alter table RECIPEINGREDIENT
@@ -913,21 +922,25 @@ alter table RECIPEINGREDIENT
 alter table RECIPEINGREDIENT
    add constraint FK_RECIPEIN_RECIPE_IN_RECIPE foreign key (RECIPEID)
       references RECIPE (RECIPEID)
+      on delete cascade
 /
 
 alter table RECIPE_APPOINTMENT
    add constraint FK_RECIPE_A_RECIPE_AP_RECIPE foreign key (RECIPEID)
       references RECIPE (RECIPEID)
+      on delete cascade
 /
 
 alter table RECIPE_APPOINTMENT
    add constraint FK_RECIPE_A_RECIPE_AP_APPOINTM foreign key (APPOINTMENTID)
       references APPOINTMENT (APPOINTMENTID)
+      on delete cascade
 /
 
 alter table TRACK
    add constraint FK_TRACK_USER_TRAC_USER foreign key (EMAIL)
       references "USER" (EMAIL)
+      on delete cascade
 /
 
 alter table TRAININGPLAN
@@ -938,60 +951,71 @@ alter table TRAININGPLAN
 alter table TRAININGPLAN
    add constraint FK_TRAINING_PLAN_SPOR_SPORT foreign key (SPORTID)
       references SPORT (SPORTID)
+      on delete set null
 /
 
 alter table TRAINING_UNIT_UNIT
    add constraint FK_TRAINING_TRAINING__EXERCISE foreign key (EXERCISEUNITID)
       references EXERCISEUNIT (EXERCISEUNITID)
+      on delete cascade
 /
 
 alter table TRAINING_UNIT_UNIT
    add constraint FK_TRAINING_TRAINING__TRAINING foreign key (TRAININGUNITID)
       references TRAININGUNIT (TRAININGUNITID)
+      on delete cascade
 /
 
 alter table "USER"
    add constraint FK_USER_IS_EMPLOY_EMPLOYEE foreign key (EMPLOYEEID)
       references EMPLOYEE (EMPLOYEEID)
+      on delete set null
 /
 
 alter table "USER"
    add constraint FK_USER_USER_FITN_FITNESSL foreign key (FITNESSLEVELID)
       references FITNESSLEVEL (FITNESSLEVELID)
+      on delete set null
 /
 
 alter table USER_APPOINTMENT
    add constraint FK_USER_APP_USER_APPO_APPOINTM foreign key (APPOINTMENTID)
       references APPOINTMENT (APPOINTMENTID)
+      on delete cascade
 /
 
 alter table USER_APPOINTMENT
    add constraint FK_USER_APP_USER_APPO_USER foreign key (EMAIL)
       references "USER" (EMAIL)
+      on delete cascade
 /
 
 alter table USER_PLAN
    add constraint FK_USER_PLA_USER_PLAN_TRAINING foreign key (TRAININGPLANID)
       references TRAININGPLAN (TRAININGPLANID)
+      on delete cascade
 /
 
 alter table USER_PLAN
    add constraint FK_USER_PLA_USER_PLAN_USER foreign key (EMAIL)
       references "USER" (EMAIL)
+      on delete cascade
 /
 
 alter table USER_SAVED_RECIPES
    add constraint FK_USER_SAV_USER_SAVE_RECIPE foreign key (RECIPEID)
       references RECIPE (RECIPEID)
+      on delete cascade
 /
 
 alter table USER_SAVED_RECIPES
    add constraint FK_USER_SAV_USER_SAVE_USER foreign key (EMAIL)
       references "USER" (EMAIL)
+      on delete cascade
 /
 
 
-create or replace function GENERATESALT
+create or replace function GENERATESALT()
 RETURN VARCHAR2
 IS
   SALT VARCHAR2(10);
@@ -1001,21 +1025,26 @@ BEGIN
 END GENERATESALT;
 /
 
-create or replace procedure INSERTINGREDIENT(P_INGREDIENTNAME IN VARCHAR2,P_FOODCATEGORY IN NUMBER,P_CALORIES IN NUMBER,P_PROTEIN IN NUMBER,P_FAT IN NUMBER,P_CARBOHYDRATES IN NUMBER,P_QUANTITYUNIT IN NUMBER,P_PRICELOWER IN NUMBER,P_PRICEUPPER IN NUMBER,P_NEWINGREDIENTID OUT NUMBER)
+
+create or replace procedure INSERTINGREDIENT(P_INGREDIENTNAME IN VARCHAR2)
 AS
-   v_QuantityPriceID NUMBER;
+   v_QuantityPriceID NUMBER(6);
 
 BEGIN
-   -- Insert into QUANTITYPRICE
-   INSERT INTO QUANTITYPRICE (INGREDIENTNAME, QUANTITYUNIT, PRICELOWER, PRICEUPPER)
-   VALUES (p_IngredientName, p_QuantityUnit, p_PriceLower, p_PriceUpper)
-   RETURNING QUANTITYPRICEID INTO v_QuantityPriceID;
+    -- Insert into INGREDIENT
+    INSERT INTO INGREDIENT (INGREDIENTNAME, QUA_INGREDIENTNAME, FOODCATEGORY, CALORIES, PROTEIN, FAT, CARBONHYDRATES)
+    VALUES (P_INGREDIENTNAME, P_INGREDIENTNAME, 1, 1, 1, 1, 1);
 
-   -- Insert into INGREDIENT
-   INSERT INTO INGREDIENT (INGREDIENTNAME, QUA_INGREDIENTNAME, QUANTITYPRICEID, FOODCATEGORY, CALORIES, PROTEIN, FAT, CARBONHYDRATES)
-   VALUES (p_IngredientName, p_IngredientName, v_QuantityPriceID, p_FoodCategory, p_Calories, p_Protein, p_Fat, p_Carbohydrates)
-   RETURNING QUANTITYPRICEID INTO p_NewIngredientID;
+    -- Insert into QUANTITYPRICE
+    INSERT INTO QUANTITYPRICE (INGREDIENTNAME, QUANTITYUNIT, PRICELOWER, PRICEUPPER)
+    VALUES (P_INGREDIENTNAME, 1, 1, 1)
+    RETURNING QUANTITYPRICEID INTO v_QuantityPriceID;
 
-   COMMIT; -- Commit the transaction
+    UPDATE INGREDIENT
+    SET QUANTITYPRICEID = v_QuantityPriceID
+    WHERE INGREDIENTNAME = P_INGREDIENTNAME;
+
+    COMMIT; -- Commit the transaction
 END;
 /
+
