@@ -9,9 +9,11 @@ namespace IncredibleFit.ViewModels
 {
     public partial class BaseViewModel : ObservableObject
     {
+        [ObservableProperty] 
+        private bool _isActive;
         [ObservableProperty]
-        protected bool _isBusy;
+        private bool _isBusy;
         [ObservableProperty]
-        protected string? _title;
+        private string? _title;
     }
 }

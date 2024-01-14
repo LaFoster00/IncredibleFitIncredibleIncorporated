@@ -9,150 +9,150 @@ namespace IncredibleFit.SQL.Entities
     {
         [ID, Field("EMAIL", OracleDbType.Varchar2, 128)]
         public string Email { 
-            get => GetValue(EmailBindableProperty) as string;
-            set => SetValue(EmailBindableProperty, value); }
+            get => (string)GetValue(EmailProperty);
+            set => SetValue(EmailProperty, value); }
 
         [Field("SALT", OracleDbType.Varchar2, 10), CreateWithSubroutine("GENERATESALT")]
         public string Salt
         {
-            get => GetValue(SaltBindableProperty) as string;
-            set => SetValue(SaltBindableProperty, value);
+            get => (string)GetValue(SaltProperty);
+            set => SetValue(SaltProperty, value);
         }
 
         [Field("PASSWORD", OracleDbType.Varchar2, 128)]
         public string Password
         {
-            get => GetValue(PasswordBindableProperty) as string;
-            set => SetValue(PasswordBindableProperty, value);
+            get => (string)GetValue(PasswordProperty);
+            set => SetValue(PasswordProperty, value);
         }
 
         [Field("LASTNAME", OracleDbType.Varchar2, 32)]
         public string Name
         {
-            get => GetValue(NameBindableProperty) as string;
-            set => SetValue(NameBindableProperty, value);
+            get => (string)GetValue(NameProperty);
+            set => SetValue(NameProperty, value);
         }
 
         [Field("FIRSTNAME", OracleDbType.Varchar2, 32)]
         public string FirstName
         {
-            get => GetValue(FirstNameBindableProperty) as string;
-            set => SetValue(FirstNameBindableProperty, value);
+            get => (string)GetValue(FirstNameProperty);
+            set => SetValue(FirstNameProperty, value);
         }
 
         [Field("WEIGHT", OracleDbType.Single)]
         public float? Weight
         {
-            get => GetValue(WeightBindableProperty) as float?;
-            set => SetValue(WeightBindableProperty, value);
+            get => (float?)GetValue(WeightProperty);
+            set => SetValue(WeightProperty, value);
         }
 
         [Field("HEIGHT", OracleDbType.Single)]
         public float? Height
         {
-            get => GetValue(HeightBindableProperty) as float?;
-            set => SetValue(HeightBindableProperty, value);
+            get => (float?)GetValue(HeightProperty);
+            set => SetValue(HeightProperty, value);
         }
 
         [Field("BODYFATPERCENTAGE", OracleDbType.Single)]
         public float? BodyFatPercentage
         {
-            get => GetValue(BodyFatPercentageBindableProperty) as float?;
-            set => SetValue(BodyFatPercentageBindableProperty, value);
+            get => (float?)GetValue(BodyFatPercentageProperty);
+            set => SetValue(BodyFatPercentageProperty, value);
         }
 
         [Field("BASALMETABOLICRATE", OracleDbType.Int32)]
         public int? BasalMetabolicRate
         {
-            get => GetValue(BasalMetabolicRateBindableProperty) as int?;
-            set => SetValue(BasalMetabolicRateBindableProperty, value);
+            get => (int?)GetValue(BasalMetabolicRateProperty);
+            set => SetValue(BasalMetabolicRateProperty, value);
         }
 
         [Field("TARGETDESCRIPTION", OracleDbType.Varchar2, 1024)]
         public string? TargetDescription
         {
-            get => GetValue(TargetDescriptionBindableProperty) as string;
-            set => SetValue(TargetDescriptionBindableProperty, value);
+            get => (string?)GetValue(TargetDescriptionProperty);
+            set => SetValue(TargetDescriptionProperty, value);
         }
 
         [Field("TARGETWEIGHT", OracleDbType.Single)]
         public float? TargetWeight
         {
-            get => GetValue(TargetWeightBindableProperty) as float?;
-            set => SetValue(TargetWeightBindableProperty, value);
+            get => (float?)GetValue(TargetWeightProperty);
+            set => SetValue(TargetWeightProperty, value);
         }
 
-        public static readonly BindableProperty EmailBindableProperty = 
+        public static readonly BindableProperty EmailProperty = 
             BindableProperty.Create(
                 nameof(Email),
                 typeof(string), 
                 typeof(User),
                 string.Empty);
 
-        public static readonly BindableProperty SaltBindableProperty =
+        public static readonly BindableProperty SaltProperty =
             BindableProperty.Create(
                 nameof(Salt),
                 typeof(string),
                 typeof(User),
                 string.Empty);
 
-        public static readonly BindableProperty PasswordBindableProperty =
+        public static readonly BindableProperty PasswordProperty =
             BindableProperty.Create(
                 nameof(Password),
                 typeof(string),
                 typeof(User),
                 string.Empty);
 
-        public static readonly BindableProperty NameBindableProperty =
+        public static readonly BindableProperty NameProperty =
             BindableProperty.Create(
                 nameof(Name),
                 typeof(string),
                 typeof(User),
                 string.Empty);
 
-        public static readonly BindableProperty FirstNameBindableProperty =
+        public static readonly BindableProperty FirstNameProperty =
             BindableProperty.Create(
                 nameof(FirstName),
                 typeof(string),
                 typeof(User),
                 string.Empty);
 
-        public static readonly BindableProperty WeightBindableProperty =
+        public static readonly BindableProperty WeightProperty =
             BindableProperty.Create(
                 nameof(Weight),
                 typeof(float?),
                 typeof(User),
                 null);
 
-        public static readonly BindableProperty HeightBindableProperty =
+        public static readonly BindableProperty HeightProperty =
             BindableProperty.Create(
                 nameof(Height),
                 typeof(float?),
                 typeof(User),
                 null);
 
-        public static readonly BindableProperty BodyFatPercentageBindableProperty =
+        public static readonly BindableProperty BodyFatPercentageProperty =
             BindableProperty.Create(
                 nameof(BodyFatPercentage),
                 typeof(float?),
                 typeof(User),
                 null);
 
-        public static readonly BindableProperty BasalMetabolicRateBindableProperty =
+        public static readonly BindableProperty BasalMetabolicRateProperty =
             BindableProperty.Create(
                 nameof(BasalMetabolicRate),
                 typeof(int?),
                 typeof(User),
                 null);
 
-        public static readonly BindableProperty TargetDescriptionBindableProperty =
+        public static readonly BindableProperty TargetDescriptionProperty =
             BindableProperty.Create(
                 nameof(TargetDescription),
                 typeof(string),
                 typeof(User),
                 null);
 
-        public static readonly BindableProperty TargetWeightBindableProperty =
+        public static readonly BindableProperty TargetWeightProperty =
             BindableProperty.Create(
                 nameof(TargetWeight),
                 typeof(float?),

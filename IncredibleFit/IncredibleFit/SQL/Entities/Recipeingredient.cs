@@ -3,13 +3,35 @@
 namespace IncredibleFit.SQL.Entities
 {
     [Entity("RECIPEINGREDIENT")]
-    public class Recipeingredient
+    public class Recipeingredient : BindableObject
     {
-        [ID, Field("RECIPEINGREDIENTID", OracleDbType.Int32)] 
-        public int RecipeIngredientID { get; private set; } = -1;
+        [ID, Field("RECIPEINGREDIENTID", OracleDbType.Int32), AutoIncrement]
+        public int RecipeIngredientID
+        {
+            get => (int)GetValue(RecipeIngredientIDProperty);
+            private set => SetValue(RecipeIngredientIDProperty, value);
+        }
 
         [Field("QUANTITY", OracleDbType.Decimal)]
-        public decimal Quantity { get; set; } = -1;
+        public decimal Quantity
+        {
+            get => (decimal)GetValue(QuantityProperty);
+            set => SetValue(QuantityProperty, value);
+        }
+
+        public static readonly BindableProperty RecipeIngredientIDProperty =
+            BindableProperty.Create(
+                nameof(RecipeIngredientID), 
+                typeof(int), 
+                typeof(Recipeingredient), 
+                -1);
+
+        public static readonly BindableProperty QuantityProperty =
+            BindableProperty.Create(
+                nameof(Quantity), 
+                typeof(decimal), 
+                typeof(Recipeingredient), 
+                -1m);
 
         private Recipeingredient() { }
 
