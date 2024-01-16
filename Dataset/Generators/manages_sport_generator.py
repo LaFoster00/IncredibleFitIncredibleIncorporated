@@ -5,7 +5,10 @@ COMMIT;
 
 managesSport = [
     #[ employeeEmail, sport]
-    [ 'incredible@fit.com', 'Yoga']
+    [ 'incredible@fit.com', 'Yoga'],
+    [ 'yvonne.smith@gmail.com', 'Bodyweight training'],
+    [ 'yvonne.smith@gmail.com', 'Core training'],
+    [ 'anne.mitchel@yahoo.com', 'Strength training']
 ]
 
 managesSportInsert = '''

@@ -5,7 +5,13 @@ COMMIT;
 
 userSavedRecipes = [
     # [ useremail, recipename]
-    [ 'incredible@fit.com', 'Garlic Chicken Stir Fry']
+    [ 'incredible@fit.com', 'Garlic Chicken Stir Fry'],
+    [ 'anne.mitchel@yahoo.com', 'Salmon with sweet potatoes'],
+    [ 'anne.mitchel@yahoo.com', 'Yoghurt with beeries'],
+    [ 'benedict.frakes@gmail.com', 'Salmon with sweet potatoes'],
+    [ 'wilson.stewart@yahoo.com', 'Yoghurt with beeries,'],
+    [ 'jonas.blake@web.de', 'Chicken-Quinoa-salad'],
+    [ 'samuel.hardy@gmail.com', 'Tomato Salad']
 ]
 
 userSavedRecipesInsert = '''

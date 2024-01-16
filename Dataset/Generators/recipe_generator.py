@@ -59,6 +59,35 @@ eggplant, mushrooms, bell peppers, and onions.""",
         "ingredients": ['banana'],
         "category": [2, 4],
     },
+    "Yoghurt with beeries" : {
+        "description": """Sweet yoghurt with some fresh berries and nuts.""",
+        "ingredients": ['yoghurt', 'beeries', 'honey', 'nuts'],
+        "category": [0, 1],
+    },
+    "Chicken-Quinoa-salad": {
+        "description": """A salad based on quinoa, chicken and vegetables""",
+        "ingredients": ['chicken breast', 'quinoa', 'olive oil', 'lemon juice'],
+        "category": [3, 0],
+    },
+    "Salmon with sweet potatoes": {
+        "description": """Some salmon out of the oven with sweet potato slices""",
+        "ingredients": ['lemon juice', 'salmon', 'sweet potatoes'],
+    },
+    "Cheesecake": {
+        "description": """A delicious cheesecake""",
+        "ingredients": ['sugar', 'flour', 'eggs'],
+        "category": [1, 0],
+    },
+    "Tomato Salad": {
+        "description": """Fresh tomato salad""",
+        "ingredients": [' tomato', 'olive oil', 'basil'],
+        "category": [3, 2],
+    },
+    "Pasta Bolognese": {
+        "description": """Classic pasta Bolognese""",
+        "ingredients": ['ground beef', 'tomato sauce', 'spaghetti'],
+        "category": [2,1]
+    }
 }
 
 default_email = 'incredible@fit.com'
