@@ -16,7 +16,7 @@ namespace IncredibleFit.SQL.Entities
         public string Email
         {
             get => (string)GetValue(EmailProperty);
-            private set => SetValue(EmailProperty, value);
+            set => SetValue(EmailProperty, value);
         }
 
         [Field("DATE", OracleDbType.Date)]

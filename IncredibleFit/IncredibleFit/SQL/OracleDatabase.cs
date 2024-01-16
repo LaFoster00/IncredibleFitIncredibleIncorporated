@@ -41,10 +41,10 @@ namespace IncredibleFit.SQL
         [ObservableProperty]
         private bool _connected = false;
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private bool _connecting = false;
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private bool _connectionFailed = false;
 
         private OracleConnection? connection = null;
@@ -245,7 +245,7 @@ namespace IncredibleFit.SQL
                     {
                         continue;
                     }
-                    param.PropertyInfo.SetValue(o, ToSystemObject(c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value));
+                    param.PropertyInfo.SetValue(o, ToSystemObject(c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value, param));
                 }
             }
             catch (OracleException e)
@@ -306,7 +306,7 @@ namespace IncredibleFit.SQL
             var entityName = typeof(T).GetEntity();
             if (entityName == null)
                 return;
-            
+
             ExecuteCommandWithObjectData(GetDeleteCommand<T>(), o);
         }
 
@@ -479,7 +479,7 @@ namespace IncredibleFit.SQL
         private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeDeleteCommands = new();
         private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetDeleteCommand<T>()
         {
-            if (TypeDeleteCommands.ContainsKey(typeof(T))) 
+            if (TypeDeleteCommands.ContainsKey(typeof(T)))
                 return TypeDeleteCommands[typeof(T)];
 
             var commandBuilder = new StringBuilder();
@@ -549,19 +549,38 @@ namespace IncredibleFit.SQL
         }
 
         // Converts oracle objects to their .net equivalent in case it is an oracle object
-        private static object? ToSystemObject(object? o)
+        private static object? ToSystemObject(object? o, CommandParameter c)
         {
             if (o is null)
                 return null;
 
+            object? sysObject = null;
+
             switch (o)
             {
                 case OracleDecimal or:
-                    return or.Value;
+                    sysObject = or.Value;
+                    break;
                 case OracleString os:
-                    return os.Value;
+                    sysObject = os.Value;
+                    break;
+            }
+
+            switch (sysObject)
+            {
+                case decimal dc:
+                    switch (c.Type)
+                    {
+                        case OracleDbType.Decimal:
+                            return dc;
+                        case OracleDbType.Int32:
+                            return (int)dc;
+                        case OracleDbType.Int64:
+                            return (long)dc;
+                    }
+                    throw new InvalidOperationException();
                 default:
-                    return o;
+                    return sysObject;
             }
         }
 
@@ -575,7 +594,7 @@ namespace IncredibleFit.SQL
         public async ValueTask DisposeAsync()
         {
             Connected = false;
-            if (connection != null) 
+            if (connection != null)
                 await connection.DisposeAsync();
             connection = null;
         }
