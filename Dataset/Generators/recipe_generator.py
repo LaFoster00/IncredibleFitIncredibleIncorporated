@@ -6,10 +6,11 @@ print('COMMIT;')
 # foodcategory: 0 meat, 1 vegetarian, 2 vegan
 # mealtype: 0 breakfast, 1 supper, 2 dinner, 3 snack, 4 drink
 
+
 print("-- recipe")
 print()
 
-rs = {
+recipes = {
     "Garlic Chicken Stir Fry": {
         "description": """Strips of skinless chicken breast stir it up with garlic,
 ginger, and tons of crunchy vegetables, including sliced cabbage, red bell pepper,
@@ -65,7 +66,7 @@ eggplant, mushrooms, bell peppers, and onions.""",
 default_email = 'incredible@fit.com'
 instructions = "step one, step two, step three, enjoy!"
 
-for name, r in rs.items():
+for name, recipe in recipes.items():
     s = """INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = {meal_type} and foodcategory = {food_category}),
@@ -75,14 +76,14 @@ VALUES (
     '{instr}');"""
 
     print(s.format(
-        email=r.get("email", default_email).replace("'", "''"),
+        email=recipe.get("email", default_email).replace("'", "''"),
         name=name.replace("'", "''"),
-        descr=r["description"].replace("\n", " ").replace("'", "''"),
+        descr=recipe["description"].replace("\n", " ").replace("'", "''"),
         instr=instructions,
-        meal_type=r["category"][1],
-        food_category=r["category"][0]))
+        meal_type=recipe["category"][1],
+        food_category=recipe["category"][0]))
 
-    for ingr in r["ingredients"]:
+    for ingr in recipe["ingredients"]:
         s = '''
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
