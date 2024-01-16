@@ -33,7 +33,7 @@ namespace IncredibleFit.SQL.Entities
             set => SetValue(InstructionsProperty, value);
         }
 
-        [Field("VISIBILITY", OracleDbType.Int16)] //Domain in ERD
+        [Field("VISIBILITY", OracleDbType.Int16)] //IDomain in ERD
         public Visibility Visibility
         {
             get => (Visibility)GetValue(VisibilityProperty);
@@ -73,13 +73,13 @@ namespace IncredibleFit.SQL.Entities
                 nameof(Visibility), 
                 typeof(Visibility), 
                 typeof(Recipe), 
-                Visibility.Invalid);
+                (Visibility)Visibility.Invalid);
 
         public int Calories { get; set; } = 0;
 
         private Recipe() { }
 
-        public Recipe(string name, string description, string instructions, short visibility, int calories)
+        public Recipe(string name, string description, string instructions, Visibility visibility, int calories)
         {
             Name = name;
             Description = description;

@@ -232,7 +232,7 @@ namespace IncredibleFit.SQL
                     continue;
 
                 var value = param.PropertyInfo.GetValue(o);
-                c.command.Parameters[$"P{param.Name}"].Value = value ?? DBNull.Value;
+                c.command.Parameters[$"P{param.Name}"].Value = value.FromDomain() ?? DBNull.Value;
             }
 
             try
@@ -245,7 +245,8 @@ namespace IncredibleFit.SQL
                     {
                         continue;
                     }
-                    param.PropertyInfo.SetValue(o, ToSystemObject(c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value, param));
+                    param.PropertyInfo.SetValue(o,
+                        ToSystemObject(c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value, param).ToDomain(param.PropertyInfo.PropertyType));
                 }
             }
             catch (OracleException e)

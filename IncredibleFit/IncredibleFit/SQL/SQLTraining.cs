@@ -43,7 +43,7 @@ namespace IncredibleFit.SQL
 
         private static TrainingUnit getDummyTrainingUnit()
         {
-            TrainingUnit tU = new TrainingUnit("Legs", "Training für die Beine", 1);
+            TrainingUnit tU = new TrainingUnit("Legs", "Training für die Beine", Difficulty.Easy);
             /*Exercise e1 = new Exercise("Squats", "Stehe mit den Füßen schulterbreit auseinander, die Zehen zeigen leicht nach außen. Senke deinen Körper, indem du die Hüften nach hinten bewegst, als ob du dich setzen würdest. Achte darauf, dass die Knie nicht über die Zehen hinausragen. Drücke dich dann durch die Fersen nach oben, um in die Ausgangsposition zurückzukehren.", 2.5);
             Exercise e2 = new Exercise("Lunges", "Stehe aufrecht und mache mit einem Fuß einen großen Schritt nach vorne, so dass sich dein vorderes Knie über dem Fuß befindet. Senke deinen Körper, bis dein vorderes Bein einen 90-Grad-Winkel bildet, während dein hinteres Knie fast den Boden berührt. Kehre dann in die Ausgangsposition zurück und wiederhole mit dem anderen Bein.", 2.5);
             Exercise e3 = new Exercise("Leg Curls", "Lege dich auf den Bauch auf eine Bein-Curl-Maschine oder benutze ein Bein-Curl-Gerät. Beuge die Beine, indem du die Fersen zum Gesäß ziehst und halte kurz die Spannung. Senke die Beine dann langsam wieder ab.", 2.5);

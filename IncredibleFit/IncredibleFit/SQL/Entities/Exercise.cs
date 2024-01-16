@@ -63,7 +63,7 @@ namespace IncredibleFit.SQL.Entities
 
         private Exercise() { }
 
-        public Exercise(string name, string description, short exerciseType) 
+        public Exercise(string name, string description, ExerciseType exerciseType) 
         {
             this.Name = name;
             this.Description = description;

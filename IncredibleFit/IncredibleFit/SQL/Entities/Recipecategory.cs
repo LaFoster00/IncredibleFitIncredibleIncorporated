@@ -12,14 +12,14 @@ namespace IncredibleFit.SQL.Entities
             private set => SetValue(RecipeCategoryIDProperty, value);
         }
 
-        [Field("MEALTYPE", OracleDbType.Int16)] //Domain in ERD
+        [Field("MEALTYPE", OracleDbType.Int16)] //IDomain in ERD
         public MealType Mealtype
         {
             get => (MealType)GetValue(MealtypeProperty);
             set => SetValue(MealtypeProperty, value);
         }
 
-        [Field("FOODCATEGORY", OracleDbType.Int16)] //Domain in ERD
+        [Field("FOODCATEGORY", OracleDbType.Int16)] //IDomain in ERD
         public FoodCategory Foodcategory
         {
             get => (FoodCategory)GetValue(FoodcategoryProperty);
@@ -48,7 +48,7 @@ namespace IncredibleFit.SQL.Entities
                 FoodCategory.Invalid);
 
         private Recipecategory() { }
-        public Recipecategory(short mealtype, short foodcategory)
+        public Recipecategory(MealType mealtype, FoodCategory foodcategory)
         {
             Mealtype = mealtype;
             Foodcategory = foodcategory;

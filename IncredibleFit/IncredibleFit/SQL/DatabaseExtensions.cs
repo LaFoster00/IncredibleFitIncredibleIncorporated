@@ -64,7 +64,7 @@ namespace IncredibleFit.SQL
                         }
                         else
                         {
-                            propertyInfo.SetValue(newInstance, readerValue);
+                            propertyInfo.SetValue(newInstance, readerValue.ToDomain(propertyInfo.PropertyType));
                         }
 
                         break;

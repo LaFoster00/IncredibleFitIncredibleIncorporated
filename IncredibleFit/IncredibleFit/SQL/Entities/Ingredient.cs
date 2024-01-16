@@ -13,7 +13,7 @@ namespace IncredibleFit.SQL.Entities
             set => SetValue(IngredientNameProperty, value);
         }
 
-        [Field("FOODCATEGORY", OracleDbType.Int16)] //Domain in ERD
+        [Field("FOODCATEGORY", OracleDbType.Int16)] //IDomain in ERD
         public FoodCategory Foodcategory
         {
             get => (FoodCategory)GetValue(FoodcategoryProperty);
@@ -88,7 +88,7 @@ namespace IncredibleFit.SQL.Entities
 
         private Ingredient() { }
 
-        public Ingredient(string ingredientName, short foodcategory, short calories, short? protein, short? fat, short? carbonhydrates)
+        public Ingredient(string ingredientName, FoodCategory foodcategory, short calories, short? protein, short? fat, short? carbonhydrates)
         {
             IngredientName = ingredientName;
             Foodcategory = foodcategory;
