@@ -9,7 +9,7 @@
         <Border Stroke="{StaticResource Gray900}">
             <StackLayout>
                 <Label
-                    Text="Filter hinzufügen"
+                    Text="Add filter"
                     FontAttributes="Bold"
                     FontSize="Medium"
                     Margin="0,0,0,10"/>
@@ -18,7 +18,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label Text="Stichwort:" VerticalOptions="Center"/>
+                    <Label Text="Keyword:" VerticalOptions="Center"/>
                     <Entry Grid.Row="1" TextChanged="KeywordEntryChanged"/>
                 </Grid>
                 <Grid x:Name="IngredientFilter">
@@ -26,10 +26,10 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label Text="Zutat:" VerticalOptions="Center"/>
+                    <Label Text="Ingredient:" VerticalOptions="Center"/>
                     <Entry Grid.Row="1" TextChanged="IngredientEntryChanged"/>
                 </Grid>
-                <Button Text="Suchen" Clicked="SearchClicked"/>
+                <Button Text="Search" Clicked="SearchClicked"/>
             </StackLayout>
         </Border>
     </VerticalStackLayout>

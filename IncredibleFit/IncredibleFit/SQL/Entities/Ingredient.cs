@@ -86,6 +86,9 @@ namespace IncredibleFit.SQL.Entities
         public static readonly BindableProperty CarbonhydratesProperty =
             BindableProperty.Create(nameof(Carbonhydrates), typeof(short?), typeof(Ingredient), (short?)0);
 
+        public decimal Quantity { get; set; } = 0;
+        public QuantityUnit QuantityUnit { get; set; } = QuantityUnit.Invalid;
+
         private Ingredient() { }
 
         public Ingredient(string ingredientName, FoodCategory foodcategory, short calories, short? protein, short? fat, short? carbonhydrates)

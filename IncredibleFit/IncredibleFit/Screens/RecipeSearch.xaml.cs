@@ -11,10 +11,17 @@ public partial class RecipeSearch : ContentPage
 {
     private string _filterIngredient = "";
     private string _filterKeyword = "";
-    public ObservableCollection<Recipe> recipeList { get; set; } = SQLNutrition.getAllRecipes();
+    public ObservableCollection<Recipe> recipeList { get; set; } = new ObservableCollection<Recipe>();
     public RecipeSearch()
 	{
         InitializeComponent();
+        recipeList = SQLNutrition.getAllVisibleRecipes(); ;
+        for (int i = 0; i < recipeList.Count; i++)
+        {
+            Recipecategory recipeCat = SQLNutrition.getRecipeCategory(recipeList[i]);
+            recipeList[i].MealType = recipeCat.Mealtype;
+            recipeList[i].FoodCategory = recipeCat.Foodcategory;
+        }
         BindingContext = this;
     }
 
@@ -36,20 +43,25 @@ public partial class RecipeSearch : ContentPage
     void KeywordFilterClicked(object sender, EventArgs e)
     {
         this._filterKeyword = "";
-        adjustFilterVisibilityAndContent();
+        adjustFilters(_filterKeyword,_filterIngredient);
     }
 
     void IngredientFilterClicked(object sender, EventArgs e)
     {
         this._filterIngredient = "";
-        adjustFilterVisibilityAndContent();
+        adjustFilters(_filterKeyword, _filterIngredient);
     }
 
     public void adjustFilters(string filterKeyword, string filterIngredient)
     {
         this._filterKeyword = filterKeyword;
         this._filterIngredient = filterIngredient;
-        BindingContext = this;
+        recipeList.Clear();
+        ObservableCollection<Recipe> recipeList2 = SQLNutrition.getRecipesByIngredientAndKeyword(filterKeyword, filterIngredient);
+        for(int i = 0; i < recipeList2.Count; i++)
+        {
+            recipeList.Add(recipeList2[i]);
+        }
         adjustFilterVisibilityAndContent();
     }
 
@@ -60,7 +72,7 @@ public partial class RecipeSearch : ContentPage
         if (this._filterKeyword != "")
         {
             KeywordFilter.IsVisible = true;
-            KeywordText.Text = "Stichwort: " + this._filterKeyword;
+            KeywordText.Text = "Keyword: " + this._filterKeyword;
         }
         else
         {
@@ -71,7 +83,7 @@ public partial class RecipeSearch : ContentPage
         if (this._filterIngredient != "")
         {
             IngredientFilter.IsVisible = true;
-            IngredientText.Text = "Zutat: " + this._filterIngredient;
+            IngredientText.Text = "Ingredient: " + this._filterIngredient;
         }
         else
         {

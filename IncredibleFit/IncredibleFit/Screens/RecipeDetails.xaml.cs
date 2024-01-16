@@ -14,6 +14,13 @@ public partial class RecipeDetails : ContentPage
 		InitializeComponent();
 		ingredientsList = SQLNutrition.getIngredientsByRecipe(recipe);
 
+		for(int i = 0; i < ingredientsList.Count; i++)
+		{
+            ingredientsList[i].Quantity = SQLNutrition.getQuantityOfIngredient(recipe, ingredientsList[i]);
+			ingredientsList[i].QuantityUnit = SQLNutrition.getQuantityUnitOfIngredient(ingredientsList[i]);
+
+        }
+
         this._recipe = recipe;
 		BindingContext = this;
 		ChangeLabel();
@@ -24,22 +31,24 @@ public partial class RecipeDetails : ContentPage
         RecipeDetailsPage.Title = _recipe.Name;
         RecipeDescription.Text = _recipe.Description;
         RecipeInstructions.Text = _recipe.Instructions;
-		RecipeEnergy.Text = _recipe.Calories.ToString();
 
+		int? calories = 0;
 		int? proteins = 0;
 		int? fat = 0;
 		int? carbonhydrates = 0;
 
 		for (int i = 0;i< ingredientsList.Count;i++)
 		{
+			calories += ingredientsList[i].Calories;
 			proteins += ingredientsList[i].Protein;
 			fat += ingredientsList[i].Fat;
             carbonhydrates += ingredientsList[i].Carbonhydrates;
 		}
 
-        RecipeProteine.Text = proteins.ToString();
+        RecipeCalories.Text = calories.ToString();
+        RecipeProteins.Text = proteins.ToString();
 		RecipeFat.Text = fat.ToString();
-		RecipeSugar.Text = carbonhydrates.ToString();
+        RecipeCarbonhydrates.Text = carbonhydrates.ToString();
     }
 
 }
