@@ -1,8 +1,7 @@
-print('DELETE FROM "INGREDIENT";')
-print('COMMIT;')
-
-print("-- ingredient")
-print()
+print('''
+DELETE FROM "INGREDIENT";
+COMMIT;
+''')
 
 # foodcategory: 0 meat, 1 vegetarian, 2 vegan
 # mealtype: 0 breakfast, 1 supper, 2 dinner, 3 snack, 4 drink
@@ -68,6 +67,7 @@ ingredients = {
 ingredientInsert = '''EXECUTE INSERTINGREDIENT('{}', {}, {}, {}, {}, {}, {}, TO_NUMBER('{}'), TO_NUMBER('{}'));'''
 
 def generateIngredients():
+    print("\n-- ingredient\n")
     for name, ingredientParams in ingredients.items():
         a = ingredientInsert.format(name, *ingredientParams[:-2], str(ingredientParams[-2]).replace('.', ','), str(ingredientParams[-1]).replace('.', ','))
         print(a)

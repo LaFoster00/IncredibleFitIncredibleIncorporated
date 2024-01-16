@@ -1,3 +1,8 @@
+print('''
+DELETE FROM "TRACK";
+COMMIT;
+''')
+
 tracks = {
     #email : [ "DATE", CALORIES, PROTEINS, FAT, CARBONHYDRATES ]
     'anne.mitchel@yahoo.com' : ['2023-12-24', 2600, 70, 46, 39]
@@ -8,6 +13,7 @@ INSERT INTO TRACK (EMAIL, "DATE", CALORIES, PROTEIN, FAT)
 VALUES ('{email}', TO_DATE('{date}', 'YYYY-MM-DD'), {proteins}, {fat}, {carbonhydrates});'''
 
 def generateTracks():
+    print("\n-- track\n")
     for email, trackInfo in tracks.items():
         print(trackInsert.format(
             email = email,

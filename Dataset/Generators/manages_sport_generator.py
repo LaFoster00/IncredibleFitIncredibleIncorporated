@@ -1,3 +1,8 @@
+print('''
+DELETE FROM "MANAGES_SPORT";
+COMMIT;
+''')
+
 managesSport = [
     #[ employeeEmail, sport]
     [ 'incredible@fit.com', 'Yoga']
@@ -12,6 +17,8 @@ VALUES
     );'''
 
 def generateManagesSport():
+    print("\n-- managessport\n")
+
     for managesSportInfo in managesSport:
         print(managesSportInsert.format(
             email = managesSportInfo[0],

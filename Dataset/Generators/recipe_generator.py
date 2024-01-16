@@ -1,14 +1,12 @@
 from random import randrange
 
-print('DELETE FROM "RECIPE";')
-print('COMMIT;')
+print('''
+DELETE FROM "RECIPE";
+COMMIT;
+''')
 
 # foodcategory: 0 meat, 1 vegetarian, 2 vegan
 # mealtype: 0 breakfast, 1 supper, 2 dinner, 3 snack, 4 drink
-
-
-print("-- recipe")
-print()
 
 recipes = {
     "Garlic Chicken Stir Fry": {
@@ -76,7 +74,7 @@ VALUES (
     '{instr}'
     );"""
 
-ingredientInsert = '''
+recipeIngredientInsert = '''
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = '{}'),
@@ -86,6 +84,7 @@ VALUES (
     '''
 
 def generateRecipes():
+    print("\n-- recipe\n")
     for name, recipe in recipes.items():
         print(recipeInsert.format(
             email=recipe.get("email", default_email).replace("'", "''"),
@@ -95,8 +94,9 @@ def generateRecipes():
             meal_type=recipe["category"][1],
             food_category=recipe["category"][0]))
 
+        print("-- recipeingredient\n")
         for ingredient in recipe["ingredients"]:
-            print(ingredientInsert.format(name.replace("'", "''"), ingredient, randrange(3) + 1))
+            print(recipeIngredientInsert.format(name.replace("'", "''"), ingredient, randrange(3) + 1))
 
 if __name__ == "__main__":
     generateRecipes()

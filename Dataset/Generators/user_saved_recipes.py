@@ -1,3 +1,8 @@
+print('''
+DELETE FROM "USER_SAVED_RECIPES";
+COMMIT;
+''')
+
 userSavedRecipes = [
     # [ useremail, recipename]
     [ 'incredible@fit.com', 'Garlic Chicken Stir Fry']
@@ -11,6 +16,7 @@ VALUES (
     );'''
 
 def generateUserSavedRecipes():
+    print("\n-- usersavedrecipes\n")
     for userSavedRecipeInfo in userSavedRecipes:
         print(userSavedRecipesInsert.format(
             useremail = userSavedRecipeInfo[0],
