@@ -66,29 +66,37 @@ eggplant, mushrooms, bell peppers, and onions.""",
 default_email = 'incredible@fit.com'
 instructions = "step one, step two, step three, enjoy!"
 
-for name, recipe in recipes.items():
-    s = """INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+recipeInsert = """
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = {meal_type} and foodcategory = {food_category}),
     '{email}',
     '{name}',
     '{descr}',
-    '{instr}');"""
+    '{instr}'
+    );"""
 
-    print(s.format(
-        email=recipe.get("email", default_email).replace("'", "''"),
-        name=name.replace("'", "''"),
-        descr=recipe["description"].replace("\n", " ").replace("'", "''"),
-        instr=instructions,
-        meal_type=recipe["category"][1],
-        food_category=recipe["category"][0]))
-
-    for ingredient in recipe["ingredients"]:
-        s = '''
+ingredientInsert = '''
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = '{}'),
     '{}',
-    {});
-'''
-        print(s.format(name.replace("'", "''"), ingredient, randrange(3) + 1))
+    {}
+    );
+    '''
+
+def generateRecipes():
+    for name, recipe in recipes.items():
+        print(recipeInsert.format(
+            email=recipe.get("email", default_email).replace("'", "''"),
+            name=name.replace("'", "''"),
+            descr=recipe["description"].replace("\n", " ").replace("'", "''"),
+            instr=instructions,
+            meal_type=recipe["category"][1],
+            food_category=recipe["category"][0]))
+
+        for ingredient in recipe["ingredients"]:
+            print(ingredientInsert.format(name.replace("'", "''"), ingredient, randrange(3) + 1))
+
+if __name__ == "__main__":
+    generateRecipes()

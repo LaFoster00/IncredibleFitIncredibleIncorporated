@@ -5,14 +5,17 @@ tracks = {
 
 trackInsert = '''
 INSERT INTO TRACK (EMAIL, "DATE", CALORIES, PROTEIN, FAT) 
-VALUES ('{email}', TO_DATE('{date}', 'YYYY-MM-DD'), {proteins}, {fat}, {carbonhydrates});
-'''
+VALUES ('{email}', TO_DATE('{date}', 'YYYY-MM-DD'), {proteins}, {fat}, {carbonhydrates});'''
 
-for email, trackInfo in tracks.items():
-    print(trackInsert.format(
-        email = email,
-        date = trackInfo[0],
-        proteins = trackInfo[1],
-        fat = trackInfo[2],
-        carbonhydrates = trackInfo[3]
-    ))
+def generateTracks():
+    for email, trackInfo in tracks.items():
+        print(trackInsert.format(
+            email = email,
+            date = trackInfo[0],
+            proteins = trackInfo[1],
+            fat = trackInfo[2],
+            carbonhydrates = trackInfo[3]
+        ))
+
+if __name__ == "__main__":
+    generateTracks()

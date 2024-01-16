@@ -67,6 +67,10 @@ ingredients = {
 
 ingredientInsert = '''EXECUTE INSERTINGREDIENT('{}', {}, {}, {}, {}, {}, {}, TO_NUMBER('{}'), TO_NUMBER('{}'));'''
 
-for name, ingredientParams in ingredients.items():
-    a = ingredientInsert.format(name, *ingredientParams[:-2], str(ingredientParams[-2]).replace('.', ','), str(ingredientParams[-1]).replace('.', ','))
-    print(a)
+def generateIngredients():
+    for name, ingredientParams in ingredients.items():
+        a = ingredientInsert.format(name, *ingredientParams[:-2], str(ingredientParams[-2]).replace('.', ','), str(ingredientParams[-1]).replace('.', ','))
+        print(a)
+
+if __name__ == "__main__":
+    generateIngredients()

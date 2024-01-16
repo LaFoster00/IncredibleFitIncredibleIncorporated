@@ -7,23 +7,26 @@ employees = {
 
 print('''
 DECLARE
-g_employeenid NUMBER;
+    g_employeenid NUMBER;
 ''')
 
 print("BEGIN")
 
 employeeInsert = '''
-INSERT INTO EMPLOYEE (EMAIL, AUTHORIZATION) VALUES ('{email}', {authorization})
-RETURNING EMPLOYEEID INTO g_employeenid;
+    INSERT INTO EMPLOYEE (EMAIL, AUTHORIZATION) VALUES ('{email}', {authorization})
+    RETURNING EMPLOYEEID INTO g_employeenid;
 
-UPDATE "USER" SET EMPLOYEEID = g_employeenid
-WHERE "USER".EMAIL = '{email}';
-'''
+    UPDATE "USER" SET EMPLOYEEID = g_employeenid
+    WHERE "USER".EMAIL = '{email}';'''
 
-for email, employeeInfo in employees.items():
-    print(employeeInsert.format(
-        email =         email,
-        authorization = employeeInfo[0]
-        ))
+def generateEmployees():
+    for email, employeeInfo in employees.items():
+        print(employeeInsert.format(
+            email =         email,
+            authorization = employeeInfo[0]
+            ))
 
 print("END;")
+
+if __name__ == "__main__":
+    generateEmployees()
