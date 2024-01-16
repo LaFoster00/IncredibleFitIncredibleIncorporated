@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     14.01.2024 14:55:38                          */
+/* Created on:     16.01.2024 15:46:07                          */
 /*==============================================================*/
 
 
@@ -338,7 +338,7 @@ create index IS_EMPLOYEE2_FK on EMPLOYEE (
 create table EXERCISE (
    EXERCISEID           NUMBER(6)           
       generated as identity ( start with 1 nocycle noorder)  not null,
-   SPORTID              NUMBER(4)             not null,
+   SPORTNAME            VARCHAR2(128)         not null,
    NAME                 VARCHAR2(128)         not null,
    DESCRIPTION          VARCHAR2(1024)        not null,
    EXERCISETYPE         NUMBER(1)             not null
@@ -351,7 +351,7 @@ create table EXERCISE (
 /* Index: SPORT_EXERCISE_FK                                     */
 /*==============================================================*/
 create index SPORT_EXERCISE_FK on EXERCISE (
-   SPORTID ASC
+   SPORTNAME ASC
 )
 /
 
@@ -418,9 +418,9 @@ create index INGREDIENT_PRICE2_FK on INGREDIENT (
 /* Table: MANAGES_SPORT                                         */
 /*==============================================================*/
 create table MANAGES_SPORT (
-   SPORTID              NUMBER(4)             not null,
+   SPORTNAME            VARCHAR2(128)         not null,
    EMPLOYEEID           NUMBER(3)             not null,
-   constraint PK_MANAGES_SPORT primary key (SPORTID, EMPLOYEEID)
+   constraint PK_MANAGES_SPORT primary key (SPORTNAME, EMPLOYEEID)
 )
 /
 
@@ -428,7 +428,7 @@ create table MANAGES_SPORT (
 /* Index: MANAGES_SPORT_FK                                      */
 /*==============================================================*/
 create index MANAGES_SPORT_FK on MANAGES_SPORT (
-   SPORTID ASC
+   SPORTNAME ASC
 )
 /
 
@@ -619,11 +619,9 @@ create index RECIPE_APPOINTMENT2_FK on RECIPE_APPOINTMENT (
 /* Table: SPORT                                                 */
 /*==============================================================*/
 create table SPORT (
-   SPORTID              NUMBER(4)           
-      generated as identity ( start with 1 nocycle noorder)  not null,
-   NAME                 VARCHAR2(128)         not null,
+   SPORTNAME            VARCHAR2(128)         not null,
    DESCRIPTION          VARCHAR2(1024)        not null,
-   constraint PK_SPORT primary key (SPORTID)
+   constraint PK_SPORT primary key (SPORTNAME)
 )
 /
 
@@ -638,7 +636,7 @@ create table TRACK (
    CALORIES             NUMBER(4)             not null,
    PROTEIN              NUMBER(3)             not null,
    FAT                  NUMBER(3)             not null,
-   CARBONHYDRATES       NUMBER(3),
+   CARBONHYDRATES       NUMBER(3)             not null,
    constraint PK_TRACK primary key (EMAIL, TRACKID)
 )
 /
@@ -658,7 +656,7 @@ create table TRAININGPLAN (
    TRAININGPLANID       NUMBER(6)           
       generated as identity ( start with 1 nocycle noorder)  not null,
    EMPLOYEEID           NUMBER(3)             not null,
-   SPORTID              NUMBER(4)             not null,
+   SPORTNAME            VARCHAR2(128)         not null,
    NAME                 VARCHAR2(128)         not null,
    DESCRIPTION          VARCHAR2(1024)        not null,
    TRAININGPLANDIFFICULTY NUMBER(1)           
@@ -679,7 +677,7 @@ create index PLAN_CREATED_BY_FK on TRAININGPLAN (
 /* Index: PLAN_SPORTART_FK                                      */
 /*==============================================================*/
 create index PLAN_SPORTART_FK on TRAININGPLAN (
-   SPORTID ASC
+   SPORTNAME ASC
 )
 /
 
@@ -852,8 +850,8 @@ alter table EMPLOYEE
 /
 
 alter table EXERCISE
-   add constraint FK_EXERCISE_SPORT_EXE_SPORT foreign key (SPORTID)
-      references SPORT (SPORTID)
+   add constraint FK_EXERCISE_SPORT_EXE_SPORT foreign key (SPORTNAME)
+      references SPORT (SPORTNAME)
       on delete set null
 /
 
@@ -869,8 +867,8 @@ alter table INGREDIENT
 /
 
 alter table MANAGES_SPORT
-   add constraint FK_MANAGES__MANAGES_S_SPORT foreign key (SPORTID)
-      references SPORT (SPORTID)
+   add constraint FK_MANAGES__MANAGES_S_SPORT foreign key (SPORTNAME)
+      references SPORT (SPORTNAME)
       on delete cascade
 /
 
@@ -949,8 +947,8 @@ alter table TRAININGPLAN
 /
 
 alter table TRAININGPLAN
-   add constraint FK_TRAINING_PLAN_SPOR_SPORT foreign key (SPORTID)
-      references SPORT (SPORTID)
+   add constraint FK_TRAINING_PLAN_SPOR_SPORT foreign key (SPORTNAME)
+      references SPORT (SPORTNAME)
       on delete set null
 /
 
@@ -1015,7 +1013,7 @@ alter table USER_SAVED_RECIPES
 /
 
 
-create or replace function GENERATESALT
+create or replace function GENERATESALT()
 RETURN VARCHAR2
 IS
   SALT VARCHAR2(10);
