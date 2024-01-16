@@ -9,10 +9,10 @@ managesSport = [
 ]
 
 managesSportInsert = '''
-INSERT INTO MANAGES_SPORT (SPORTID, EMPLOYEEID)
+INSERT INTO MANAGES_SPORT (SPORTNAME, EMPLOYEEID)
 VALUES 
     (
-    (SELECT SPORTID FROM SPORT WHERE NAME = '{sport}' ),
+    '{sport}',
     (SELECT EMPLOYEEID FROM EMPLOYEE WHERE EMAIL = '{email}')
     );'''
 
