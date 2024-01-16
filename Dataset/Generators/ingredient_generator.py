@@ -65,8 +65,8 @@ ingredients = {
 
 # unit: 0 gram, 1 liter, 2 pfund, 3 unze, 4 stück
 
-insert = '''EXECUTE INSERTINGREDIENT('{}', {}, {}, {}, {}, {}, {}, TO_NUMBER('{}'), TO_NUMBER('{}'));'''
+ingredientInsert = '''EXECUTE INSERTINGREDIENT('{}', {}, {}, {}, {}, {}, {}, TO_NUMBER('{}'), TO_NUMBER('{}'));'''
 
 for name, ingredientParams in ingredients.items():
-    a = insert.format(name, *ingredientParams[:-2], str(ingredientParams[-2]).replace('.', ','), str(ingredientParams[-1]).replace('.', ','))
+    a = ingredientInsert.format(name, *ingredientParams[:-2], str(ingredientParams[-2]).replace('.', ','), str(ingredientParams[-1]).replace('.', ','))
     print(a)

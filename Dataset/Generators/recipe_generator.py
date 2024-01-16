@@ -83,7 +83,7 @@ VALUES (
         meal_type=recipe["category"][1],
         food_category=recipe["category"][0]))
 
-    for ingr in recipe["ingredients"]:
+    for ingredient in recipe["ingredients"]:
         s = '''
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
@@ -91,19 +91,4 @@ VALUES (
     '{}',
     {});
 '''
-        print(s.format(name.replace("'", "''"), ingr, randrange(3) + 1))
-
-
-
-
-# print('VARIABLE unit_id NUMBER; VARIABLE ingredient_id NUMBER;')
-insert = '''INSERT INTO "INGREDIENT"
-    (INGREDIENTNAME, FOODCATEGORY, CALORIES, PROTEIN, FAT, CARBONHYDRATES)
-VALUES
-    ('{0}', {1}, {2}, {3}, {4}, {5})
-    RETURNING INGREDIENTID INTO :ingredient_id;
-INSERT INTO QUANTITYPRICE
-    (INGREDIENTNAME, QUANTITYUNIT, PRICELOWER, PRICEUPPER)
-VALUES ('{0}', {6}, {7}, {8})
-    RETURNING QUANTITYPRICEID INTO :unit_id;
-UPDATE "INGREDIENT" SET QUANTITYPRICEID = :unit_id WHERE = :ingredient_id;'''
+        print(s.format(name.replace("'", "''"), ingredient, randrange(3) + 1))
