@@ -107,20 +107,16 @@ INSERT INTO RECIPE (RECIPECATEGORYID, EMAIL, NAME, DESCRIPTION, INSTRUCTIONS, VI
 INSERT INTO RECIPE (RECIPECATEGORYID, EMAIL, NAME, DESCRIPTION, INSTRUCTIONS, VISIBILITY) VALUES (3, NULL, 'Salmon with sweet potatoes', 'Some salmon out of the oven with sweet potato slices.', 'Squeeze some lemoin juice over the salmon and use spices of your choice. Then cut the sweet potato in slices and put it with the salmon into the oven.', '1');
 
 -- Exercise:
-INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (2, 'squad', 'A lower-body exercise where an individual lowers their hips from a standing position and then stands back up. This compound movement engages the muscles in the thighs, hips, and buttocks and is effective for building overall lower body strength. Proper form is essential to prevent injury and maximize benefits.', '2');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (5, 'jumping jack', 'A jumping exercise with simultaneous arm and leg spreading and closing. Effective for cardiovascular training.', '0');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (2, 'pull up', 'An upper-body strength exercise involving lifting the body using the arms, targeting the upper back and arms.
 ', '2');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (1, 'push up', 'A bodyweight exercise where the body is lifted and lowered by arm extension, primarily targeting the chest, shoulders, and triceps.', '0');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (2, 'dead lift', 'A fundamental weightlifting exercise involving lifting a barbell from the ground, targeting the lower back, legs, and glutes.', '2');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (2, 'kick back', 'Exercise for the glutes, extending one leg backward.', '2');
-INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (4, 'Hit Cardio', 'High-Intensity Interval Training (HIIT) involving various exercises to elevate heart rate and burn calories.', '2');
-INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (1, 'lit Cardio', 'Light cardiovascular exercise, potentially light running or brisk walking for at least 15 minutes.', '2');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (3, 'Downward dog', 'A yoga position where the body forms an inverted "V," stretching the back and leg muscles.', '1');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (3, 'upward dog', 'A yoga position where the upper body is lifted off the ground, stretching the chest and abdominal muscles.', '1');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (2, 'military press', 'Standing shoulder press, lifting a barbell or dumbbells overhead. Focuses on the shoulder muscles.', '2');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (1, 'plank', 'Holding a position similar to a push-up to strengthen the core muscles.', '0');
-INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (1, 'lunges', 'Forward stepping exercise targeting the leg and glute muscles.', '0');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (5, 'burpee', 'A full-body exercise combining a squat, push-up, and jump. Intensive for overall conditioning.', '0');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (1, 'crunches', 'Abdominal exercise involving lifting the upper body towards the knees.', '0');
 INSERT INTO EXERCISE (SPORTID, NAME, DESCRIPTION, EXERCISETYPE) VALUES (3, 'child’s pose', 'Relaxing yoga position where one sits on the heels and bends the upper body forward.', '1');
