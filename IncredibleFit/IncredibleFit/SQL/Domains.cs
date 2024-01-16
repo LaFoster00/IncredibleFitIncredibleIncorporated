@@ -140,6 +140,7 @@ namespace IncredibleFit.SQL
         public static readonly short Liter = 1;
         public static readonly short Pound = 2;
         public static readonly short FluidOunce = 3;
+        public static readonly short Pieces = 4;
 
         private QuantityUnit(short status)
         {
