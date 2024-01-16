@@ -8,7 +8,7 @@ INSERT INTO USER_SAVED_RECIPES (EMAIL, RECIPEID)
 VALUES (
     '{useremail}',
     (SELECT RECIPEID FROM RECIPE WHERE NAME = '{recipename}')
-)
+);
 '''
 
 for userSavedRecipeInfo in userSavedRecipes:

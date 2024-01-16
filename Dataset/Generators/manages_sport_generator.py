@@ -9,7 +9,7 @@ VALUES
 (
 (SELECT SPORTID FROM SPORT WHERE NAME = '{sport}' ),
 (SELECT EMPLOYEEID FROM EMPLOYEE WHERE EMAIL = '{email}')
-)
+);
 '''
 
 for managesSportInfo in managesSport:
