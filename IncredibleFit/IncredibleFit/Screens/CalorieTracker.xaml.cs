@@ -18,10 +18,10 @@ public partial class CalorieTracker : ContentPage
         DateTime monday = getStartOfWeek();
         for (int i = 0; i < 7; i++)
         {
-            Track currentTrack = SQLNutrition.getTrackByDate(monday.AddDays(i));
+            Track currentTrack = SQLNutrition.getTrackByDate(monday.AddDays(i), _sessionInfo.User);
             if(currentTrack == null ) 
             {
-                currentTrack = new Track(monday.AddDays(i),0,0,0,0);
+                currentTrack = new Track(_sessionInfo.User!.Email, monday.AddDays(i),0,0,0,0);
             }
             currentTrack.Weekday = getWeekdayByIndex(i);
             weekCalorieTracks.Add(currentTrack);
@@ -71,7 +71,6 @@ public partial class CalorieTracker : ContentPage
     {
         this.weekCalorieTracks[index] = track;
         SQLNutrition.SaveCalorieTrack(track);
-        BindingContext = this;
         ChangeAverageData();
     }
 

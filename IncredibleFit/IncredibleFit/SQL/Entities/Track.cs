@@ -12,6 +12,13 @@ namespace IncredibleFit.SQL.Entities
             private set => SetValue(TrackIDProperty, value);
         }
 
+        [Field("EMAIL", OracleDbType.Varchar2, 128)]
+        public string Email
+        {
+            get => (string)GetValue(EmailProperty);
+            private set => SetValue(EmailProperty, value);
+        }
+
         [Field("DATE", OracleDbType.Date)]
         public DateTime Date
         {
@@ -54,6 +61,13 @@ namespace IncredibleFit.SQL.Entities
                 typeof(Track), 
                 -1);
 
+        public static readonly BindableProperty EmailProperty =
+            BindableProperty.Create(
+                nameof(Email),
+                typeof(string),
+                typeof(Track),
+                string.Empty);
+
         public static readonly BindableProperty DateProperty =
             BindableProperty.Create(
                 nameof(Date), 
@@ -93,8 +107,9 @@ namespace IncredibleFit.SQL.Entities
 
         private Track() { }
 
-        public Track(DateTime date, short calories, short protein, short fat, short carbonhydrates)
+        public Track(string email, DateTime date, short calories, short protein, short fat, short carbonhydrates)
         {
+            Email = email;
             Date = date;
             Calories = calories;
             Protein = protein;

@@ -1,4 +1,5 @@
 ﻿using IncredibleFit.SQL.Entities;
+using Microsoft.Maui.ApplicationModel.Communication;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System.Collections.ObjectModel;
@@ -16,6 +17,7 @@ namespace IncredibleFit.SQL
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "RECIPE"
+                 WHERE VISIBILITY=1
                  """);
 
             var reader = OracleDatabase.ExecuteQuery(command);
@@ -29,7 +31,7 @@ namespace IncredibleFit.SQL
                 }
             }
 
-            getIngredientsByRecipe(new Recipe("ABC", "abc", "aaa", 0, 100));
+            //getIngredientsByRecipe(new Recipe("ABC", "abc", "aaa", 0, 100));
 
             return recipes;
         }
@@ -62,14 +64,19 @@ namespace IncredibleFit.SQL
             return ingredients;
         }
 
-        public static Track getTrackByDate(DateTime date)
+        public static Track getTrackByDate(DateTime date, User? user)
         {
+            string mail = "";
+            if (user != null)
+            {
+                mail = user.Email;
+            }
             DateTime date2 = new DateTime(date.Year, date.Month, date.Day);
             
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "TRACK"
-                 WHERE "DATE" = :PDATE
+                 WHERE "DATE" = :PDATE AND EMAIL='{mail}'
                  """);
             command.Parameters.Add(new OracleParameter("PDATE", OracleDbType.Date)).Value = date2;
             
@@ -81,13 +88,12 @@ namespace IncredibleFit.SQL
 
         public static void SaveCalorieTrack(Track calorieTrack)
         {
-
             DateTime date2 = new DateTime(calorieTrack.Date.Year, calorieTrack.Date.Month, calorieTrack.Date.Day);
 
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM TRACK
-                 WHERE "DATE" = :PDATE
+                 WHERE "DATE" = :PDATE AND EMAIL = '{calorieTrack.Email}'
                  """);
             command.Parameters.Add(new OracleParameter("PDATE", OracleDbType.Date)).Value = date2;
 
