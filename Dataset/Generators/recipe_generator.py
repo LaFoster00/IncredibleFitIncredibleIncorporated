@@ -67,11 +67,12 @@ eggplant, mushrooms, bell peppers, and onions.""",
     "Chicken-Quinoa-salad": {
         "description": """A salad based on quinoa, chicken and vegetables""",
         "ingredients": ['chicken breast', 'quinoa', 'olive oil', 'lemon juice'],
-        "category": [3, 0],
+        "category": [0, 0],
     },
     "Salmon with sweet potatoes": {
         "description": """Some salmon out of the oven with sweet potato slices""",
         "ingredients": ['lemon juice', 'salmon', 'sweet potatoes'],
+        "category" : [0, 1]
     },
     "Cheesecake": {
         "description": """A delicious cheesecake""",
@@ -80,8 +81,8 @@ eggplant, mushrooms, bell peppers, and onions.""",
     },
     "Tomato Salad": {
         "description": """Fresh tomato salad""",
-        "ingredients": [' tomato', 'olive oil', 'basil'],
-        "category": [3, 2],
+        "ingredients": ['tomato', 'olive oil', 'basil'],
+        "category": [2, 2],
     },
     "Pasta Bolognese": {
         "description": """Classic pasta Bolognese""",
@@ -90,7 +91,7 @@ eggplant, mushrooms, bell peppers, and onions.""",
     }
 }
 
-default_email = 'incredible@fit.com'
+default_email = 'anne.mitchel@yahoo.com'
 instructions = "step one, step two, step three, enjoy!"
 
 recipeInsert = """

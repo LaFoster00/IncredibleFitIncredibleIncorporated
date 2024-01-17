@@ -101,7 +101,10 @@ ingredients = {
         0, 0.5, 1.0],
     'tomato sauce': [
         2, 50, 2, 0, 10,
-        0, 0.05, 0.1]
+        0, 0.05, 0.1],
+    'quinoa' : [
+        2, 43, 4, 8, 9,
+        0, 0.5, 1.0]
 }
 
 # unit: 0 gram, 1 liter, 2 pfund, 3 unze, 4 stück
@@ -111,7 +114,7 @@ ingredientInsert = '''EXECUTE INSERTINGREDIENT('{}', {}, {}, {}, {}, {}, {}, TO_
 def generateIngredients():
     print("\n-- ingredient\n")
     for name, ingredientParams in ingredients.items():
-        a = ingredientInsert.format(name, *ingredientParams[:-2], str(ingredientParams[-2]).replace('.', ','), str(ingredientParams[-1]).replace('.', ','))
+        a = ingredientInsert.format(name, *ingredientParams[:-2], str(ingredientParams[-2]), str(ingredientParams[-1]))
         print(a)
 
 if __name__ == "__main__":
