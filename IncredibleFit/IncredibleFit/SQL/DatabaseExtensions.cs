@@ -79,7 +79,6 @@ namespace IncredibleFit.SQL
                 return value;
 
             return Activator.CreateInstance(targetType, new[] { value });
-
         }
 
         // System type should be the type of the property, will return a domain in case the system type is a domain
