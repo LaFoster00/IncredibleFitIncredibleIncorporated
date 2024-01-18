@@ -5,7 +5,8 @@
              Shell.NavBarIsVisible="False">
 
     <StackLayout>
-        <ImageButton Source="icon_edit.png" Clicked="RefreshFavorites" WidthRequest="20" HeightRequest="20"/>
+        <ImageButton Source="icon_refresh.png" Clicked="RefreshFavorites" WidthRequest="20" HeightRequest="20" 
+                     Margin="10" HorizontalOptions="End"/>
         <ListView ItemsSource="{Binding FavoritesList}" RowHeight="200">
             <ListView.ItemTemplate>
                 <DataTemplate>

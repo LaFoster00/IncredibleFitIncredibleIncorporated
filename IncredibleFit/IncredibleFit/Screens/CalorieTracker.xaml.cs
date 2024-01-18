@@ -96,12 +96,12 @@ public partial class CalorieTracker : ContentPage
         switch (index)
         {
             case 0: return "Mo";
-            case 1: return "Di";
-            case 2: return "Mi";
-            case 3: return "Do";
+            case 1: return "Tu";
+            case 2: return "We";
+            case 3: return "Th";
             case 4: return "Fr";
             case 5: return "Sa";
-            case 6: return "So";
+            case 6: return "Su";
             default: return "Mo";
         }
     }

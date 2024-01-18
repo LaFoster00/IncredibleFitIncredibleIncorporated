@@ -60,4 +60,11 @@ public partial class RecipeFavorites : ContentPage
             FavoritesList.Add(tmp[i]);
         }
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        RefreshFavorites(null, null);
+    }
 }

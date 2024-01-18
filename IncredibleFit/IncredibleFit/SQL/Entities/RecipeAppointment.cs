@@ -9,14 +9,14 @@ namespace IncredibleFit.SQL.Entities
         public int RecipeID
         {
             get => (int)GetValue(RecipeIDProperty);
-            private set => SetValue(RecipeIDProperty, value);
+            set => SetValue(RecipeIDProperty, value);
         }
 
         [Field("APPOINTMENTID", OracleDbType.Int32)]
         public int AppointmentID
         {
             get => (int)GetValue(AppointmentIDProperty);
-            private set => SetValue(AppointmentIDProperty, value);
+            set => SetValue(AppointmentIDProperty, value);
         }
 
         public static readonly BindableProperty RecipeIDProperty =

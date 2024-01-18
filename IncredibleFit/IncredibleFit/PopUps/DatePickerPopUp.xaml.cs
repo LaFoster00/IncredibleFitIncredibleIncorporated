@@ -23,7 +23,7 @@ public partial class DatePickerPopUp : Popup
     void SaveEditClicked(object sender, EventArgs e)
 	{
         DateTime selectedDate = DatePicker.Date;
-		SQLNutrition.addRecipeAppointment(_recipe, _user, selectedDate);
+		SQLTimeline.addRecipeAppointment(_recipe, _user, selectedDate);
 		this.Close();
     }
 }

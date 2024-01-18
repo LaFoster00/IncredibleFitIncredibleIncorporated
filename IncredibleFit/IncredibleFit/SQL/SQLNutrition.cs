@@ -81,10 +81,13 @@ namespace IncredibleFit.SQL
 
             var command = OracleDatabase.CreateCommand(
                 $"""
-                 SELECT * FROM "RECIPE" 
-                 JOIN "USER_SAVED_RECIPES"
-                 ON RECIPE.RECIPEID = USER_SAVED_RECIPES.RECIPEID
-                 WHERE USER_SAVED_RECIPES.EMAIL='{user.Email}'
+                 SELECT *
+                 FROM "RECIPE"
+                 WHERE "RECIPEID" IN (
+                     SELECT "RECIPEID"
+                     FROM "USER_SAVED_RECIPES"
+                     WHERE "EMAIL" = '{user.Email}'
+                 )
                  """);
 
             var reader = OracleDatabase.ExecuteQuery(command);
@@ -243,25 +246,6 @@ namespace IncredibleFit.SQL
             {
                 OracleDatabase.UpdateObject(calorieTrack);
             }
-        }
-
-        public static void addRecipeAppointment(Recipe recipe, User user, DateTime date)
-        {
-            var command = OracleDatabase.CreateCommand(
-                $"""
-                 INSERT INTO APPOINTMENT("DATE", STATUS)
-                 VALUES(:PDate, 0)
-                 RETURNING APPOINTMENTID INTO :PappointmentID
-                 """);
-            command.Parameters.Add("PDate", OracleDbType.Date).Value = date;
-            command.Parameters.Add("PappointmentID", OracleDbType.Int32).Direction = ParameterDirection.Output;
-
-            OracleDatabase.ExecuteNonQuery(command);
-
-            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(OracleDbType.Int32)!;
-
-
-            //TODO
         }
     }
 }

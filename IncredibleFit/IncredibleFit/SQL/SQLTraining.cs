@@ -45,14 +45,50 @@ namespace IncredibleFit.SQL
             return track;
         }
 
-        public static TrainingUnit getNextTrainingUnit()
+        public static TrainingUnit getTrainingUnit(PlanTrainingUnit unit)
         {
-            //Get next Exercise for the currentUser from Database
+            if(unit == null)
+            {
+                return null;
+            }
+
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "TRAININGUNIT" 
+                 JOIN "PLAN_UNIT_UNIT"
+                 ON TRAININGUNIT.TRAININGUNITID = PLAN_UNIT_UNIT.TRAININGUNITID
+                 JOIN "PLANTRAININGUNIT"
+                 ON PLANTRAININGUNIT.PLANTRAININGUNITID = PLAN_UNIT_UNIT.PLANTRAININGUNITID
+                 WHERE PLANTRAININGUNIT.PLANTRAININGUNITID = {unit.PlanTrainingUnitID}
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<TrainingUnit>();
+
+            return track.Any() ? track[0] : null;
+        }
+
+        public static int getExerciseCount(TrainingUnit trainingUnit)
+        {
+            if(trainingUnit == null)
+            { 
+                return 0; 
+            }
+
+            ObservableCollection<ExerciseUnit> exercises = SQLTraining.getExerciseUnits(trainingUnit);
+
+            return exercises.Count();
+        }
+
+        public static TrainingUnit getNextTrainingUnit(User user)
+        {
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "APPOINTMENT" 
-                 WHERE TRAININGUNITID IS NOT NULL
-                 ORDER BY "DATE"
+                 JOIN "USER_APPOINTMENT" ON USER_APPOINTMENT.APPOINTMENTID = APPOINTMENT.APPOINTMENTID                 
+                 WHERE APPOINTMENT.TRAININGUNITID IS NOT NULL AND USER_APPOINTMENT.EMAIL = '{user.Email}'
+                 ORDER BY APPOINTMENT."DATE"
                  """);
 
             var reader = OracleDatabase.ExecuteQuery(command);
@@ -105,12 +141,11 @@ namespace IncredibleFit.SQL
         {
             ObservableCollection<ExerciseUnit> exerciseUnits = new ObservableCollection<ExerciseUnit>();
 
-            //TODO get exercises from DB
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "EXERCISEUNIT" 
                  JOIN "TRAINING_UNIT_UNIT" 
-                 ON TRAINING_UNIT_UNIT.EXERCISEID = EXERCISEUNIT.EXERCISEID
+                 ON TRAINING_UNIT_UNIT.EXERCISEUNITID = EXERCISEUNIT.EXERCISEUNITID
                  JOIN "TRAININGUNIT"
                  ON TRAINING_UNIT_UNIT.TRAININGUNITID = TRAININGUNIT.TRAININGUNITID
                  WHERE TRAININGUNIT.TRAININGUNITID = {trainingUnit.TrainingUnitID}

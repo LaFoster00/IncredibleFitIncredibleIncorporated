@@ -61,6 +61,7 @@
       <None Remove="Resources\Images\icon_minus.png" />
       <None Remove="Resources\Images\icon_plus.png" />
       <None Remove="Resources\Images\icon_profile.png" />
+      <None Remove="Resources\Images\icon_refresh.png" />
       <None Remove="Resources\Images\icon_ruler.png" />
       <None Remove="Resources\Images\icon_scale.png" />
       <None Remove="Resources\Images\icon_settings.png" />
@@ -78,6 +79,9 @@
 
     <ItemGroup>
       <MauiXaml Update="IncredibleFit\ContentViews\EditableField.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\ContentViews\ExerciseUnitField.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\ContentViews\TrainingPlanUnitField.xaml">

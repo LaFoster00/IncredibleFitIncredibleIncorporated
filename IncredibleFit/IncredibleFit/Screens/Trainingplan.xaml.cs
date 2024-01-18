@@ -8,7 +8,7 @@ public partial class Trainingplan : ContentPage
 {
 	private SessionInfo _sessionInfo;
 	private TrainingPlan _currentTrainingPlan;
-	public PlanTrainingUnit[] TrainingUnitArray { get; set; } = { null, null, null, null, null, null, null };
+	public ObservableCollection<PlanTrainingUnit> TrainingUnitArray { get; set; } = new ObservableCollection<PlanTrainingUnit>{ null, null, null, null, null, null, null };
 	public Trainingplan(SessionInfo info)
 	{
 		_sessionInfo = info;
@@ -26,6 +26,6 @@ public partial class Trainingplan : ContentPage
 		}
 
 		InitializeComponent();
-		BindingContext = TrainingUnitArray;
+		BindingContext = this;
 	}
 }

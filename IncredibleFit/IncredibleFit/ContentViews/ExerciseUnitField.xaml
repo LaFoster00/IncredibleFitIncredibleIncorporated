@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IncredibleFit.ContentViews.ExerciseUnitField"
+             x:Name="view">
+    <VerticalStackLayout>
+        <Border Stroke="{Binding StrokeColor}">
+            <Grid RowSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="{Binding Source={x:Reference view}, Path=Name}" TextColor="{Binding Source={x:Reference view}, Path=TextColor}" FontSize="Medium" FontAttributes="Bold" Grid.ColumnSpan="2"/>
+                <Label Text="{Binding Description}" TextColor="{Binding Source={x:Reference view}, Path=TextColor}" Grid.Row="1" Grid.ColumnSpan="2"/>
+                <Line Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="{Binding Source={x:Reference view}, Path=TextColor}"/>
+                <Label Text="Set" Grid.Row="3" TextColor="{Binding Source={x:Reference view}, Path=TextColor}" HorizontalOptions="Center" FontAttributes="Bold"/>
+                <Label Text="Repetitions" TextColor="{Binding Source={x:Reference view}, Path=TextColor}" Grid.Row="3" Grid.Column="1" HorizontalOptions="Start" FontAttributes="Bold"/>
+            </Grid>
+        </Border>
+    </VerticalStackLayout>
+</ContentView>
