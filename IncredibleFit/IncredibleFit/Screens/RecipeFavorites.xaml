@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IncredibleFit.Screens.RecipeFavorites"
+             Shell.NavBarIsVisible="False">
+
+    <StackLayout>
+        <ImageButton Source="icon_edit.png" Clicked="RefreshFavorites" WidthRequest="20" HeightRequest="20"/>
+        <ListView ItemsSource="{Binding FavoritesList}" RowHeight="200">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Border>
+                            <ScrollView>
+                                <Grid RowSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Text="{Binding Name}" Grid.Row="0" 
+                                   FontAttributes="Bold" Grid.ColumnSpan="2"
+                                       FontSize="Medium"/>
+                                    <Label Text="Description:" Grid.Row="1" Grid.ColumnSpan="2"/>
+                                    <Label Text="{Binding Description}" Grid.Row="2" Grid.ColumnSpan="2"/>
+                                    <Label Text="Mealtype:" Grid.Row="3"/>
+                                    <Label Text="{Binding MealType}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                    <Label Text="Foodcategory:" Grid.Row="4"/>
+                                    <Label Text="{Binding FoodCategory}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="RecipeClicked"/>
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </ScrollView>
+                        </Border>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

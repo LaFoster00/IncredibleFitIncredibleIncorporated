@@ -3,6 +3,7 @@ using Microsoft.Maui.ApplicationModel.Communication;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System.Collections.ObjectModel;
+using System.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace IncredibleFit.SQL
@@ -72,6 +73,58 @@ namespace IncredibleFit.SQL
             }
 
             return recipes;
+        }
+
+        public static ObservableCollection<Recipe> getFavoriteRecipes(User user)
+        {
+            ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
+
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "RECIPE" 
+                 JOIN "USER_SAVED_RECIPES"
+                 ON RECIPE.RECIPEID = USER_SAVED_RECIPES.RECIPEID
+                 WHERE USER_SAVED_RECIPES.EMAIL='{user.Email}'
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Recipe>();
+            if (track.Any())
+            {
+                foreach (var item in track)
+                {
+                    recipes.Add(item);
+                }
+            }
+
+            return recipes;
+        }
+
+        public static bool isRecipeFavorite(Recipe recipe, User user)
+        {
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "USER_SAVED_RECIPES"
+                 WHERE EMAIL='{user.Email}' AND RECIPEID={recipe.RecipeID}
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<UserSavedRecipe>();
+            return track.Any() ? true : false;
+        }
+        public static void addToFavorites(Recipe recipe, User user)
+        {
+            UserSavedRecipe usR = new UserSavedRecipe(recipe.RecipeID, user.Email);
+            OracleDatabase.InsertObject(usR);
+        }
+
+        public static void deleteFromFavorites(Recipe recipe, User user)
+        {
+            //TODO: All User Saved Recipes Elements with recipeID gets deleted. 
+            UserSavedRecipe usR = new UserSavedRecipe(recipe.RecipeID, user.Email);
+            OracleDatabase.DeleteObject(usR);
         }
 
         public static Recipecategory getRecipeCategory(Recipe recipe)
@@ -190,6 +243,22 @@ namespace IncredibleFit.SQL
             {
                 OracleDatabase.UpdateObject(calorieTrack);
             }
+        }
+
+        public static void addRecipeAppointment(Recipe recipe, User user, DateTime date)
+        {
+
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 INSERT INTO APPOINTMENT("DATE", STATUS)
+                 VALUES({date}, 0))
+                 RETURNING APPOINTMENTID INTO :appointmentID
+                 """);
+            command.Parameters.Add("appointmentID", OracleDbType.Int32).Direction = ParameterDirection.Output;
+
+            OracleDatabase.ExecuteNonQuery(command);
+
+            //TODO
         }
     }
 }

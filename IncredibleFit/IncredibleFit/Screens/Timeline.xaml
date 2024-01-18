@@ -6,7 +6,7 @@
              Title="Timeline">
 
     <ContentPage.Behaviors>
-        <behaviors:StatusBarBehavior StatusBarColor="#FB8505" StatusBarStyle="LightContent" />
+        <behaviors:StatusBarBehavior StatusBarColor="{StaticResource Primary}" StatusBarStyle="LightContent" />
     </ContentPage.Behaviors>
 
     <CollectionView ItemsSource="{Binding timelineItems}">

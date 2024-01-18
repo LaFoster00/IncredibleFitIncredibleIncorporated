@@ -9,12 +9,14 @@ namespace IncredibleFit.Screens;
 
 public partial class RecipeSearch : ContentPage
 {
+    private readonly SessionInfo _sessionInfo;
     private string _filterIngredient = "";
     private string _filterKeyword = "";
     public ObservableCollection<Recipe> recipeList { get; set; } = new ObservableCollection<Recipe>();
-    public RecipeSearch()
+    public RecipeSearch(SessionInfo info)
 	{
         InitializeComponent();
+        _sessionInfo = info;
         recipeList = SQLNutrition.getAllVisibleRecipes(); ;
         for (int i = 0; i < recipeList.Count; i++)
         {
@@ -31,7 +33,7 @@ public partial class RecipeSearch : ContentPage
         Label label = (Label)grid.Children[0];
         String name = label.Text;
         Recipe recipe = getRecipeByName(name);
-        Navigation.PushAsync(new RecipeDetails(recipe));
+        Navigation.PushAsync(new RecipeDetails(recipe, _sessionInfo));
     }
 
     void AddFilterClicked(object sender, EventArgs e)

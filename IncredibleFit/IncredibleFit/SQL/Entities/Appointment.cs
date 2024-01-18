@@ -12,6 +12,13 @@ namespace IncredibleFit.SQL.Entities
             private set => SetValue(AppointmentIDProperty, value);
         }
 
+        [Field("TRAININGUNITID", OracleDbType.Int32)]
+        public int? TrainingUnitID
+        {
+            get => (int?)GetValue(TrainingUnitIDProperty);
+            set => SetValue(TrainingUnitIDProperty, value);
+        }
+
         [Field("DATE", OracleDbType.Date)]
         public DateTime Date
         {
@@ -31,6 +38,13 @@ namespace IncredibleFit.SQL.Entities
                 nameof(AppointmentID), 
                 typeof(int), 
                 typeof(Appointment), 
+                -1);
+
+        public static readonly BindableProperty TrainingUnitIDProperty =
+            BindableProperty.Create(
+                nameof(TrainingUnitID),
+                typeof(int?),
+                typeof(Appointment),
                 -1);
 
         public static readonly BindableProperty DateProperty =

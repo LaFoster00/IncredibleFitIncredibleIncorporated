@@ -19,7 +19,7 @@ namespace IncredibleFit.SQL.Entities
             set => SetValue(DescriptionProperty, value);
         }
 
-        [Field("WEKKDAY", OracleDbType.Int16)]
+        [Field("WEEKDAY", OracleDbType.Int16)]
         public Weekday Weekday
         {
             get => (Weekday)GetValue(WeekdayProperty);

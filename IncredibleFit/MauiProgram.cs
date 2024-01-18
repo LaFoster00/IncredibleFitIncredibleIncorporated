@@ -33,6 +33,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<Profile>();
         builder.Services.AddSingleton<Settings>();
         builder.Services.AddSingleton<CalorieTracker>();
+        builder.Services.AddSingleton<RecipeFavorites>();
+        builder.Services.AddSingleton<RecipeSearch>();
         builder.Services.AddSingleton<Training>();
         builder.Services.AddSingleton<Trainingplan>();
 

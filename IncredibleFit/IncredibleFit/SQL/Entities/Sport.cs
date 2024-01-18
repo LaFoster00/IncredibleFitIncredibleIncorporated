@@ -5,18 +5,11 @@ namespace IncredibleFit.SQL.Entities
     [Entity("SPORT")]
     internal class Sport : BindableObject
     {
-        [ID, Field("SPORTID", OracleDbType.Int32), AutoIncrement]
-        public int SportID
+        [ID, Field("SPORTNAME", OracleDbType.Varchar2, 128)]
+        public string Sportname
         {
-            get => (int)GetValue(SportIDProperty);
-            private set => SetValue(SportIDProperty, value);
-        }
-
-        [Field("NAME", OracleDbType.Varchar2, 128)]
-        public string Name
-        {
-            get => (string)GetValue(NameProperty);
-            set => SetValue(NameProperty, value);
+            get => (string)GetValue(SportnameProperty);
+            set => SetValue(SportnameProperty, value);
         }
 
         [Field("DESCRIPTION", OracleDbType.Varchar2, 1024)]
@@ -26,16 +19,9 @@ namespace IncredibleFit.SQL.Entities
             set => SetValue(DescriptionProperty, value);
         }
 
-        public static readonly BindableProperty SportIDProperty =
+        public static readonly BindableProperty SportnameProperty =
             BindableProperty.Create(
-                nameof(SportID), 
-                typeof(int), 
-                typeof(Sport), 
-                -1);
-
-        public static readonly BindableProperty NameProperty =
-            BindableProperty.Create(
-                nameof(Name), 
+                nameof(Sportname), 
                 typeof(string), 
                 typeof(Sport), 
                 string.Empty);
@@ -51,7 +37,7 @@ namespace IncredibleFit.SQL.Entities
 
         public Sport(string name, string description)
         {
-            this.Name = name;
+            this.Sportname = name;
             this.Description = description;
         }
     }

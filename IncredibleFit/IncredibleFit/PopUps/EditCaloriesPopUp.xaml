@@ -9,7 +9,7 @@
         <Border Stroke="{StaticResource Gray900}">
             <StackLayout>
                 <Label
-                    Text="Nährwerte anpassen"
+                    Text="Adjust nutrional values"
                     FontAttributes="Bold"
                     FontSize="Medium"
                     Margin="0,0,0,10"/>
@@ -25,27 +25,27 @@
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width=".5*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Text="Kalorien:" VerticalOptions="Center"/>
+                    <Label Text="Calories:" VerticalOptions="Center"/>
                     <Entry x:Name="NewKCAL" Grid.Column="1" 
                            Keyboard="Numeric" TextChanged="KcalEntryChanged"/>
                     <Label Text="kcal" Grid.Row="0" Grid.Column="2" VerticalOptions="Center"/>
                     
-                    <Label Text="Kohlenhydrate:" Grid.Row="1" VerticalOptions="Center"/>
+                    <Label Text="Carbonhydrates:" Grid.Row="1" VerticalOptions="Center"/>
                     <Entry x:Name="NewKH" Grid.Row="1" Grid.Column="1" 
                            Keyboard="Numeric" TextChanged="KhEntryChanged"/>
                     <Label Text="g" Grid.Row="1" Grid.Column="2" VerticalOptions="Center"/>
                     
-                    <Label Text="Proteine:" Grid.Row="2" VerticalOptions="Center"/>
+                    <Label Text="Proteins:" Grid.Row="2" VerticalOptions="Center"/>
                     <Entry x:Name="NewP" Grid.Row="2" Grid.Column="1" 
                            Keyboard="Numeric" TextChanged="PEntryChanged"/>
                     <Label Text="g" Grid.Row="2" Grid.Column="2" VerticalOptions="Center"/>
                     
-                    <Label Text="Fett:" Grid.Row="3" VerticalOptions="Center"/>
+                    <Label Text="Fat:" Grid.Row="3" VerticalOptions="Center"/>
                     <Entry x:Name="NewF" Grid.Row="3" Grid.Column="1" 
                            Keyboard="Numeric" TextChanged="FEntryChanged"/>
                     <Label Text="g" Grid.Row="3" Grid.Column="2" VerticalOptions="Center"/>
                 </Grid>
-                <Button Text="Speichern" Clicked="SaveEditClicked"/>
+                <Button Text="Save" Clicked="SaveEditClicked"/>
             </StackLayout>
         </Border>
     </VerticalStackLayout>

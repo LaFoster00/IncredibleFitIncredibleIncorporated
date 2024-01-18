@@ -5,7 +5,7 @@
              Shell.NavBarIsVisible="False">
     <ScrollView>
         <VerticalStackLayout>
-            <Button Text="Training starten" x:Name="BtnStartFinish" Clicked="BtnStartFinishClicked"/>
+            <Button Text="Start training" x:Name="BtnStartFinish" Clicked="BtnStartFinishClicked"/>
             <ListView ItemsSource="{Binding exerciseUnits}" HasUnevenRows="True" 
                       SeparatorVisibility="None" ItemTapped="ExerciseDoneClicked">
                 <ListView.ItemTemplate>
@@ -27,8 +27,8 @@
                                     <Label Text="{Binding name}" TextColor="{Binding textColor}" FontSize="Medium" FontAttributes="Bold" Grid.ColumnSpan="2"/>
                                     <Label Text="{Binding description}" TextColor="{Binding textColor}" Grid.Row="1" Grid.ColumnSpan="2"/>
                                     <Line Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="{Binding textColor}"/>
-                                    <Label Text="Satz" Grid.Row="3" TextColor="{Binding textColor}" HorizontalOptions="Center" FontAttributes="Bold"/>
-                                    <Label Text="Wiederholungen" TextColor="{Binding textColor}" Grid.Row="3" Grid.Column="1" HorizontalOptions="Start" FontAttributes="Bold"/>
+                                    <Label Text="Set" Grid.Row="3" TextColor="{Binding textColor}" HorizontalOptions="Center" FontAttributes="Bold"/>
+                                    <Label Text="Repetitions" TextColor="{Binding textColor}" Grid.Row="3" Grid.Column="1" HorizontalOptions="Start" FontAttributes="Bold"/>
                                     </Grid>
                             </Border>
                         </ViewCell>

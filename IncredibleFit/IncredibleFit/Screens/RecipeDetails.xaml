@@ -6,6 +6,17 @@
              Title="">
     <ScrollView>
         <VerticalStackLayout>
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <ImageButton Source="icon_add_appointment.png" WidthRequest="30" HeightRequest="30" 
+                             Clicked="AddAppointmentClicked" Grid.Column="1"/>
+                <ImageButton x:Name="BtnHeart" Source="icon_heart.png" WidthRequest="30" HeightRequest="30" 
+                             Clicked="BtnHeartClicked" Grid.Column="2"/>
+            </Grid>
             <Label 
                 x:Name="RecipeDescription"
                 HorizontalOptions="Fill"
@@ -17,7 +28,7 @@
                         FontAttributes="Bold"
                         FontSize="Medium"
                         Margin="0,0,0,5"/>
-                    <ListView ItemsSource="{Binding ingredientsList}" SelectedItem="{StaticResource Gray600}"
+                    <ListView ItemsSource="{Binding IngredientsList}" SelectedItem="{StaticResource Gray600}"
                               SeparatorVisibility="None">
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -26,8 +37,8 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="1*"/>
                                             <ColumnDefinition Width="5*"/>
-                                            <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="1.5*"/>
                                         </Grid.ColumnDefinitions>
                                         <Ellipse Fill="White"
                                                  WidthRequest="10"

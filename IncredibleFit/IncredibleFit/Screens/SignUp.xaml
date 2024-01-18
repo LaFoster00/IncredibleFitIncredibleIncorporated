@@ -10,22 +10,22 @@
 		<Label Text="Sign Up" FontSize="30" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
 
 		<Entry Text="{Binding Email}" Placeholder="Email" Margin="0,10,0,0"/>
-        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="DarkGoldenrod"/>
-        <Label Text="Email Address Already Registered" IsVisible="{Binding AccountTaken}" TextColor="DarkGoldenrod"/>
-        <Label Text="Email Invalid" IsVisible="{Binding EmailInvalid}" TextColor="DarkGoldenrod"/>
+        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="{StaticResource Tertiary}"/>
+        <Label Text="Email Address Already Registered" IsVisible="{Binding AccountTaken}" TextColor="{StaticResource Tertiary}"/>
+        <Label Text="Email Invalid" IsVisible="{Binding EmailInvalid}" TextColor="{StaticResource Tertiary}"/>
 
         <Entry Text="{Binding FirstName}" Placeholder="First Name" Margin="0,10,0,0"/>
-        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="DarkGoldenrod"/>
+        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="{StaticResource Tertiary}"/>
 
 		<Entry Text="{Binding Name}" Placeholder="Last Name" Margin="0,10,0,0"/>
-        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="DarkGoldenrod"/>
+        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="{StaticResource Tertiary}"/>
 
 		<Entry Text="{Binding Password}" Placeholder="Password" IsPassword="True" Margin="0,10,0,0"/>
-        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="DarkGoldenrod"/>
+        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="{StaticResource Tertiary}"/>
 
 		<Entry Text="{Binding ConfirmPassword}" Placeholder="Confirm Password" IsPassword="True" Margin="0,10,0,0"/>
-        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="DarkGoldenrod"/>
-        <Label Text="Password Doesn't Match" IsVisible="{Binding PasswordDoesntMatch}" TextColor="DarkGoldenrod"/>
+        <Label Text="Required" IsVisible="{Binding NotAllFilledOut}" TextColor="{StaticResource Tertiary}"/>
+        <Label Text="Password Doesn't Match" IsVisible="{Binding PasswordDoesntMatch}" TextColor="{StaticResource Tertiary}"/>
 
 		<Button Text="Sign Up" Command="{Binding SignUpCommand}" Margin="0,20,0,0"/>
 
