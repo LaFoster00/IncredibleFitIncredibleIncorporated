@@ -247,5 +247,24 @@ namespace IncredibleFit.SQL
                 OracleDatabase.UpdateObject(calorieTrack);
             }
         }
+
+        public static void addRecipeAppointment(Recipe recipe, User user, DateTime date)
+        {
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 INSERT INTO APPOINTMENT("DATE", STATUS)
+                 VALUES(:PDate, 0)
+                 RETURNING APPOINTMENTID INTO :PappointmentID
+                 """);
+            command.Parameters.Add("PDate", OracleDbType.Date).Value = date;
+            command.Parameters.Add("PappointmentID", OracleDbType.Int32).Direction = ParameterDirection.Output;
+
+            OracleDatabase.ExecuteNonQuery(command);
+
+            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(OracleDbType.Int32)!;
+
+
+            //TODO
+        }
     }
 }

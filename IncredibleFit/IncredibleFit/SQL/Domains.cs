@@ -16,10 +16,8 @@ namespace IncredibleFit.SQL
                 return null;
             }
 
-            if (domainType.IsEnum)
-                return Enum.ToObject(domainType, o);
-            else
-                return o;
+            var underlyingDomainType = domainType.GetNullableUnderlying();
+            return underlyingDomainType.IsEnum ? Enum.ToObject(underlyingDomainType, o).ToNullable(domainType) : o;
         }
 
         public static object? FromDomain(this object? o)
