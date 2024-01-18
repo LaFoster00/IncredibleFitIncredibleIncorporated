@@ -13,19 +13,7 @@
     </ContentPage.Resources>
     <StackLayout>
         <Border Margin="20">
-            <Grid RowSpacing="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+            <StackLayout>
                 <Label Text="{Binding CurrentUser.FirstName, FallbackValue='Undefined'}" FontAttributes="Bold" 
                            FontSize="Large" HorizontalOptions="Center"
                            TextColor="{StaticResource Primary}"/>
@@ -49,13 +37,10 @@
                 <contentViews:EditableField Icon="icon_basalmetabolicrate.png"
                             Value = "{Binding CurrentUser.BasalMetabolicRate, FallbackValue='Undefined', Converter={StaticResource NullableConverter}}"
                             Placeholder="0" Grid.Row="7"/>
-                <Image Source="icon_goal.png" HeightRequest="20" WidthRequest="20"
-                            Grid.Row="8"/>
-                <Label x:Name="cardAimDescription" Grid.Row="8" Grid.Column="1"/>
-                <Label x:Name="cardAimWeight" Grid.Row="9" Grid.Column="0" Margin="0, -20, 0,0"/>
-                <Line HorizontalOptions="Fill" BackgroundColor="{StaticResource Primary}" 
-                        Grid.Row="10" Grid.ColumnSpan="2"/>
-            </Grid>
+                <contentViews:EditableField Icon="icon_goal.png"
+                            Value = "{Binding CurrentUser.TargetDescription, FallbackValue='Undefined', Converter={StaticResource NullableConverter}}"
+                            Placeholder="0" Grid.Row="8"/>
+            </StackLayout>
         </Border>
     </StackLayout>
 </ContentPage>

@@ -12,7 +12,7 @@ namespace IncredibleFit.SQL.Entities
             private set => SetValue(QuantitypriceIDProperty, value);
         }
         
-        [Field("QUANTITYUNIT", OracleDbType.Int16)] //Domain in ERD
+        [Field("QUANTITYUNIT", OracleDbType.Int16)] //IDomain in ERD
         public QuantityUnit Quantityunit
         {
             get => (QuantityUnit)GetValue(QuantityunitProperty);
@@ -63,7 +63,7 @@ namespace IncredibleFit.SQL.Entities
 
         private Quantityprice() { }
 
-        public Quantityprice(short quantityunit, double priceLower, double priceUpper)
+        public Quantityprice(QuantityUnit quantityunit, double priceLower, double priceUpper)
         {
             Quantityunit = quantityunit;
             PriceLower = priceLower;

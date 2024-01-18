@@ -12,10 +12,10 @@ namespace IncredibleFit.ViewModels
         private readonly SignUp _signUp;
 
         [ObservableProperty]
-        private string _userName = "incredible@fit.com";
+        private string _userName = "samuel.hardy@gmail.com";
 
         [ObservableProperty]
-        private string _password = "123";
+        private string _password = "Samuel";
 
         [ObservableProperty] 
         private bool _wrongCredentials = false;

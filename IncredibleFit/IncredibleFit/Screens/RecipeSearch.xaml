@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:models="clr-namespace:IncredibleFit.Models"
              xmlns:screens="clr-namespace:IncredibleFit.Screens"
              x:Class="IncredibleFit.Screens.RecipeSearch"
              Shell.NavBarIsVisible="False">
@@ -18,7 +17,7 @@
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
-                <Label Text="Stichwort:" x:Name="KeywordText"  TextColor="Black"/>
+                <Label Text="Keyword:" x:Name="KeywordText"  TextColor="Black"/>
                 <Image Source="icon_minus.png" Grid.Column="1" WidthRequest="20" HeightRequest="20"/>
             </Grid>
         </Border>
@@ -33,7 +32,7 @@
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
-                <Label Text="Zutat:" x:Name="IngredientText"  TextColor="Black"/>
+                <Label Text="Ingredient:" x:Name="IngredientText"  TextColor="Black"/>
                 <Image Source="icon_minus.png" Grid.Column="1" WidthRequest="20" HeightRequest="20"/>
             </Grid>
         </Border>
@@ -48,7 +47,7 @@
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
                 <Image Source="icon_plus.png" WidthRequest="20" HeightRequest="20"/>
-                <Label Text="Filter hinzufügen" Grid.Column="1" TextColor="Black"/>
+                <Label Text="Add filter" Grid.Column="1" TextColor="Black"/>
             </Grid>
         </Border>
         <ListView ItemsSource="{Binding recipeList}" RowHeight="200">
@@ -72,12 +71,12 @@
                                     <Label Text="{Binding Name}" Grid.Row="0" 
                                        FontAttributes="Bold" Grid.ColumnSpan="2"
                                            FontSize="Medium"/>
-                                    <Label Text="Beschreibung:" Grid.Row="1" Grid.ColumnSpan="2"/>
+                                    <Label Text="Description:" Grid.Row="1" Grid.ColumnSpan="2"/>
                                     <Label Text="{Binding Description}" Grid.Row="2" Grid.ColumnSpan="2"/>
-                                    <Label Text="Kategorie:" Grid.Row="3"/>
-                                    <Label Text="{Binding Category}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
-                                    <Label Text="Kalorien:" Grid.Row="4"/>
-                                    <Label Text="{Binding Energy}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                    <Label Text="Mealtype:" Grid.Row="3"/>
+                                    <Label Text="{Binding MealType}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                    <Label Text="Foodcategory:" Grid.Row="4"/>
+                                    <Label Text="{Binding FoodCategory}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="RecipeClicked"/>
                                     </Grid.GestureRecognizers>

@@ -8,7 +8,7 @@
         <Border>
             <StackLayout>
                 <Label
-                    Text="Grundumsatz"
+                    Text="Basal metabolic rate"
                     FontAttributes="Bold"
                     FontSize="Medium"
                     Margin="0,0,0,10"/>
@@ -19,7 +19,7 @@
         <Border>
             <StackLayout>
                 <Label
-                    Text="Kalorientracking"
+                    Text="Calorie tracking"
                     FontAttributes="Bold"
                     FontSize="Medium"
                     Margin="0,0,0,10"/>
@@ -33,7 +33,7 @@
                         <ColumnDefinition Width="0.5*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="KCAL" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
-                    <Label Text="KH" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
+                    <Label Text="CH" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
                     <Label Text="P" Grid.Column="3" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
                     <Label Text="F" Grid.Column="4" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
                 </Grid>

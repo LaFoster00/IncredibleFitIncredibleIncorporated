@@ -9,7 +9,7 @@
         <Border Stroke="{StaticResource Gray900}">
             <StackLayout>
                 <Label
-                    Text="Übung erledigt?"
+                    Text="Exercise done?"
                     FontAttributes="Bold"
                     FontSize="Medium"
                     Margin="0,0,0,10"/>
@@ -18,8 +18,8 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Button Text="Nein" Clicked="BtnNoClicked" BackgroundColor="{StaticResource Gray400}"/>
-                    <Button Text="Ja" Grid.Column="1" Clicked="BtnYesClicked"/>
+                    <Button Text="No" Clicked="BtnNoClicked" BackgroundColor="{StaticResource Gray400}"/>
+                    <Button Text="Yes" Grid.Column="1" Clicked="BtnYesClicked"/>
                 </Grid>
             </StackLayout>
         </Border>

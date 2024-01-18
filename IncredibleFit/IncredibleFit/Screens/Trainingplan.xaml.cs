@@ -6,27 +6,24 @@ namespace IncredibleFit.Screens;
 
 public partial class Trainingplan : ContentPage
 {
-	private TrainingPlan _currentTrainingPlan = SQLTraining.getCurrentTrainingPlan();
-    public ObservableCollection<PlanTrainingUnit> trainingUnits { get; set; } = new ObservableCollection<PlanTrainingUnit>();
-	public Trainingplan()
+	private SessionInfo _sessionInfo;
+	private TrainingPlan _currentTrainingPlan;
+	public ObservableCollection<PlanTrainingUnit> TrainingUnitArray { get; set; } = new ObservableCollection<PlanTrainingUnit>{ null, null, null, null, null, null, null };
+	public Trainingplan(SessionInfo info)
 	{
-		trainingUnits = SQLTraining.getTrainingUnitsByTrainingPlan(_currentTrainingPlan);
+		_sessionInfo = info;
+		_currentTrainingPlan = SQLTraining.getCurrentTrainingPlan(_sessionInfo.User!);
+        List<PlanTrainingUnit> trainingUnits = SQLTraining.getTrainingUnitsByTrainingPlan(_currentTrainingPlan);
 
-        /*for (int i = 0; i<trainingUnits.Count; i++)
+		for(int i = 0; i < trainingUnits.Count; i++)
 		{
-			PlanTrainingUnit unit = _currentTrainingPlan.trainingUnits[i];
-			if (trainingUnits[i] != null)
+			if (trainingUnits[i].Weekday != Weekday.FridayFridayGottaGetDownOnFriday)
 			{
-				unit.exerciseCount = unit.trainingUnit.exercises.Count;
-			}
-			else
-			{
-				unit.exerciseCount = 0;
-				unit.visibility = false;
-				unit.trainingUnit = new TrainingUnit("Pause", "", "");
-			}
-			trainingUnits.Add(_currentTrainingPlan.trainingUnits[i]);
-		}*/
+				short weekday = (short)trainingUnits[i].Weekday;
+
+                TrainingUnitArray[weekday] = trainingUnits[i];
+            }
+		}
 
 		InitializeComponent();
 		BindingContext = this;

@@ -1,18 +1,30 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using IncredibleFit.SQL.Entities;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
+using static IncredibleFit.SQL.OracleDatabase;
 
 namespace IncredibleFit.SQL
 {
+    internal static class DbExtensions
+    {
+        // Converts oracle objects to their .net equivalent in case it is an oracle object
+        public static object? ToSystemObject(this object? o, CommandParameter c)
+        {
+            return o.ToSystemObject(c.Type, c.PropertyInfo.PropertyType);
+        }
+    }
+
     public partial class OracleDatabase : ObservableObject, IDisposable, IAsyncDisposable
     {
-        private struct CommandParameter
+        internal struct CommandParameter
         {
             public readonly string Name;
             public readonly PropertyInfo PropertyInfo;
@@ -41,10 +53,10 @@ namespace IncredibleFit.SQL
         [ObservableProperty]
         private bool _connected = false;
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private bool _connecting = false;
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private bool _connectionFailed = false;
 
         private OracleConnection? connection = null;
@@ -150,7 +162,6 @@ namespace IncredibleFit.SQL
             Instance.connection = new OracleConnection(connectionString);
             try
             {
-                await Task.Delay(2000);
                 await Instance.connection.OpenAsync();
                 Debug.WriteLine("Connected to Oracle Database");
                 Instance.Connected = true;
@@ -232,7 +243,7 @@ namespace IncredibleFit.SQL
                     continue;
 
                 var value = param.PropertyInfo.GetValue(o);
-                c.command.Parameters[$"P{param.Name}"].Value = value ?? DBNull.Value;
+                c.command.Parameters[$"P{param.Name}"].Value = value.FromDomain() ?? DBNull.Value;
             }
 
             try
@@ -245,7 +256,8 @@ namespace IncredibleFit.SQL
                     {
                         continue;
                     }
-                    param.PropertyInfo.SetValue(o, ToSystemObject(c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value));
+                    param.PropertyInfo.SetValue(o, 
+                        c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value.ToSystemObject(param));
                 }
             }
             catch (OracleException e)
@@ -306,7 +318,7 @@ namespace IncredibleFit.SQL
             var entityName = typeof(T).GetEntity();
             if (entityName == null)
                 return;
-            
+
             ExecuteCommandWithObjectData(GetDeleteCommand<T>(), o);
         }
 
@@ -364,6 +376,22 @@ namespace IncredibleFit.SQL
             return parameters;
         }
 
+        private static List<CommandParameter> GetIdProperty<T>(ParameterDirection direction)
+        {
+            var idProperties = typeof(T).GetProperties().Where(info => info.GetField() != null && info.GetCustomAttribute<ID>() != null);
+            if (!idProperties.Any())
+            {
+                throw new InvalidOperationException("No id field specified in this class. Can't update object without");
+            }
+
+            return (from info in idProperties
+                    let field = info.GetField()!
+                    let name = field.Name
+                    let type = GetOracleDbType(info, field)
+                    select new CommandParameter(name, info, direction, type, field.Size, info.GetSubroutine())
+                ).ToList();
+        }
+
         private static string CreateReturnStatement(IReadOnlyList<CommandParameter> parameters)
         {
             bool hasReturn = false;
@@ -381,6 +409,19 @@ namespace IncredibleFit.SQL
             }
 
             return hasReturn ? vars.Append(ids).ToString() : string.Empty;
+        }
+
+        private static string CreateWhereStatement(Entity entity, IReadOnlyList<CommandParameter> idProperties)
+        {
+            var statement = new StringBuilder();
+            statement.Append($"WHERE ");
+            for (var index = 0; index < idProperties.Count; index++)
+            {
+                var id = idProperties[index];
+                statement.Append($"\"{entity.Name}\".\"{id.Name}\" = :P{id.Name}").Append(index < (idProperties.Count - 1) ? " and " : "");
+            }
+
+            return statement.ToString();
         }
 
         private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeInsertCommands = new();
@@ -441,6 +482,7 @@ namespace IncredibleFit.SQL
         }
 
         private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeUpdateCommands = new();
+
         private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetUpdateCommand<T>()
         {
             if (TypeUpdateCommands.ContainsKey(typeof(T)))
@@ -450,24 +492,29 @@ namespace IncredibleFit.SQL
             commandBuilder.Append("UPDATE ");
 
             #region RetreiveTableName
+
             var entityName = typeof(T).GetEntity();
             commandBuilder.Append($"\"{entityName!.Name}\"");
+
             #endregion
 
             var parameters = GetParameterList(typeof(T), false);
 
             #region AddParamsAndValueParams
+
             commandBuilder.Append("\nSET");
             for (var i = 0; i < parameters.Count; i++)
             {
                 var param = parameters[i];
-                commandBuilder.Append($"\t\"{param.Name}\" = :P{param.Name}").Append(i < parameters.Count - 1 ? ",\n" : "\n");
+                commandBuilder.Append($"\t\"{param.Name}\" = :P{param.Name}")
+                    .Append(i < parameters.Count - 1 ? "," : "").Append('\n');
             }
 
-            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
-            parameters.Add(idProperty);
+            var idProperties = GetIdProperty<T>(ParameterDirection.Input);
+            parameters.AddRange(idProperties);
 
-            commandBuilder.Append($"WHERE \"{entityName.Name}\".\"{idProperty.Name}\" = :P{idProperty.Name}");
+            commandBuilder.Append(CreateWhereStatement(entityName, idProperties));
+
             #endregion
 
             TypeUpdateCommands.Add(
@@ -479,7 +526,7 @@ namespace IncredibleFit.SQL
         private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeDeleteCommands = new();
         private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetDeleteCommand<T>()
         {
-            if (TypeDeleteCommands.ContainsKey(typeof(T))) 
+            if (TypeDeleteCommands.ContainsKey(typeof(T)))
                 return TypeDeleteCommands[typeof(T)];
 
             var commandBuilder = new StringBuilder();
@@ -492,10 +539,11 @@ namespace IncredibleFit.SQL
 
             #region AddParamsAndValueParams
             var parameters = new List<CommandParameter>();
-            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
-            parameters.Add(idProperty);
+            var idProperties = GetIdProperty<T>(ParameterDirection.Input);
+            parameters.AddRange(idProperties);
 
-            commandBuilder.Append($"WHERE \"{entityName.Name}\".\"{idProperty.Name}\" = :P{idProperty.Name}");
+            commandBuilder.Append(CreateWhereStatement(entityName, idProperties));
+
             #endregion
 
             TypeDeleteCommands.Add(
@@ -504,37 +552,11 @@ namespace IncredibleFit.SQL
             return TypeDeleteCommands[typeof(T)];
         }
 
-        private static CommandParameter GetIdProperty<T>(ParameterDirection direction)
-        {
-            try
-            {
-                var info = typeof(T).GetProperties().First(info =>
-                    info.GetField() != null && info.GetCustomAttribute<ID>() != null);
-                var field = info.GetField()!;
-                var name = field.Name;
-                var type = GetOracleDbType(info, field);
-                return new CommandParameter(name, info, direction, type, field.Size, info.GetSubroutine());
-            }
-            catch (InvalidOperationException)
-            {
-                throw new InvalidOperationException("No id field specified in this class. Can't update object without");
-            }
-        }
-
-        private static bool IsNullable(Type type)
-        {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
-        }
-
         private static OracleDbType GetOracleDbType(PropertyInfo info, Field field)
         {
             if (field.Mapping == null)
             {
-                Type propType = info.PropertyType;
-                if (IsNullable(propType))
-                    propType = Nullable.GetUnderlyingType(propType) ?? throw new InvalidOperationException();
-
-                return TypeToDb[propType];
+                return TypeToDb[info.PropertyType.GetNullableUnderlying()];
             }
             else
             {
@@ -548,23 +570,6 @@ namespace IncredibleFit.SQL
             Instance.Connected = false;
         }
 
-        // Converts oracle objects to their .net equivalent in case it is an oracle object
-        private static object? ToSystemObject(object? o)
-        {
-            if (o is null)
-                return null;
-
-            switch (o)
-            {
-                case OracleDecimal or:
-                    return or.Value;
-                case OracleString os:
-                    return os.Value;
-                default:
-                    return o;
-            }
-        }
-
         public void Dispose()
         {
             Connected = false;
@@ -575,7 +580,7 @@ namespace IncredibleFit.SQL
         public async ValueTask DisposeAsync()
         {
             Connected = false;
-            if (connection != null) 
+            if (connection != null)
                 await connection.DisposeAsync();
             connection = null;
         }

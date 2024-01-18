@@ -9,12 +9,21 @@ namespace IncredibleFit.Screens;
 
 public partial class RecipeSearch : ContentPage
 {
+    private readonly SessionInfo _sessionInfo;
     private string _filterIngredient = "";
     private string _filterKeyword = "";
-    public ObservableCollection<Recipe> recipeList { get; set; } = SQLNutrition.getAllRecipes();
-    public RecipeSearch()
+    public ObservableCollection<Recipe> recipeList { get; set; } = new ObservableCollection<Recipe>();
+    public RecipeSearch(SessionInfo info)
 	{
         InitializeComponent();
+        _sessionInfo = info;
+        recipeList = SQLNutrition.getAllVisibleRecipes(); ;
+        for (int i = 0; i < recipeList.Count; i++)
+        {
+            Recipecategory recipeCat = SQLNutrition.getRecipeCategory(recipeList[i]);
+            recipeList[i].MealType = recipeCat.Mealtype;
+            recipeList[i].FoodCategory = recipeCat.Foodcategory;
+        }
         BindingContext = this;
     }
 
@@ -24,7 +33,7 @@ public partial class RecipeSearch : ContentPage
         Label label = (Label)grid.Children[0];
         String name = label.Text;
         Recipe recipe = getRecipeByName(name);
-        Navigation.PushAsync(new RecipeDetails(recipe));
+        Navigation.PushAsync(new RecipeDetails(recipe, _sessionInfo));
     }
 
     void AddFilterClicked(object sender, EventArgs e)
@@ -36,20 +45,25 @@ public partial class RecipeSearch : ContentPage
     void KeywordFilterClicked(object sender, EventArgs e)
     {
         this._filterKeyword = "";
-        adjustFilterVisibilityAndContent();
+        adjustFilters(_filterKeyword,_filterIngredient);
     }
 
     void IngredientFilterClicked(object sender, EventArgs e)
     {
         this._filterIngredient = "";
-        adjustFilterVisibilityAndContent();
+        adjustFilters(_filterKeyword, _filterIngredient);
     }
 
     public void adjustFilters(string filterKeyword, string filterIngredient)
     {
         this._filterKeyword = filterKeyword;
         this._filterIngredient = filterIngredient;
-        BindingContext = this;
+        recipeList.Clear();
+        ObservableCollection<Recipe> recipeList2 = SQLNutrition.getRecipesByIngredientAndKeyword(filterKeyword, filterIngredient);
+        for(int i = 0; i < recipeList2.Count; i++)
+        {
+            recipeList.Add(recipeList2[i]);
+        }
         adjustFilterVisibilityAndContent();
     }
 
@@ -60,7 +74,7 @@ public partial class RecipeSearch : ContentPage
         if (this._filterKeyword != "")
         {
             KeywordFilter.IsVisible = true;
-            KeywordText.Text = "Stichwort: " + this._filterKeyword;
+            KeywordText.Text = "Keyword: " + this._filterKeyword;
         }
         else
         {
@@ -71,7 +85,7 @@ public partial class RecipeSearch : ContentPage
         if (this._filterIngredient != "")
         {
             IngredientFilter.IsVisible = true;
-            IngredientText.Text = "Zutat: " + this._filterIngredient;
+            IngredientText.Text = "Ingredient: " + this._filterIngredient;
         }
         else
         {

@@ -49,6 +49,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Resources\Images\icon_add_appointment.png" />
       <None Remove="Resources\Images\icon_average.png" />
       <None Remove="Resources\Images\icon_basalmetabolicrate.png" />
       <None Remove="Resources\Images\icon_check.png" />
@@ -60,16 +61,12 @@
       <None Remove="Resources\Images\icon_minus.png" />
       <None Remove="Resources\Images\icon_plus.png" />
       <None Remove="Resources\Images\icon_profile.png" />
+      <None Remove="Resources\Images\icon_refresh.png" />
       <None Remove="Resources\Images\icon_ruler.png" />
       <None Remove="Resources\Images\icon_scale.png" />
       <None Remove="Resources\Images\icon_settings.png" />
       <None Remove="Resources\Images\icon_timeline.png" />
       <None Remove="Resources\Images\icon_training.png" />
-      <None Remove="Resources\Images\incredible_fit_logo.jpeg" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <MauiImage Include="Resources\AppIcon\incredible_fit_logo.jpeg" />
     </ItemGroup>
 
     <ItemGroup>
@@ -82,6 +79,15 @@
 
     <ItemGroup>
       <MauiXaml Update="IncredibleFit\ContentViews\EditableField.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\ContentViews\ExerciseUnitField.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\ContentViews\TrainingPlanUnitField.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\PopUps\DatePickerPopUp.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\PopUps\EditCaloriesPopUp.xaml">
@@ -103,6 +109,9 @@
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\Screens\RecipeDetails.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\RecipeFavorites.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\Screens\RecipeSearch.xaml">

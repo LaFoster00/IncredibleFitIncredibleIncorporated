@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Views;
+using IncredibleFit.PopUps;
 using IncredibleFit.SQL;
 using IncredibleFit.SQL.Entities;
 using System.Collections;
@@ -7,12 +9,28 @@ namespace IncredibleFit.Screens;
 
 public partial class RecipeDetails : ContentPage
 {
+	private readonly SessionInfo _sessionInfo;
 	private Recipe _recipe;
-    public ObservableCollection<Ingredient> ingredientsList { get; set; } = new ObservableCollection<Ingredient> { };
-    public RecipeDetails(Recipe recipe)
+	private bool _isFavorite = false;
+    public ObservableCollection<Ingredient> IngredientsList { get; set; } = new ObservableCollection<Ingredient> { };
+    public RecipeDetails(Recipe recipe, SessionInfo info)
 	{
 		InitializeComponent();
-		ingredientsList = SQLNutrition.getIngredientsByRecipe(recipe);
+		_sessionInfo = info;
+        IngredientsList = SQLNutrition.getIngredientsByRecipe(recipe);
+
+		for(int i = 0; i < IngredientsList.Count; i++)
+		{
+            IngredientsList[i].Quantity = SQLNutrition.getQuantityOfIngredient(recipe, IngredientsList[i]);
+            IngredientsList[i].QuantityUnit = SQLNutrition.getQuantityUnitOfIngredient(IngredientsList[i]);
+
+        }
+
+		_isFavorite = SQLNutrition.isRecipeFavorite(recipe, _sessionInfo.User!);
+		if(_isFavorite)
+		{
+			BtnHeart.Source = "icon_heart_filled.png";
+        }
 
         this._recipe = recipe;
 		BindingContext = this;
@@ -24,22 +42,46 @@ public partial class RecipeDetails : ContentPage
         RecipeDetailsPage.Title = _recipe.Name;
         RecipeDescription.Text = _recipe.Description;
         RecipeInstructions.Text = _recipe.Instructions;
-		RecipeEnergy.Text = _recipe.Calories.ToString();
 
+		int? calories = 0;
 		int? proteins = 0;
 		int? fat = 0;
 		int? carbonhydrates = 0;
 
-		for (int i = 0;i< ingredientsList.Count;i++)
+		for (int i = 0;i< IngredientsList.Count;i++)
 		{
-			proteins += ingredientsList[i].Protein;
-			fat += ingredientsList[i].Fat;
-            carbonhydrates += ingredientsList[i].Carbonhydrates;
+			calories += IngredientsList[i].Calories;
+			proteins += IngredientsList[i].Protein;
+			fat += IngredientsList[i].Fat;
+            carbonhydrates += IngredientsList[i].Carbonhydrates;
 		}
 
-        RecipeProteine.Text = proteins.ToString();
+        RecipeCalories.Text = calories.ToString();
+        RecipeProteins.Text = proteins.ToString();
 		RecipeFat.Text = fat.ToString();
-		RecipeSugar.Text = carbonhydrates.ToString();
+        RecipeCarbonhydrates.Text = carbonhydrates.ToString();
+    }
+
+	void BtnHeartClicked(object sender, EventArgs e)
+	{
+		if (_isFavorite)
+		{
+			SQLNutrition.deleteFromFavorites(_recipe, _sessionInfo.User!);
+            BtnHeart.Source = "icon_heart.png";
+            _isFavorite = false;
+		}
+		else
+		{
+            SQLNutrition.addToFavorites(_recipe, _sessionInfo.User!);
+            BtnHeart.Source = "icon_heart_filled.png";
+            _isFavorite = true;
+        }
+	}
+
+	void AddAppointmentClicked(object sender, EventArgs e)
+	{
+        var popup = new DatePickerPopUp(_recipe, _sessionInfo.User!);
+        this.ShowPopup(popup);
     }
 
 }

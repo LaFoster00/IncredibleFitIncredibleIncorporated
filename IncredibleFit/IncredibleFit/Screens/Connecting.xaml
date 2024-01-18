@@ -5,18 +5,17 @@
              x:Class="IncredibleFit.Screens.Connecting"
              Title="Connecting"
              x:DataType="sql:OracleDatabase">
-    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Margin="20">
         <Label 
             Text="Connecting To Server!&#x0a;Please Wait..."
             VerticalOptions="Center" 
             HorizontalOptions="Center"
             IsVisible="{Binding Connecting}"/>
-            <Label 
+        <Label 
             Text="Connection could not be established!
             Don't forget to log into the HSBI network via VPN!"
             VerticalOptions="Center" 
             HorizontalOptions="Center"
-            IsVisible="{Binding ConnectionFailed}">
-        </Label>
+            IsVisible="{Binding ConnectionFailed}"/>
     </StackLayout>
 </ContentPage>

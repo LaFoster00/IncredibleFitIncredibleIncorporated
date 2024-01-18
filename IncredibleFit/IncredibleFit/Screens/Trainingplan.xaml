@@ -1,44 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:contentViews = "clr-namespace:IncredibleFit.ContentViews"
+             xmlns:screens = "clr-namespace:IncredibleFit.Screens"
+             x:DataType="screens:Trainingplan"
              x:Class="IncredibleFit.Screens.Trainingplan"
              Shell.NavBarIsVisible="False">
     <ScrollView>
-    <VerticalStackLayout>
-            <Label Text="Aktueller Trainingsplan" FontAttributes="Bold" FontSize="Large" Margin="10"/>
-            <ListView ItemsSource="{Binding trainingUnits}" HasUnevenRows="True" 
-              SeparatorVisibility="None">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-        <Border>
-                                <Grid RowSpacing="10">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="1*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label Text="{Binding weekday}" FontSize="Medium" FontAttributes="Bold" Grid.ColumnSpan="2"/>
-                                    <Label Text="{Binding trainingUnit.name}" Grid.Row="1" Grid.ColumnSpan="2"/>
-                                    <Label Text="{Binding trainingUnit.description}" IsVisible="{Binding visibility}" Grid.Row="2" Grid.ColumnSpan="2"/>
-                                    <Line Grid.Row="3" Grid.ColumnSpan="2" Background="White" IsVisible="{Binding visibility}"/>
-                                    <Label Text="Schwierigkeitsgrad: " Grid.Row="4" IsVisible="{Binding visibility}"/>
-                                    <Label Text="{Binding trainingUnit.difficulty}" Grid.Row="4" Grid.Column="1" IsVisible="{Binding visibility}"/>
-                                    <Label Text="Anzahl Übungen: " Grid.Row="5" Grid.Column="0" IsVisible="{Binding visibility}"/>
-                                    <Label Text="{Binding exerciseCount}" Grid.Row="5" Grid.Column="1" IsVisible="{Binding visibility}"/>
-                                </Grid>
-        </Border>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-    </VerticalStackLayout>
+        <VerticalStackLayout>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Current training plan" FontAttributes="Bold" FontSize="Large" Margin="10"/>
+                <ImageButton Source="icon_edit.png" WidthRequest="30" HeightRequest="30" Grid.Column="1"/>
+            </Grid>
+
+            <contentViews:TrainingPlanUnitField Unit="{Binding TrainingUnitArray[0]}" WeekdayIndex="0"/>
+            <contentViews:TrainingPlanUnitField Unit="{Binding TrainingUnitArray[1]}" WeekdayIndex="1"/>
+            <contentViews:TrainingPlanUnitField Unit="{Binding TrainingUnitArray[2]}" WeekdayIndex="2"/>
+            <contentViews:TrainingPlanUnitField Unit="{Binding TrainingUnitArray[3]}" WeekdayIndex="3"/>
+            <contentViews:TrainingPlanUnitField Unit="{Binding TrainingUnitArray[4]}" WeekdayIndex="4"/>
+            <contentViews:TrainingPlanUnitField Unit="{Binding TrainingUnitArray[5]}" WeekdayIndex="5"/>
+            <contentViews:TrainingPlanUnitField Unit="{Binding TrainingUnitArray[6]}" WeekdayIndex="6"/>
+
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

@@ -66,7 +66,7 @@ namespace IncredibleFit.SQL.Entities
         {
         }
 
-        public TrainingUnit(string name, string description, short difficulty)
+        public TrainingUnit(string name, string description, Difficulty difficulty)
         {
             this.Name = name;
             this.Description = description;

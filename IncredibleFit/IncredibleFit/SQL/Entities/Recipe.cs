@@ -12,6 +12,20 @@ namespace IncredibleFit.SQL.Entities
             private set => SetValue(RecipeIDProperty, value);
         }
 
+        [Field("RECIPECATEGORYID", OracleDbType.Int32)]
+        public int RecipeCategoryID
+        {
+            get => (int)GetValue(RecipeCategoryIDProperty);
+            set => SetValue(RecipeCategoryIDProperty, value);
+        }
+
+        [Field("EMAIL", OracleDbType.Varchar2, 128)]
+        public string Email
+        {
+            get => (string)GetValue(EmailProperty);
+            set => SetValue(EmailProperty, value);
+        }
+
         [Field("NAME", OracleDbType.Varchar2, 128)]
         public string Name
         {
@@ -33,7 +47,7 @@ namespace IncredibleFit.SQL.Entities
             set => SetValue(InstructionsProperty, value);
         }
 
-        [Field("VISIBILITY", OracleDbType.Int16)] //Domain in ERD
+        [Field("VISIBILITY", OracleDbType.Int16)] //IDomain in ERD
         public Visibility Visibility
         {
             get => (Visibility)GetValue(VisibilityProperty);
@@ -46,6 +60,20 @@ namespace IncredibleFit.SQL.Entities
                 typeof(int), 
                 typeof(Recipe), 
                 -1);
+
+        public static readonly BindableProperty RecipeCategoryIDProperty =
+            BindableProperty.Create(
+                nameof(RecipeCategoryID),
+                typeof(int),
+                typeof(Recipe),
+                -1);
+
+        public static readonly BindableProperty EmailProperty =
+            BindableProperty.Create(
+                nameof(Email),
+                typeof(string),
+                typeof(Recipe),
+                string.Empty);
 
         public static readonly BindableProperty NameProperty =
             BindableProperty.Create(
@@ -73,19 +101,19 @@ namespace IncredibleFit.SQL.Entities
                 nameof(Visibility), 
                 typeof(Visibility), 
                 typeof(Recipe), 
-                Visibility.Invalid);
+                (Visibility)Visibility.Invalid);
 
-        public int Calories { get; set; } = 0;
+        public MealType MealType { get; set; } = MealType.Invalid;
+        public FoodCategory FoodCategory { get; set; } = FoodCategory.Invalid;
 
         private Recipe() { }
 
-        public Recipe(string name, string description, string instructions, short visibility, int calories)
+        public Recipe(string name, string description, string instructions, Visibility visibility)
         {
             Name = name;
             Description = description;
             Instructions = instructions;
             Visibility = visibility;
-            Calories = calories;
         }
     }
 }

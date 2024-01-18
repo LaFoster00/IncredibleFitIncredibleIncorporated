@@ -8,13 +8,16 @@ namespace IncredibleFit.Screens;
 
 public partial class Training : ContentPage
 {
-    public ObservableCollection<ExerciseUnit> exerciseUnits { get; set; } = new ObservableCollection<ExerciseUnit>();
+	private SessionInfo _sessionInfo;
+    public ObservableCollection<ExerciseUnit> ExerciseUnits { get; set; } = new ObservableCollection<ExerciseUnit>();
 
-    private TrainingUnit _nextTrainingUnit = SQLTraining.getNextTrainingUnit();
-    public Training()
+    private TrainingUnit _nextTrainingUnit;
+    public Training(SessionInfo info)
     {
         InitializeComponent();
-        exerciseUnits = SQLTraining.getExerciseUnits(_nextTrainingUnit);
+		_sessionInfo = info;
+        _nextTrainingUnit = SQLTraining.getNextTrainingUnit(_sessionInfo.User!);
+        ExerciseUnits = SQLTraining.getExerciseUnits(_nextTrainingUnit);
         BindingContext = this;
     }
 
@@ -48,23 +51,23 @@ public partial class Training : ContentPage
 
 	public void ExerciseDone(ExerciseUnit ex)
 	{
-        exerciseUnits.Remove(ex);
+        ExerciseUnits.Remove(ex);
 		ex.IsFinished = true;
 		ex.StrokeColor = Colors.Transparent;
 		ex.TextColor = Color.FromArgb("#6E6E6E");
-        exerciseUnits.Add(ex);
+        ExerciseUnits.Add(ex);
 		BindingContext = this;
     }
 
 
     private void setStrokeAndTextColors(Color strokeColor, Color textColor)
 	{
-		for(int i=0; i< exerciseUnits.Count(); i++)
+		for(int i=0; i< ExerciseUnits.Count(); i++)
 		{
-			ExerciseUnit tmp = exerciseUnits[i];	
+			ExerciseUnit tmp = ExerciseUnits[i];	
 			tmp.StrokeColor = strokeColor;
 			tmp.TextColor = textColor;
-			this.exerciseUnits[i] = tmp;
+			this.ExerciseUnits[i] = tmp;
 		}
         BindingContext = this;
     }

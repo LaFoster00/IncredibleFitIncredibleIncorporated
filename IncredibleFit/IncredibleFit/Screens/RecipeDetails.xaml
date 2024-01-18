@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:models="clr-namespace:IncredibleFit.Models"
              x:Class="IncredibleFit.Screens.RecipeDetails"
              x:Name="RecipeDetailsPage"
              Title="">
     <ScrollView>
         <VerticalStackLayout>
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <ImageButton Source="icon_add_appointment.png" WidthRequest="30" HeightRequest="30" 
+                             Clicked="AddAppointmentClicked" Grid.Column="1"/>
+                <ImageButton x:Name="BtnHeart" Source="icon_heart.png" WidthRequest="30" HeightRequest="30" 
+                             Clicked="BtnHeartClicked" Grid.Column="2"/>
+            </Grid>
             <Label 
                 x:Name="RecipeDescription"
                 HorizontalOptions="Fill"
@@ -14,28 +24,31 @@
             <Border>
                 <StackLayout>
                     <Label
-                        Text="Zutaten"
+                        Text="Ingredients"
                         FontAttributes="Bold"
                         FontSize="Medium"
                         Margin="0,0,0,5"/>
-                    <ListView ItemsSource="{Binding ingredientsList}" SelectedItem="{StaticResource Gray600}"
+                    <ListView ItemsSource="{Binding IngredientsList}" SelectedItem="{StaticResource Gray600}"
                               SeparatorVisibility="None">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <Grid>
+                                    <Grid RowSpacing="5">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="1*"/>
                                             <ColumnDefinition Width="5*"/>
-                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="1.5*"/>
                                         </Grid.ColumnDefinitions>
                                         <Ellipse Fill="White"
                                                  WidthRequest="10"
                                                  HeightRequest="10"
                                                  HorizontalOptions="Start" />
-                                        <Label Text="{Binding Name}" Grid.Column="1"
+                                        <Label Text="{Binding IngredientName}" Grid.Column="1"
                                                VerticalTextAlignment="Center"/>
-                                        <Label Text="{Binding Quantityprice.Quantity}" Grid.Column="2"
+                                        <Label Text="{Binding Quantity}" Grid.Column="2"
+                                               VerticalTextAlignment="Center"/>
+                                        <Label Text="{Binding QuantityUnit}" Grid.Column="3"
                                                VerticalTextAlignment="Center"/>
                                     </Grid>
                                 </ViewCell>
@@ -47,7 +60,7 @@
             <Border>
                 <StackLayout>
                     <Label
-                        Text="Zubereitung"
+                        Text="Preparation"
                         FontAttributes="Bold"
                         FontSize="Medium"
                         Margin="0,0,0,10"/>
@@ -58,7 +71,7 @@
             <Border>
                 <StackLayout>
                     <Label
-                        Text="Nährwerte"
+                        Text="Nutritional values"
                         FontAttributes="Bold"
                         FontSize="Medium"
                         Margin="0,0,0,10"/>
@@ -73,27 +86,22 @@
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
-                            <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Label Text="Kalorien:"/>
-                        <Label x:Name="RecipeEnergy" Grid.Column="1" HorizontalTextAlignment="End"/>
+                        <Label Text="Calories:"/>
+                        <Label x:Name="RecipeCalories" Grid.Column="1" HorizontalTextAlignment="End"/>
                         <Label Text="kcal" Grid.Column="2"/>
 
-                        <Label Text="Proteine:" Grid.Row="1"/>
-                        <Label x:Name="RecipeProteine" Grid.Column="1" Grid.Row="1" HorizontalTextAlignment="End"/>
+                        <Label Text="Proteins:" Grid.Row="1"/>
+                        <Label x:Name="RecipeProteins" Grid.Column="1" Grid.Row="1" HorizontalTextAlignment="End"/>
                         <Label Text="g" Grid.Column="2" Grid.Row="1"/>
 
-                        <Label Text="Fett:" Grid.Row="2"/>
+                        <Label Text="Fat:" Grid.Row="2"/>
                         <Label x:Name="RecipeFat" Grid.Column="1" Grid.Row="2" HorizontalTextAlignment="End"/>
                         <Label Text="g" Grid.Column="2" Grid.Row="2"/>
 
-                        <Label Text="Zucker:" Grid.Row="3"/>
-                        <Label x:Name="RecipeSugar" Grid.Column="1" Grid.Row="3" HorizontalTextAlignment="End"/>
+                        <Label Text="Carbonhydrates:" Grid.Row="3"/>
+                        <Label x:Name="RecipeCarbonhydrates" Grid.Column="1" Grid.Row="3" HorizontalTextAlignment="End"/>
                         <Label Text="g" Grid.Column="2" Grid.Row="3"/>
-
-                        <Label Text="Wasser:" Grid.Row="4"/>
-                        <Label x:Name="RecipeWater" Grid.Column="1" Grid.Row="4" HorizontalTextAlignment="End"/>
-                        <Label Text="g" Grid.Column="2" Grid.Row="4"/>
                     </Grid>
                 </StackLayout>
             </Border>

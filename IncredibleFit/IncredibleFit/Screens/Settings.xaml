@@ -8,10 +8,10 @@
 
     <VerticalStackLayout>
         <Button x:Name="LogOut"
-                Text="Ausloggen"
+                Text="Log out"
                 Command="{Binding LogoutCommand}"/>
         <Button x:Name="DeleteAccoung"
-                Text="Account löschen"
+                Text="Delete account"
                 Command="{Binding DeleteAccountCommand}"/>
     </VerticalStackLayout>
 </ContentPage>

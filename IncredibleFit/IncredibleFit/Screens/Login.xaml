@@ -7,14 +7,15 @@
 
     <StackLayout Padding="20">
 
-        <Label Text="Login" FontSize="30" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-
+        <Border Padding="0" Stroke="Transparent" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+            <Image Source="incredible_fit_logo.jpeg"/>
+        </Border>
         <Entry Text="{Binding UserName}" Placeholder="Email" Margin="0,10,0,0" IsReadOnly="{Binding IsBusy}"/>
         <Entry Text="{Binding Password}" Placeholder="Password" IsPassword="True" Margin="0,10,0,0" IsReadOnly="{Binding IsBusy}"/>
-        <Label Text="Wrong Username Or Password" IsVisible="{Binding WrongCredentials}" TextColor="DarkGoldenrod"/>
+        <Label Text="Wrong Username Or Password" IsVisible="{Binding WrongCredentials}" TextColor="{StaticResource Tertiary}"/>
 
         <Button Text="Login" Command="{Binding LoginCommand}" Margin="0,20,0,0"/>
-        <Button Text="Sign Up" Command="{Binding SignUpCommand}" Margin="0,10,0,0"/>
+        <Button Text="Sign Up" Command="{Binding SignUpCommand}" Margin="0,10,0,20"/>
 
     </StackLayout>
 

@@ -1,21 +1,23 @@
 ﻿using IncredibleFit.SQL.Entities;
+using Microsoft.Maui.ApplicationModel.Communication;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System.Collections.ObjectModel;
+using System.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace IncredibleFit.SQL
 {
     public static class SQLNutrition
     {
-        public static ObservableCollection<Recipe> getAllRecipes()
+        public static ObservableCollection<Recipe> getAllVisibleRecipes()
         {
             ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
 
-            //get all Recipes from Database
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "RECIPE"
+                 WHERE VISIBILITY=1
                  """);
 
             var reader = OracleDatabase.ExecuteQuery(command);
@@ -29,22 +31,124 @@ namespace IncredibleFit.SQL
                 }
             }
 
-            getIngredientsByRecipe(new Recipe("ABC", "abc", "aaa", 0, 100));
+            return recipes;
+        }
+
+        public static ObservableCollection<Recipe> getRecipesByIngredientAndKeyword(string keyword, string ingredientname)
+        {
+            ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
+
+            var command = OracleDatabase.CreateCommand($""" """);
+
+            if (ingredientname == "")
+            {
+
+                command = OracleDatabase.CreateCommand(
+                    $"""
+                 SELECT * FROM "RECIPE"
+                 WHERE VISIBILITY=1 AND NAME LIKE '%{keyword}%' 
+                 """);
+
+            }
+            else
+            {
+                command = OracleDatabase.CreateCommand(
+                                    $"""
+                 SELECT * FROM "RECIPE"
+                 JOIN "RECIPEINGREDIENT"
+                 ON RECIPEINGREDIENT.RECIPEID = RECIPE.RECIPEID
+                 WHERE RECIPE.VISIBILITY=1 AND RECIPE.NAME LIKE '%{keyword}%' AND RECIPEINGREDIENT.INGREDIENTNAME = '{ingredientname}'
+                 """);
+            }
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Recipe>();
+            if (track.Any())
+            {
+                foreach (var item in track)
+                {
+                    recipes.Add(item);
+                }
+            }
 
             return recipes;
         }
 
-        public static ObservableCollection<Recipe> getRecipesByIngredientAndKeyword(string keyword, string ingredient)
+        public static ObservableCollection<Recipe> getFavoriteRecipes(User user)
         {
-            //TODO Get Recipes from Database
+            ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
 
-            return getDummyRecipes();
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT *
+                 FROM "RECIPE"
+                 WHERE "RECIPEID" IN (
+                     SELECT "RECIPEID"
+                     FROM "USER_SAVED_RECIPES"
+                     WHERE "EMAIL" = '{user.Email}'
+                 )
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Recipe>();
+            if (track.Any())
+            {
+                foreach (var item in track)
+                {
+                    recipes.Add(item);
+                }
+            }
+
+            return recipes;
+        }
+
+        public static bool isRecipeFavorite(Recipe recipe, User user)
+        {
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "USER_SAVED_RECIPES"
+                 WHERE EMAIL='{user.Email}' AND RECIPEID={recipe.RecipeID}
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<UserSavedRecipe>();
+            return track.Any() ? true : false;
+        }
+        public static void addToFavorites(Recipe recipe, User user)
+        {
+            UserSavedRecipe usR = new UserSavedRecipe(recipe.RecipeID, user.Email);
+            OracleDatabase.InsertObject(usR);
+        }
+
+        public static void deleteFromFavorites(Recipe recipe, User user)
+        {
+            //TODO: All User Saved Recipes Elements with recipeID gets deleted. 
+            UserSavedRecipe usR = new UserSavedRecipe(recipe.RecipeID, user.Email);
+            OracleDatabase.DeleteObject(usR);
+        }
+
+        public static Recipecategory getRecipeCategory(Recipe recipe)
+        {
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "RECIPECATEGORY" 
+                 WHERE RECIPECATEGORYID = {recipe.RecipeCategoryID}
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Recipecategory>();
+
+            return track.Any() ? track[0] : null;
         }
 
         public static ObservableCollection<Ingredient> getIngredientsByRecipe(Recipe recipe)
         {
             ObservableCollection<Ingredient> ingredients = new ObservableCollection<Ingredient>();
-            //TODO Get Ingredients from Database
+
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "INGREDIENT" 
@@ -59,17 +163,57 @@ namespace IncredibleFit.SQL
 
             var track = reader.ToObjectList<Ingredient>();
 
+            for(int i=0; i < track.Count; i++)
+            {
+                ingredients.Add(track[i]);
+            }
+
             return ingredients;
         }
 
-        public static Track getTrackByDate(DateTime date)
+        public static decimal getQuantityOfIngredient(Recipe recipe, Ingredient ingredient)
         {
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "RECIPEINGREDIENT" 
+                 WHERE RECIPEID = {recipe.RecipeID} AND INGREDIENTNAME='{ingredient.IngredientName}'
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Recipeingredient>();
+
+            return track.Any() ? track[0].Quantity : 0;
+        }
+
+        public static QuantityUnit getQuantityUnitOfIngredient(Ingredient ingredient)
+        {
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "QUANTITYPRICE" 
+                 WHERE INGREDIENTNAME='{ingredient.IngredientName}'
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Quantityprice>();
+
+            return track.Any() ? track[0].Quantityunit : QuantityUnit.Invalid;
+        }
+
+        public static Track getTrackByDate(DateTime date, User? user)
+        {
+            string mail = "";
+            if (user != null)
+            {
+                mail = user.Email;
+            }
             DateTime date2 = new DateTime(date.Year, date.Month, date.Day);
             
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "TRACK"
-                 WHERE "DATE" = :PDATE
+                 WHERE "DATE" = :PDATE AND EMAIL='{mail}'
                  """);
             command.Parameters.Add(new OracleParameter("PDATE", OracleDbType.Date)).Value = date2;
             
@@ -81,13 +225,12 @@ namespace IncredibleFit.SQL
 
         public static void SaveCalorieTrack(Track calorieTrack)
         {
-
             DateTime date2 = new DateTime(calorieTrack.Date.Year, calorieTrack.Date.Month, calorieTrack.Date.Day);
 
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM TRACK
-                 WHERE "DATE" = :PDATE
+                 WHERE "DATE" = :PDATE AND EMAIL = '{calorieTrack.Email}'
                  """);
             command.Parameters.Add(new OracleParameter("PDATE", OracleDbType.Date)).Value = date2;
 
@@ -103,35 +246,25 @@ namespace IncredibleFit.SQL
             {
                 OracleDatabase.UpdateObject(calorieTrack);
             }
-            //TODO Save calorieTrack in Database
         }
 
-
-        private static ObservableCollection<Recipe> getDummyRecipes()
+        public static void addRecipeAppointment(Recipe recipe, User user, DateTime date)
         {
-            ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 INSERT INTO APPOINTMENT("DATE", STATUS)
+                 VALUES(:PDate, 0)
+                 RETURNING APPOINTMENTID INTO :PappointmentID
+                 """);
+            command.Parameters.Add("PDate", OracleDbType.Date).Value = date;
+            command.Parameters.Add("PappointmentID", OracleDbType.Int32).Direction = ParameterDirection.Output;
 
-            /*recipes.Add(new Recipe("Lasagne", "Leckerer Auflauf mit Nudeln und Hackfleisch", "Bla", 1, "Fleischhaltig", 100, new List<Ingredient> { }));
-            recipes.Add(new Recipe("Pfannkuchen", "Nach Wunsch belegte Teigfladen", "Bla", 1, "Vegetarisch", 50, new List<Ingredient> { }));
-            List<Ingredient> ingredients = new List<Ingredient> { };
-            ingredients.Add(new Ingredient("Zucchini", 1, 17.0, 1.2, 0.3, 1.5, 95.0, new Quantityprice(0, 400, 0.5, 1.0)));
-            ingredients.Add(new Ingredient("Aubergine", 1, 25, 1, 0.2, 3.5, 92, new Quantityprice(0, 300, 1, 2)));
-            ingredients.Add(new Ingredient("Paprika", 1, 31, 1, 0.3, 4.2, 92, new Quantityprice(0, 300, 0.7, 1.5)));
-            ingredients.Add(new Ingredient("Tomate", 1, 18, 0.9, 0.2, 2.6, 94, new Quantityprice(0, 400, 0.3, 0.6)));
-            ingredients.Add(new Ingredient("Knoblauchzehe", 1, 149, 6.4, 0.5, 1, 58, new Quantityprice(0, 20, 0.2, 0.4)));
-            ingredients.Add(new Ingredient("Olivenöl", 1, 884, 0, 100, 0, 0, new Quantityprice(1, 30, 0.3, 0.6)));
-            ingredients.Add(new Ingredient("Kräuter", 1, 0, 0, 0, 0, 0, new Quantityprice(0, 10, 0.5, 1.5)));
-            int wholeEnergy = 0;
-            for (int i = 0; i < ingredients.Count; i++)
-            {
-                wholeEnergy += (int)ingredients[i].Energy;
-            }
-            recipes.Add(new Recipe("Knuspriges Gemüse-Ratatouille",
-                "Ein herzhaftes Gericht, das die Aromen verschiedener Gemüsesorten in einer knusprigen, würzigen und köstlichen Kombination vereint.",
-                "Vorbereitungszeit: 20 Minuten\nKochzeit: 40 Minuten\nGesamtdauer: 60 Minuten\nPortionen: 4\n\nOfen auf 180°C vorheizen. Zucchini, Aubergine, Paprika und Tomaten in gleichmäßige Scheiben schneiden. Gemüsescheiben auf einem Backblech verteilen, Knoblauch darüber streuen und mit Olivenöl beträufeln. Mit den Kräutern bestreuen und für 40 Minuten im Ofen backen, bis das Gemüse knusprig und goldbraun ist. Aus dem Ofen nehmen und heiß servieren.",
-                1, "Vegetarisch", wholeEnergy, ingredients));*/
+            OracleDatabase.ExecuteNonQuery(command);
 
-            return recipes;
+            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(OracleDbType.Int32)!;
+
+
+            //TODO
         }
     }
 }
