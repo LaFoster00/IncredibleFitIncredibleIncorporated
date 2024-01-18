@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -399,6 +400,19 @@ namespace IncredibleFit.SQL
             return hasReturn ? vars.Append(ids).ToString() : string.Empty;
         }
 
+        private static string CreateWhereStatement(Entity entity, IReadOnlyList<CommandParameter> idProperties)
+        {
+            var statement = new StringBuilder();
+            statement.Append($"WHERE ");
+            for (var index = 0; index < idProperties.Count; index++)
+            {
+                var id = idProperties[index];
+                statement.Append($"\"{entity.Name}\".\"{id.Name}\" = :P{id.Name}").Append(index < (idProperties.Count - 1) ? " and " : "");
+            }
+
+            return statement.ToString();
+        }
+
         private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeInsertCommands = new();
         private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetInsertCommand<T>()
         {
@@ -488,13 +502,7 @@ namespace IncredibleFit.SQL
             var idProperties = GetIdProperty<T>(ParameterDirection.Input);
             parameters.AddRange(idProperties);
 
-            commandBuilder.Append($"WHERE \n");
-            for (var index = 0; index < idProperties.Count; index++)
-            {
-                var id = idProperties[index];
-                commandBuilder.Append($"\t\"{entityName.Name}\".\"{id.Name}\" = :P{id.Name}\n")
-                    .Append(index < (idProperties.Count - 1) ? "," : "").Append('\n');
-            }
+            commandBuilder.Append(CreateWhereStatement(entityName, idProperties));
 
             #endregion
 
@@ -523,13 +531,7 @@ namespace IncredibleFit.SQL
             var idProperties = GetIdProperty<T>(ParameterDirection.Input);
             parameters.AddRange(idProperties);
 
-            commandBuilder.Append($"WHERE \n");
-            for (var index = 0; index < idProperties.Count; index++)
-            {
-                var id = idProperties[index];
-                commandBuilder.Append($"\t\"{entityName.Name}\".\"{id.Name}\" = :P{id.Name}")
-                    .Append(index < (idProperties.Count - 1) ? "," : "").Append('\n');
-            }
+            commandBuilder.Append(CreateWhereStatement(entityName, idProperties));
 
             #endregion
 
