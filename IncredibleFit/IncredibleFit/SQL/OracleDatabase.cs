@@ -552,37 +552,7 @@ namespace IncredibleFit.SQL
         // Converts oracle objects to their .net equivalent in case it is an oracle object
         private static object? ToSystemObject(object? o, CommandParameter c)
         {
-            if (o is null)
-                return null;
-
-            object? sysObject = null;
-
-            switch (o)
-            {
-                case OracleDecimal or:
-                    sysObject = or.Value;
-                    break;
-                case OracleString os:
-                    sysObject = os.Value;
-                    break;
-            }
-
-            switch (sysObject)
-            {
-                case decimal dc:
-                    switch (c.Type)
-                    {
-                        case OracleDbType.Decimal:
-                            return dc;
-                        case OracleDbType.Int32:
-                            return (int)dc;
-                        case OracleDbType.Int64:
-                            return (long)dc;
-                    }
-                    throw new InvalidOperationException();
-                default:
-                    return sysObject;
-            }
+            return o.ToSystemObject(c.Type);
         }
 
         public void Dispose()

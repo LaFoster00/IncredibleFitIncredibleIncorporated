@@ -247,16 +247,19 @@ namespace IncredibleFit.SQL
 
         public static void addRecipeAppointment(Recipe recipe, User user, DateTime date)
         {
-
             var command = OracleDatabase.CreateCommand(
                 $"""
                  INSERT INTO APPOINTMENT("DATE", STATUS)
-                 VALUES({date}, 0))
-                 RETURNING APPOINTMENTID INTO :appointmentID
+                 VALUES(:PDate, 0)
+                 RETURNING APPOINTMENTID INTO :PappointmentID
                  """);
-            command.Parameters.Add("appointmentID", OracleDbType.Int32).Direction = ParameterDirection.Output;
+            command.Parameters.Add("PDate", OracleDbType.Date).Value = date;
+            command.Parameters.Add("PappointmentID", OracleDbType.Int32).Direction = ParameterDirection.Output;
 
             OracleDatabase.ExecuteNonQuery(command);
+
+            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(OracleDbType.Int32)!;
+
 
             //TODO
         }

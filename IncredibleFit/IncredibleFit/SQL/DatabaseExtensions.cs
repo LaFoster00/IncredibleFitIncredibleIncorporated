@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 
 namespace IncredibleFit.SQL
 {
@@ -83,6 +84,41 @@ namespace IncredibleFit.SQL
         public static T? ToNullable<T>(T value)
         {
             return (T?)value;
+        }
+
+        public static object? ToSystemObject(this object? o, OracleDbType type)
+        {
+            if (o is null)
+                return null;
+
+            object? sysObject = null;
+
+            switch (o)
+            {
+                case OracleDecimal or:
+                    sysObject = or.Value;
+                    break;
+                case OracleString os:
+                    sysObject = os.Value;
+                    break;
+            }
+
+            switch (sysObject)
+            {
+                case decimal dc:
+                    switch (type)
+                    {
+                        case OracleDbType.Decimal:
+                            return dc;
+                        case OracleDbType.Int32:
+                            return (int)dc;
+                        case OracleDbType.Int64:
+                            return (long)dc;
+                    }
+                    throw new InvalidOperationException();
+                default:
+                    return sysObject;
+            }
         }
     }
 }

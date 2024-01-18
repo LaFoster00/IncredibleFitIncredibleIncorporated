@@ -8,13 +8,12 @@ public partial class Trainingplan : ContentPage
 {
 	private SessionInfo _sessionInfo;
 	private TrainingPlan _currentTrainingPlan;
-    public ObservableCollection<PlanTrainingUnit> trainingUnits { get; set; } = new ObservableCollection<PlanTrainingUnit>();
 	public PlanTrainingUnit[] TrainingUnitArray { get; set; } = { null, null, null, null, null, null, null };
 	public Trainingplan(SessionInfo info)
 	{
 		_sessionInfo = info;
 		_currentTrainingPlan = SQLTraining.getCurrentTrainingPlan(_sessionInfo.User!);
-        trainingUnits = SQLTraining.getTrainingUnitsByTrainingPlan(_currentTrainingPlan);
+        List<PlanTrainingUnit> trainingUnits = SQLTraining.getTrainingUnitsByTrainingPlan(_currentTrainingPlan);
 
 		for(int i = 0; i < trainingUnits.Count; i++)
 		{

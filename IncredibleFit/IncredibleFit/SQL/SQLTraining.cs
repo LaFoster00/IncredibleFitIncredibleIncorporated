@@ -1,4 +1,5 @@
 ﻿using IncredibleFit.SQL.Entities;
+using System.Collections;
 using System.Collections.ObjectModel;
 
 namespace IncredibleFit.SQL
@@ -24,14 +25,12 @@ namespace IncredibleFit.SQL
             return track.Any() ? track[0] : null;
         }
 
-        public static ObservableCollection<PlanTrainingUnit> getTrainingUnitsByTrainingPlan(TrainingPlan trainingPlan)
+        public static List<PlanTrainingUnit> getTrainingUnitsByTrainingPlan(TrainingPlan trainingPlan)
         {
             if(trainingPlan == null)
             {
                 return null;
             }
-
-            ObservableCollection<PlanTrainingUnit> planTrainingUnits = new ObservableCollection<PlanTrainingUnit>(); ;
 
             var command = OracleDatabase.CreateCommand(
                 $"""
@@ -42,15 +41,8 @@ namespace IncredibleFit.SQL
             var reader = OracleDatabase.ExecuteQuery(command);
 
             var track = reader.ToObjectList<PlanTrainingUnit>();
-            if(track.Any())
-            {
-                for(int i = 0; i < track.Count(); i++)
-                {
-                    planTrainingUnits.Add(track[i]);
-                }
-            }
 
-            return planTrainingUnits;
+            return track;
         }
 
         public static TrainingUnit getNextTrainingUnit()
