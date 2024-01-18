@@ -8,6 +8,8 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using IncredibleFit.ValueConverters;
+using Microsoft.VisualBasic;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 
@@ -15,6 +17,20 @@ namespace IncredibleFit.SQL
 {
     public static class DatabaseExtensions
     {
+
+        public static bool IsNullable(this Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
+
+        public static Type GetNullableUnderlying(this Type type)
+        {
+            if (type.IsNullable())
+                return Nullable.GetUnderlyingType(type) ?? throw new InvalidOperationException();
+
+            return type;
+        }
+
         public static List<T> ToObjectList<T>(this OracleDataReader? reader)
         {
             if (reader == null)
@@ -43,30 +59,8 @@ namespace IncredibleFit.SQL
                             continue;
                         if (reader.GetValue(i).Equals(DBNull.Value))
                             break;
-                        object? readerValue = reader.GetValue(i);
-                        if (Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null)
-                        {
-                            var toNullableConverter = ToNullableInfo!.MakeGenericMethod(Nullable.GetUnderlyingType(propertyInfo.PropertyType)!);
-                            object? nullable = null;
-                            try
-                            {
-                                nullable = toNullableConverter.Invoke(null, new[]
-                                {
-                                    readerValue
-                                });
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e);
-                                throw;
-                            }
-                            
-                            propertyInfo.SetValue(newInstance, nullable);
-                        }
-                        else
-                        {
-                            propertyInfo.SetValue(newInstance, readerValue.ToDomain(propertyInfo.PropertyType));
-                        }
+
+                        propertyInfo.SetValue(newInstance, reader.GetValue(i).ToSystemObject(fieldAttribute.Mapping, propertyInfo.PropertyType));
 
                         break;
                     }
@@ -78,30 +72,30 @@ namespace IncredibleFit.SQL
             return list;
         }
 
-        private static readonly MethodInfo ToNullableInfo =
-            typeof(DatabaseExtensions).GetMethod("ToNullable") ?? throw new InvalidOperationException();
-
-        public static T? ToNullable<T>(T value)
+        // Target type should be the property type including the nullable so no underlying types
+        public static object? ToNullable(this object? value, Type targetType)
         {
-            return (T?)value;
+            if (!targetType.IsNullable())
+                return value;
+
+            return Activator.CreateInstance(targetType, new[] { value });
+
         }
 
-        public static object? ToSystemObject(this object? o, OracleDbType type)
+        // System type should be the type of the property, will return a domain in case the system type is a domain
+        public static object? ToSystemObject(this object? o, OracleDbType? type, Type systemType)
         {
             if (o is null)
-                return null;
+                return o.ToNullable(systemType);
 
-            object? sysObject = null;
-
-            switch (o)
+            object? sysObject = o switch
             {
-                case OracleDecimal or:
-                    sysObject = or.Value;
-                    break;
-                case OracleString os:
-                    sysObject = os.Value;
-                    break;
-            }
+                OracleDecimal or => or.Value,
+                OracleString os => os.Value,
+                _ => o
+            };
+
+            type ??= OracleDatabase.TypeToDb[systemType.GetNullableUnderlying()];
 
             switch (sysObject)
             {
@@ -109,16 +103,21 @@ namespace IncredibleFit.SQL
                     switch (type)
                     {
                         case OracleDbType.Decimal:
-                            return dc;
+                            sysObject = dc;
+                            break;
                         case OracleDbType.Int32:
-                            return (int)dc;
+                            sysObject = (int)dc;
+                            break;
                         case OracleDbType.Int64:
-                            return (long)dc;
+                            sysObject = (long)dc;
+                            break;
+                        default:
+                            throw new InvalidOperationException();
                     }
-                    throw new InvalidOperationException();
-                default:
-                    return sysObject;
+                    break;
             }
+
+            return sysObject.ToNullable(systemType).ToDomain(systemType);
         }
     }
 }

@@ -3,17 +3,28 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using IncredibleFit.SQL.Entities;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
+using static IncredibleFit.SQL.OracleDatabase;
 
 namespace IncredibleFit.SQL
 {
+    internal static class DbExtensions
+    {
+        // Converts oracle objects to their .net equivalent in case it is an oracle object
+        public static object? ToSystemObject(this object? o, CommandParameter c)
+        {
+            return o.ToSystemObject(c.Type, c.PropertyInfo.PropertyType);
+        }
+    }
+
     public partial class OracleDatabase : ObservableObject, IDisposable, IAsyncDisposable
     {
-        private struct CommandParameter
+        internal struct CommandParameter
         {
             public readonly string Name;
             public readonly PropertyInfo PropertyInfo;
@@ -245,8 +256,8 @@ namespace IncredibleFit.SQL
                     {
                         continue;
                     }
-                    param.PropertyInfo.SetValue(o,
-                        ToSystemObject(c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value, param).ToDomain(param.PropertyInfo.PropertyType));
+                    param.PropertyInfo.SetValue(o, 
+                        c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value.ToSystemObject(param));
                 }
             }
             catch (OracleException e)
@@ -541,20 +552,11 @@ namespace IncredibleFit.SQL
             return TypeDeleteCommands[typeof(T)];
         }
 
-        private static bool IsNullable(Type type)
-        {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
-        }
-
         private static OracleDbType GetOracleDbType(PropertyInfo info, Field field)
         {
             if (field.Mapping == null)
             {
-                Type propType = info.PropertyType;
-                if (IsNullable(propType))
-                    propType = Nullable.GetUnderlyingType(propType) ?? throw new InvalidOperationException();
-
-                return TypeToDb[propType];
+                return TypeToDb[info.PropertyType.GetNullableUnderlying()];
             }
             else
             {
@@ -566,12 +568,6 @@ namespace IncredibleFit.SQL
         {
             Instance.connection?.Close();
             Instance.Connected = false;
-        }
-
-        // Converts oracle objects to their .net equivalent in case it is an oracle object
-        private static object? ToSystemObject(object? o, CommandParameter c)
-        {
-            return o.ToSystemObject(c.Type);
         }
 
         public void Dispose()

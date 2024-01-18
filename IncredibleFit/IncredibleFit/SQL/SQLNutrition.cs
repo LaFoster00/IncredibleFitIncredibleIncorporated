@@ -258,7 +258,7 @@ namespace IncredibleFit.SQL
 
             OracleDatabase.ExecuteNonQuery(command);
 
-            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(OracleDbType.Int32)!;
+            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(OracleDbType.Int32, typeof(int))!;
 
 
             //TODO
