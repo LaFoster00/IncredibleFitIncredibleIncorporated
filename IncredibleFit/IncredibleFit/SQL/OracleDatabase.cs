@@ -150,7 +150,6 @@ namespace IncredibleFit.SQL
             Instance.connection = new OracleConnection(connectionString);
             try
             {
-                await Task.Delay(2000);
                 await Instance.connection.OpenAsync();
                 Debug.WriteLine("Connected to Oracle Database");
                 Instance.Connected = true;
@@ -365,6 +364,22 @@ namespace IncredibleFit.SQL
             return parameters;
         }
 
+        private static List<CommandParameter> GetIdProperty<T>(ParameterDirection direction)
+        {
+            var idProperties = typeof(T).GetProperties().Where(info => info.GetField() != null && info.GetCustomAttribute<ID>() != null);
+            if (!idProperties.Any())
+            {
+                throw new InvalidOperationException("No id field specified in this class. Can't update object without");
+            }
+
+            return (from info in idProperties
+                    let field = info.GetField()!
+                    let name = field.Name
+                    let type = GetOracleDbType(info, field)
+                    select new CommandParameter(name, info, direction, type, field.Size, info.GetSubroutine())
+                ).ToList();
+        }
+
         private static string CreateReturnStatement(IReadOnlyList<CommandParameter> parameters)
         {
             bool hasReturn = false;
@@ -442,6 +457,7 @@ namespace IncredibleFit.SQL
         }
 
         private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeUpdateCommands = new();
+
         private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetUpdateCommand<T>()
         {
             if (TypeUpdateCommands.ContainsKey(typeof(T)))
@@ -451,24 +467,35 @@ namespace IncredibleFit.SQL
             commandBuilder.Append("UPDATE ");
 
             #region RetreiveTableName
+
             var entityName = typeof(T).GetEntity();
             commandBuilder.Append($"\"{entityName!.Name}\"");
+
             #endregion
 
             var parameters = GetParameterList(typeof(T), false);
 
             #region AddParamsAndValueParams
+
             commandBuilder.Append("\nSET");
             for (var i = 0; i < parameters.Count; i++)
             {
                 var param = parameters[i];
-                commandBuilder.Append($"\t\"{param.Name}\" = :P{param.Name}").Append(i < parameters.Count - 1 ? ",\n" : "\n");
+                commandBuilder.Append($"\t\"{param.Name}\" = :P{param.Name}")
+                    .Append(i < parameters.Count - 1 ? "," : "").Append('\n');
             }
 
-            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
-            parameters.Add(idProperty);
+            var idProperties = GetIdProperty<T>(ParameterDirection.Input);
+            parameters.AddRange(idProperties);
 
-            commandBuilder.Append($"WHERE \"{entityName.Name}\".\"{idProperty.Name}\" = :P{idProperty.Name}");
+            commandBuilder.Append($"WHERE \n");
+            for (var index = 0; index < idProperties.Count; index++)
+            {
+                var id = idProperties[index];
+                commandBuilder.Append($"\t\"{entityName.Name}\".\"{id.Name}\" = :P{id.Name}\n")
+                    .Append(index < (idProperties.Count - 1) ? "," : "").Append('\n');
+            }
+
             #endregion
 
             TypeUpdateCommands.Add(
@@ -493,33 +520,23 @@ namespace IncredibleFit.SQL
 
             #region AddParamsAndValueParams
             var parameters = new List<CommandParameter>();
-            var idProperty = GetIdProperty<T>(ParameterDirection.Input);
-            parameters.Add(idProperty);
+            var idProperties = GetIdProperty<T>(ParameterDirection.Input);
+            parameters.AddRange(idProperties);
 
-            commandBuilder.Append($"WHERE \"{entityName.Name}\".\"{idProperty.Name}\" = :P{idProperty.Name}");
+            commandBuilder.Append($"WHERE \n");
+            for (var index = 0; index < idProperties.Count; index++)
+            {
+                var id = idProperties[index];
+                commandBuilder.Append($"\t\"{entityName.Name}\".\"{id.Name}\" = :P{id.Name}")
+                    .Append(index < (idProperties.Count - 1) ? "," : "").Append('\n');
+            }
+
             #endregion
 
             TypeDeleteCommands.Add(
                 typeof(T),
                 (SetupCommandWithParams(commandBuilder, parameters), parameters));
             return TypeDeleteCommands[typeof(T)];
-        }
-
-        private static CommandParameter GetIdProperty<T>(ParameterDirection direction)
-        {
-            try
-            {
-                var info = typeof(T).GetProperties().First(info =>
-                    info.GetField() != null && info.GetCustomAttribute<ID>() != null);
-                var field = info.GetField()!;
-                var name = field.Name;
-                var type = GetOracleDbType(info, field);
-                return new CommandParameter(name, info, direction, type, field.Size, info.GetSubroutine());
-            }
-            catch (InvalidOperationException)
-            {
-                throw new InvalidOperationException("No id field specified in this class. Can't update object without");
-            }
         }
 
         private static bool IsNullable(Type type)
