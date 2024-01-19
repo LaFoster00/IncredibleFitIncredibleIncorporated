@@ -12,6 +12,13 @@ namespace IncredibleFit.SQL.Entities
             private set => SetValue(ExerciseUnitIDProperty, value);
         }
 
+        [Field("EXERCISEID", OracleDbType.Int32), AutoIncrement]
+        public int ExerciseID
+        {
+            get => (int)GetValue(ExerciseIDProperty);
+            set => SetValue(ExerciseIDProperty, value);
+        }
+
         [Field("DESCRIPTION", OracleDbType.Varchar2, 1024)]
         public string Description
         {
@@ -38,6 +45,13 @@ namespace IncredibleFit.SQL.Entities
                 nameof(ExerciseUnitID), 
                 typeof(int), 
                 typeof(ExerciseUnit), 
+                -1);
+
+        public static readonly BindableProperty ExerciseIDProperty =
+            BindableProperty.Create(
+                nameof(ExerciseID),
+                typeof(int),
+                typeof(ExerciseUnit),
                 -1);
 
         public static readonly BindableProperty DescriptionProperty =

@@ -4,7 +4,7 @@
              x:Class="IncredibleFit.ContentViews.ExerciseUnitField"
              x:Name="view">
     <VerticalStackLayout>
-        <Border Stroke="{Binding StrokeColor}">
+        <Border>
             <Grid RowSpacing="10">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -17,11 +17,13 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Label Text="{Binding Source={x:Reference view}, Path=Name}" TextColor="{Binding Source={x:Reference view}, Path=TextColor}" FontSize="Medium" FontAttributes="Bold" Grid.ColumnSpan="2"/>
-                <Label Text="{Binding Description}" TextColor="{Binding Source={x:Reference view}, Path=TextColor}" Grid.Row="1" Grid.ColumnSpan="2"/>
-                <Line Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="{Binding Source={x:Reference view}, Path=TextColor}"/>
-                <Label Text="Set" Grid.Row="3" TextColor="{Binding Source={x:Reference view}, Path=TextColor}" HorizontalOptions="Center" FontAttributes="Bold"/>
-                <Label Text="Repetitions" TextColor="{Binding Source={x:Reference view}, Path=TextColor}" Grid.Row="3" Grid.Column="1" HorizontalOptions="Start" FontAttributes="Bold"/>
+                <Label Text="{Binding Source={x:Reference view}, Path=Name}" FontSize="Medium" FontAttributes="Bold" Grid.ColumnSpan="2"/>
+                <Label Text="{Binding Description}" Grid.Row="1" Grid.ColumnSpan="2"/>
+                <Line Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="{StaticResource Primary}"/>
+                <Label Text="Repetitions:" Grid.Row="3" FontAttributes="Bold"/>
+                <Label Text="{Binding Repetitions}" Grid.Row="3" Grid.Column="1" HorizontalOptions="Start" FontAttributes="Bold"/>
+                <Label Text="Difficulty:" Grid.Row="4" FontAttributes="Bold"/>
+                <Label Text="{Binding ExerciseDifficulty}" Grid.Row="4" Grid.Column="1" HorizontalOptions="Start" FontAttributes="Bold"/>
             </Grid>
         </Border>
     </VerticalStackLayout>

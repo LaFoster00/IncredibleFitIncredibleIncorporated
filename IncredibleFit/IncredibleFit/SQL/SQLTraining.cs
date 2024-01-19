@@ -6,6 +6,29 @@ namespace IncredibleFit.SQL
 {
     public static class SQLTraining
     {
+        public static ObservableCollection<TrainingPlan> getAllTrainingPlans()
+        {
+            ObservableCollection<TrainingPlan> TrainingPlans = new ObservableCollection<TrainingPlan>();
+
+            var command = OracleDatabase.CreateCommand(
+               $"""
+                 SELECT * FROM "TRAININGPLAN" 
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<TrainingPlan>();
+
+            if (track.Any())
+            {
+                for( int i = 0; i < track.Count(); i++)
+                {
+                    TrainingPlans.Add(track[i]);
+                }
+            }
+
+            return TrainingPlans;
+        }
         public static TrainingPlan getCurrentTrainingPlan(User user)
         {
             //Get selected plan by user
@@ -25,7 +48,43 @@ namespace IncredibleFit.SQL
             return track.Any() ? track[0] : null;
         }
 
-        public static List<PlanTrainingUnit> getTrainingUnitsByTrainingPlan(TrainingPlan trainingPlan)
+        public static void deleteCurrentTrainingplan(User user)
+        {
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "TRAININGPLAN" 
+                 JOIN "USER_PLAN" 
+                 ON USER_PLAN.TRAININGPLANID = TRAININGPLAN.TRAININGPLANID
+                 WHERE USER_PLAN.EMAIL = '{user.Email}'
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<TrainingPlan>();
+
+            if (track.Any())
+            {
+                for(int i = 0; i < track.Count(); i++)
+                {
+                    UserPlan userPlan = new UserPlan(track[i].TrainingPlanID, user.Email);
+                    OracleDatabase.DeleteObject(userPlan);
+
+                    SQLTimeline.deleteAppointmentsForOldTrainingPlan(track[i], user);
+                }
+            }
+
+
+        }
+
+        public static void setNewTrainingplan(TrainingPlan trainingPlan, User user)
+        {
+            UserPlan userPlan = new UserPlan(trainingPlan.TrainingPlanID, user.Email);
+            OracleDatabase.InsertObject(userPlan);
+
+            SQLTimeline.insertAppointmentsForNewTrainingPlan(trainingPlan, user);
+        }
+
+        public static List<PlanTrainingUnit> getPlanTrainingUnitsByTrainingPlan(TrainingPlan trainingPlan)
         {
             if(trainingPlan == null)
             {
@@ -139,6 +198,10 @@ namespace IncredibleFit.SQL
 
         public static ObservableCollection<ExerciseUnit> getExerciseUnits(TrainingUnit trainingUnit)
         {
+            if(trainingUnit == null)
+            {
+                return new ObservableCollection<ExerciseUnit>();
+            }
             ObservableCollection<ExerciseUnit> exerciseUnits = new ObservableCollection<ExerciseUnit>();
 
             var command = OracleDatabase.CreateCommand(
@@ -164,6 +227,21 @@ namespace IncredibleFit.SQL
             }
 
             return exerciseUnits;
+        }
+
+        public static Exercise getExerciseByExerciseUnit(ExerciseUnit exerciseUnit)
+        {
+            var command = OracleDatabase.CreateCommand(
+                $"""
+                 SELECT * FROM "EXERCISE"
+                 WHERE EXERCISEID = {exerciseUnit.ExerciseID}
+                 """);
+
+            var reader = OracleDatabase.ExecuteQuery(command);
+
+            var track = reader.ToObjectList<Exercise>();
+
+            return track.Any() ? track[0] : null;
         }
     }
 }

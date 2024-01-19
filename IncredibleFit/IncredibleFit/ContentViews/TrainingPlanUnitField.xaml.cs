@@ -58,11 +58,14 @@ public partial class TrainingPlanUnitField : ContentView
             case nameof(Unit):
                 Visibility = true;
                 TrainingUnit tU = SQLTraining.getTrainingUnit(Unit);
-                Name.Text = tU.Name;
-                Description.Text = tU.Description;
-                TrainingUnitDifficulty.Text = tU.TrainingUnitDifficulty.ToString();
-                int exerciseCount = SQLTraining.getExerciseCount(tU);
-                ExerciseCount.Text = exerciseCount.ToString();
+                if (tU != null)
+                {
+                    Name.Text = tU.Name;
+                    Description.Text = tU.Description;
+                    TrainingUnitDifficulty.Text = tU.TrainingUnitDifficulty.ToString();
+                    int exerciseCount = SQLTraining.getExerciseCount(tU);
+                    ExerciseCount.Text = exerciseCount.ToString();
+                }
                 break;
             case nameof(WeekdayIndex):
                 short wIndex = short.Parse(WeekdayIndex.ToString());

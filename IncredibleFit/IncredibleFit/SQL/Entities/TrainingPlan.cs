@@ -19,6 +19,13 @@ namespace IncredibleFit.SQL.Entities
             set => SetValue(NameProperty, value);
         }
 
+        [Field("SPORTNAME", OracleDbType.Varchar2, 128)]
+        public string Sportname
+        {
+            get => (string)GetValue(SportnameProperty);
+            set => SetValue(SportnameProperty, value);
+        }
+
         [Field("DESCRIPTION", OracleDbType.Varchar2, 1024)]
         public string Description
         {
@@ -47,6 +54,13 @@ namespace IncredibleFit.SQL.Entities
                 typeof(TrainingPlan), 
                 string.Empty);
 
+        public static readonly BindableProperty SportnameProperty =
+            BindableProperty.Create(
+                nameof(Sportname),
+                typeof(string),
+                typeof(TrainingPlan),
+                string.Empty);
+
         public static readonly BindableProperty DescriptionProperty =
             BindableProperty.Create(
                 nameof(Description), 
@@ -63,9 +77,10 @@ namespace IncredibleFit.SQL.Entities
 
         private TrainingPlan() { }
 
-        public TrainingPlan(string name, string description, Difficulty trainingPlanDifficulty)
+        public TrainingPlan(string name, string sportname, string description, Difficulty trainingPlanDifficulty)
         {
             Name = name;
+            Sportname = sportname;
             Description = description;
             TrainingPlanDifficulty = trainingPlanDifficulty;
         }

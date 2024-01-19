@@ -37,6 +37,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<RecipeSearch>();
         builder.Services.AddSingleton<Training>();
         builder.Services.AddSingleton<Trainingplan>();
+        builder.Services.AddSingleton<SelectTrainingplan>();
 
         builder.Services.AddTransient<EditableField>();
         builder.Services.AddTransient<TrainingPlanUnitField>();

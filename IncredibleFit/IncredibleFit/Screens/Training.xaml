@@ -12,7 +12,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <contentViews:ExerciseUnitField ExerciseUnit="{Binding this}"/>
+                            <contentViews:ExerciseUnitField Unit="{Binding .}"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
