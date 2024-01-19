@@ -66,7 +66,7 @@ public partial class AppointmentField : ContentView
         {
             case nameof(Appointment):
                 
-                if(Appointment.TrainingUnitID == null)
+                if(Appointment.TrainingUnitID == -1)
                 {
                     Recipe recipe = SQLTimeline.getRecipeByAppointment(Appointment);
                     if(recipe != null)

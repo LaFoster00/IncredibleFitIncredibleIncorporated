@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="IncredibleFit.ContentViews.AppointmentField">
-    <VerticalStackLayout>
-        <Border>
-            <StackLayout>
-                <Label Text="{Binding Source={x:Reference view}, Path=Type}" FontSize="Medium" FontAttributes="Bold"/>
-                <Label Text="{Binding Source={x:Reference view}, Path=Name}"/>
-                <Label Text="{Binding Source={x:Reference view}, Path=Description}"/>
-            </StackLayout>
-        </Border>
-    </VerticalStackLayout>
+             x:Class="IncredibleFit.ContentViews.AppointmentField"
+             x:Name="view">
+
+    <StackLayout>
+        <Label Text="{Binding Source={x:Reference view}, Path=Type}" FontSize="Medium" FontAttributes="Bold"/>
+        <Label Text="{Binding Source={x:Reference view}, Path=Name}"/>
+        <Label Text="{Binding Source={x:Reference view}, Path=Description}"/>
+    </StackLayout>
 </ContentView>

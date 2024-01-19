@@ -7,7 +7,7 @@
     <StackLayout>
         <Label Text="{Binding Source={x:Reference view}, Path=Date}" Margin="10"/>
         <Border IsVisible="{Binding Source={x:Reference view}, Path=AppointmentsVisible}">
-            <ListView ItemsSource="{Binding Appointments}" HasUnevenRows="True" 
+            <ListView ItemsSource="{Binding Source={x:Reference view}, Path=Appointments}" HasUnevenRows="True" 
                     SeparatorVisibility="None" ItemTapped="AppointmentClicked">
                 <ListView.ItemTemplate>
                     <DataTemplate>

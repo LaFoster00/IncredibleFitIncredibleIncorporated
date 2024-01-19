@@ -37,7 +37,6 @@ public partial class ExerciseUnitField : ContentView
 
     protected override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
-        //TODO!!
         base.OnPropertyChanged(propertyName);
         switch (propertyName)
         {
