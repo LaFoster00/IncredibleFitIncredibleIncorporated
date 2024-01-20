@@ -3,7 +3,8 @@
              xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewModels="clr-namespace:IncredibleFit.ViewModels"
              x:Class="IncredibleFit.Screens.SignUp"
-             x:DataType="viewModels:SignUpViewModel">
+             x:DataType="viewModels:SignUpViewModel"
+             Shell.NavBarIsVisible="False">
 
 	<StackLayout Padding="20">
 

@@ -2,14 +2,23 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:contentViews = "clr-namespace:IncredibleFit.ContentViews"
              x:Class="IncredibleFit.Screens.Timeline"
-             Title="Timeline">
+             Shell.NavBarIsVisible="False">
 
     <ContentPage.Behaviors>
         <behaviors:StatusBarBehavior StatusBarColor="{StaticResource Primary}" StatusBarStyle="LightContent" />
     </ContentPage.Behaviors>
 
-    <CollectionView ItemsSource="{Binding timelineItems}">
-        
-    </CollectionView>
+    <ScrollView>
+        <StackLayout>
+            <contentViews:TimeLineField DateTime="{Binding dateTimes[0]}"/>
+            <contentViews:TimeLineField DateTime="{Binding dateTimes[1]}"/>
+            <contentViews:TimeLineField DateTime="{Binding dateTimes[2]}"/>
+            <contentViews:TimeLineField DateTime="{Binding dateTimes[3]}"/>
+            <contentViews:TimeLineField DateTime="{Binding dateTimes[4]}"/>
+            <contentViews:TimeLineField DateTime="{Binding dateTimes[5]}"/>
+            <contentViews:TimeLineField DateTime="{Binding dateTimes[6]}"/>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

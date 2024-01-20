@@ -27,6 +27,9 @@ namespace IncredibleFit.SQL
             {
                 foreach ( var item in track)
                 {
+                    Recipecategory recipeCat = SQLNutrition.getRecipeCategory(item);
+                    item.MealType = recipeCat.Mealtype;
+                    item.FoodCategory = recipeCat.Foodcategory;
                     recipes.Add(item);
                 }
             }
@@ -42,13 +45,11 @@ namespace IncredibleFit.SQL
 
             if (ingredientname == "")
             {
-
                 command = OracleDatabase.CreateCommand(
                     $"""
                  SELECT * FROM "RECIPE"
                  WHERE VISIBILITY=1 AND NAME LIKE '%{keyword}%' 
                  """);
-
             }
             else
             {
@@ -68,6 +69,9 @@ namespace IncredibleFit.SQL
             {
                 foreach (var item in track)
                 {
+                    Recipecategory recipeCat = SQLNutrition.getRecipeCategory(item);
+                    item.MealType = recipeCat.Mealtype;
+                    item.FoodCategory = recipeCat.Foodcategory;
                     recipes.Add(item);
                 }
             }
@@ -97,6 +101,9 @@ namespace IncredibleFit.SQL
             {
                 foreach (var item in track)
                 {
+                    Recipecategory recipeCat = SQLNutrition.getRecipeCategory(item);
+                    item.MealType = recipeCat.Mealtype;
+                    item.FoodCategory = recipeCat.Foodcategory;
                     recipes.Add(item);
                 }
             }
@@ -125,7 +132,6 @@ namespace IncredibleFit.SQL
 
         public static void deleteFromFavorites(Recipe recipe, User user)
         {
-            //TODO: All User Saved Recipes Elements with recipeID gets deleted. 
             UserSavedRecipe usR = new UserSavedRecipe(recipe.RecipeID, user.Email);
             OracleDatabase.DeleteObject(usR);
         }
@@ -246,25 +252,6 @@ namespace IncredibleFit.SQL
             {
                 OracleDatabase.UpdateObject(calorieTrack);
             }
-        }
-
-        public static void addRecipeAppointment(Recipe recipe, User user, DateTime date)
-        {
-            var command = OracleDatabase.CreateCommand(
-                $"""
-                 INSERT INTO APPOINTMENT("DATE", STATUS)
-                 VALUES(:PDate, 0)
-                 RETURNING APPOINTMENTID INTO :PappointmentID
-                 """);
-            command.Parameters.Add("PDate", OracleDbType.Date).Value = date;
-            command.Parameters.Add("PappointmentID", OracleDbType.Int32).Direction = ParameterDirection.Output;
-
-            OracleDatabase.ExecuteNonQuery(command);
-
-            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(OracleDbType.Int32, typeof(int))!;
-
-
-            //TODO
         }
     }
 }

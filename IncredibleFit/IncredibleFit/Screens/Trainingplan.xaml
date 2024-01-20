@@ -14,7 +14,8 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Label Text="Current training plan" FontAttributes="Bold" FontSize="Large" Margin="10"/>
-                <ImageButton Source="icon_edit.png" WidthRequest="30" HeightRequest="30" Grid.Column="1"/>
+                <ImageButton Source="icon_edit.png" WidthRequest="30" HeightRequest="30" Grid.Column="1"
+                             Clicked="BtnEditPlanClicked"/>
             </Grid>
 
             <contentViews:TrainingPlanUnitField Unit="{Binding TrainingUnitArray[0]}" WeekdayIndex="0"/>

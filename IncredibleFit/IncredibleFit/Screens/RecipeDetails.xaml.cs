@@ -16,7 +16,7 @@ public partial class RecipeDetails : ContentPage
     public RecipeDetails(Recipe recipe, SessionInfo info)
 	{
 		InitializeComponent();
-		_sessionInfo = info;
+        _sessionInfo = info;
         IngredientsList = SQLNutrition.getIngredientsByRecipe(recipe);
 
 		for(int i = 0; i < IngredientsList.Count; i++)

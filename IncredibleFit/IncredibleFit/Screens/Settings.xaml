@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:IncredibleFit.ViewModels"
              x:Class="IncredibleFit.Screens.Settings"
-             Title="Settings"
+             Shell.NavBarIsVisible="False"
              x:DataType="viewModels:SettingsViewModel">
 
-    <VerticalStackLayout>
+    <VerticalStackLayout Margin="20">
         <Button x:Name="LogOut"
                 Text="Log out"
                 Command="{Binding LogoutCommand}"/>

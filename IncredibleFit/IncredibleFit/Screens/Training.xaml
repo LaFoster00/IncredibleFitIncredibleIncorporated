@@ -8,11 +8,11 @@
         <VerticalStackLayout>
             <Button Text="Start training" x:Name="BtnStartFinish" Clicked="BtnStartFinishClicked"/>
             <ListView ItemsSource="{Binding ExerciseUnits}" HasUnevenRows="True" 
-                      SeparatorVisibility="None" ItemTapped="ExerciseDoneClicked">
+                      SeparatorVisibility="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <contentViews:ExerciseUnitField ExerciseUnit="{Binding this}"/>
+                            <contentViews:ExerciseUnitField Unit="{Binding .}"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

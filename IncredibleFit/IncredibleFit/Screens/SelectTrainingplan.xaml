@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="IncredibleFit.Screens.RecipeFavorites"
              xmlns:contentViews = "clr-namespace:IncredibleFit.ContentViews"
-             Shell.NavBarIsVisible="False">
-
+             x:Class="IncredibleFit.Screens.SelectTrainingplan"
+             Title="Select new trainingplan">
     <StackLayout>
-        <ImageButton Source="icon_refresh.png" Clicked="RefreshFavorites" WidthRequest="20" HeightRequest="20" 
-                     Margin="10" HorizontalOptions="End"/>
-        <ListView ItemsSource="{Binding FavoritesList}" HasUnevenRows="True" ItemTapped="RecipeClicked">
+        <ListView ItemsSource="{Binding TrainingPlans}" HasUnevenRows="True" 
+                  SeparatorVisibility="None" ItemTapped="TrainingplanSelected">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <contentViews:RecipeField Recipe="{Binding .}"/>
+                        <contentViews:TrainingPlanField Plan="{Binding this}"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

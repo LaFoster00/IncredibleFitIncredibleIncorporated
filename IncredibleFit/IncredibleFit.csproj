@@ -78,10 +78,22 @@
     </ItemGroup>
 
     <ItemGroup>
+      <MauiXaml Update="IncredibleFit\ContentViews\AppointmentField.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
       <MauiXaml Update="IncredibleFit\ContentViews\EditableField.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\ContentViews\ExerciseUnitField.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\ContentViews\RecipeField.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\ContentViews\TimeLineField.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\ContentViews\TrainingPlanField.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\ContentViews\TrainingPlanUnitField.xaml">
@@ -94,9 +106,6 @@
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\PopUps\EditRecipeSearchFilterPopUp.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
-      <MauiXaml Update="IncredibleFit\PopUps\ExerciseDonePopOup.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\Screens\CalorieTracker.xaml">
@@ -115,6 +124,9 @@
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\Screens\RecipeSearch.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="IncredibleFit\Screens\SelectTrainingplan.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="IncredibleFit\Screens\Settings.xaml">
