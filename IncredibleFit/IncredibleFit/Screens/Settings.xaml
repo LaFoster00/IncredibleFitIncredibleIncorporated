@@ -13,5 +13,8 @@
         <Button x:Name="DeleteAccoung"
                 Text="Delete account"
                 Command="{Binding DeleteAccountCommand}"/>
+        <Button x:Name="VisitIcons8"
+                Text="Visit Icons8"
+                Command="{Binding VisitIcons8Command}"/>
     </VerticalStackLayout>
 </ContentPage>

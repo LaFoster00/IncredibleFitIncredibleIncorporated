@@ -35,5 +35,11 @@ namespace IncredibleFit.ViewModels
             await Logout();
         }
 
+        [RelayCommand]
+        public async Task VisitIcons8()
+        {
+            await Launcher.OpenAsync("https://icons8.com/");
+        }
+
     }
 }
