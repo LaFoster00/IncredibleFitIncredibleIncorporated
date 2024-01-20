@@ -18,21 +18,14 @@ public partial class RecipeSearch : ContentPage
         InitializeComponent();
         _sessionInfo = info;
         recipeList = SQLNutrition.getAllVisibleRecipes(); ;
-        for (int i = 0; i < recipeList.Count; i++)
-        {
-            Recipecategory recipeCat = SQLNutrition.getRecipeCategory(recipeList[i]);
-            recipeList[i].MealType = recipeCat.Mealtype;
-            recipeList[i].FoodCategory = recipeCat.Foodcategory;
-        }
+        
         BindingContext = this;
     }
 
     void RecipeClicked(object sender, EventArgs e)
 	{
-        Grid grid = (Grid)sender;
-        Label label = (Label)grid.Children[0];
-        String name = label.Text;
-        Recipe recipe = getRecipeByName(name);
+        ListView lV = (ListView)sender;
+        Recipe recipe = (Recipe)lV.SelectedItem;
         Navigation.PushAsync(new RecipeDetails(recipe, _sessionInfo));
     }
 
@@ -60,7 +53,7 @@ public partial class RecipeSearch : ContentPage
         this._filterIngredient = filterIngredient;
         recipeList.Clear();
         ObservableCollection<Recipe> recipeList2 = SQLNutrition.getRecipesByIngredientAndKeyword(filterKeyword, filterIngredient);
-        for(int i = 0; i < recipeList2.Count; i++)
+        for (int i = 0; i < recipeList2.Count; i++)
         {
             recipeList.Add(recipeList2[i]);
         }
@@ -101,18 +94,5 @@ public partial class RecipeSearch : ContentPage
         {
             AddFilter.IsVisible = true;
         }
-    }
-
-    Recipe getRecipeByName(string name)
-    {
-        Recipe recipe = null;
-        for (int i = 0; i < recipeList.Count; i++)
-        {
-            if (recipeList[i].Name == name)
-            {
-                recipe = recipeList[i];
-            }
-        }
-        return recipe;
     }
 }

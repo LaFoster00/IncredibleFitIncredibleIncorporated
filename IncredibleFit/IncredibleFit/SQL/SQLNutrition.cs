@@ -27,6 +27,9 @@ namespace IncredibleFit.SQL
             {
                 foreach ( var item in track)
                 {
+                    Recipecategory recipeCat = SQLNutrition.getRecipeCategory(item);
+                    item.MealType = recipeCat.Mealtype;
+                    item.FoodCategory = recipeCat.Foodcategory;
                     recipes.Add(item);
                 }
             }
@@ -66,6 +69,9 @@ namespace IncredibleFit.SQL
             {
                 foreach (var item in track)
                 {
+                    Recipecategory recipeCat = SQLNutrition.getRecipeCategory(item);
+                    item.MealType = recipeCat.Mealtype;
+                    item.FoodCategory = recipeCat.Foodcategory;
                     recipes.Add(item);
                 }
             }
@@ -95,6 +101,9 @@ namespace IncredibleFit.SQL
             {
                 foreach (var item in track)
                 {
+                    Recipecategory recipeCat = SQLNutrition.getRecipeCategory(item);
+                    item.MealType = recipeCat.Mealtype;
+                    item.FoodCategory = recipeCat.Foodcategory;
                     recipes.Add(item);
                 }
             }

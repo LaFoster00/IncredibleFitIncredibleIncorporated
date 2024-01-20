@@ -41,6 +41,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<EditableField>();
         builder.Services.AddTransient<TrainingPlanUnitField>();
+        builder.Services.AddTransient<RecipeField>();
 
 
 #if DEBUG
