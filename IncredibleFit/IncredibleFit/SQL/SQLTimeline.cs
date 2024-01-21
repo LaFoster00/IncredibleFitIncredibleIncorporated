@@ -46,7 +46,7 @@ namespace IncredibleFit.SQL
 
             OracleDatabase.ExecuteNonQuery(command);
 
-            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(OracleDbType.Int32, typeof(int))!;
+            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(typeof(int), OracleDbType.Int32)!;
 
             RecipeAppointment rA = new RecipeAppointment(recipe.RecipeID, appointmentID);
             OracleDatabase.InsertObject(rA);
@@ -159,7 +159,7 @@ namespace IncredibleFit.SQL
 
             OracleDatabase.ExecuteNonQuery(command);
 
-            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(OracleDbType.Int32, typeof(int))!;
+            int appointmentID = (int)command.Parameters["PappointmentID"].Value.ToSystemObject(typeof(int), OracleDbType.Int32)!;
 
             UserAppointment uA = new UserAppointment(appointmentID, user.Email);
             OracleDatabase.InsertObject(uA);

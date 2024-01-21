@@ -14,7 +14,7 @@ namespace IncredibleFit.SQL
         // Converts oracle objects to their .net equivalent in case it is an oracle object
         public static object? ToSystemObject(this object? o, CommandParameter c)
         {
-            return o.ToSystemObject(c.Type, c.PropertyInfo.PropertyType);
+            return o.ToSystemObject(c.PropertyInfo.PropertyType, c.Type);
         }
     }
 
