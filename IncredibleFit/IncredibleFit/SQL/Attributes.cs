@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,7 +13,7 @@ namespace IncredibleFit.SQL
     /// Marks a class as an Entity(Table) in a database, with a specific name that is defined
     /// independent of the class name
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class), DebuggerDisplay("Entity: {Name}")]
     public class Entity : Attribute
     {
         public readonly string Name;
@@ -65,7 +66,7 @@ namespace IncredibleFit.SQL
     /// <summary>
     /// Holds all necessary information needed to map a property to a field in a database entity
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property), DebuggerDisplay("Field: {Name}, {Type.ToString()}, {Size}")]
     public class Field : Attribute
     {
         public readonly string Name;
@@ -202,7 +203,7 @@ namespace IncredibleFit.SQL
     /// <summary>
     /// Allows a field to specify routine that should be called to populate its parameter instead of a literal.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property), DebuggerDisplay("{Subroutine}")]
     public class CreateWithSubroutine : Attribute
     {
         public readonly string Subroutine;
