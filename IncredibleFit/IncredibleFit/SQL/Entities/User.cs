@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿// Written by Lasse Foster https://github.com/LaFoster00 and Lisa Weikenmeier
+
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Oracle.ManagedDataAccess.Client;
 

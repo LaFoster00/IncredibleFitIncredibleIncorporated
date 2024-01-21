@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Written by Lasse Foster https://github.com/LaFoster00
+
+using System;
 using System.Data;
 using System.Diagnostics;
 using System.Reflection;

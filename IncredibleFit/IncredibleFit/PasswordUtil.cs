@@ -1,10 +1,11 @@
-﻿using System.Security.Cryptography;
+﻿// Written by Lasse Foster https://github.com/LaFoster00
+
+using System.Security.Cryptography;
 using System.Text;
 
 namespace IncredibleFit
 {
     public static class PasswordUtil
-
     {
         public static readonly int KeySize = 64;
         public static readonly int Iterations = 350000;

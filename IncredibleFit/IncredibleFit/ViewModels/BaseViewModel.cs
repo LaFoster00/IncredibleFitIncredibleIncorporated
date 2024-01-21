@@ -1,9 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Written by Lasse Foster https://github.com/LaFoster00
+
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace IncredibleFit.ViewModels
 {
@@ -13,7 +10,5 @@ namespace IncredibleFit.ViewModels
         private bool _isActive;
         [ObservableProperty]
         private bool _isBusy;
-        [ObservableProperty]
-        private string? _title;
     }
 }
