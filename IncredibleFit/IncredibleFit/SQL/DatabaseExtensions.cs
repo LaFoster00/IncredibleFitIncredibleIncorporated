@@ -37,16 +37,30 @@ namespace IncredibleFit.SQL
             return type;
         }
 
+        /// <summary>
+        /// The Field Properties and Field Attributes for a given type
+        /// Fields is not IReadOnlyList since we want to use FindIndex which is only available on lists
+        /// </summary>
         public static Dictionary<Type, (IReadOnlyList<PropertyInfo> Properties, List<Field> Fields)> EntityFields = new();
+
+        /// <summary>
+        /// Returns the Field Properties and Field Attributes for a given type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static (IReadOnlyList<PropertyInfo> Properties, List<Field> Fields) GetDbFields(this Type? type)
         {
+            // Return empty lists in case the type is null
             if (type == null)
                 return (new List<PropertyInfo>(), new List<Field>());
 
+            // Return the cached lists
             if (EntityFields.TryGetValue(type, out var f))
                 return f;
 
+            // Get the properties with a field attribute
             var properties = type.GetProperties().Where(info => info.TryGetField() != null).ToList();
+            // Get the field attributes for those properties
             var fields = properties.Select(info => info.TryGetField()!).ToList();
 
             EntityFields.Add(type, (properties, fields));
