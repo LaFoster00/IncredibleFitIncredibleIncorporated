@@ -9,32 +9,41 @@ namespace IncredibleFit.SQL
 {
     public static class DomainTools
     {
+        /// <summary>
+        /// Converts an object to an enum in case its type is of enum
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="domainType"></param>
+        /// <returns></returns>
         public static object? ToDomain(this object? o, Type domainType)
         {
             if (o == null)
-            {
-                return null;
-            }
+                return o;
 
+            // Get the underlying type in case it is a nullable value
             var underlyingDomainType = domainType.GetNullableUnderlying();
+            // Return the enum object in case it is required and convert it to a nullable if required. Otherwise, return the original object
             return underlyingDomainType.IsEnum ? Enum.ToObject(underlyingDomainType, o).ToNullable(domainType) : o;
         }
 
+        /// <summary>
+        /// Converts an object to a short in case it is an enum (all domains are shorts)
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
         public static object? FromDomain(this object? o)
         {
-            if (o == null)
-            {
-                return null;
-            }
+            if (o == null || !o.GetType().IsEnum)
+                return o;
 
-            if (o.GetType().IsEnum)
-            {
-                return (short)o;
-            }
+            return (short)o;
 
-            return o;
         }
     }
+
+    /// <summary>
+    /// All the domains present in the database in enum form
+    /// </summary>
 
     public enum AppointmentStatus : short
     {
