@@ -5,7 +5,7 @@ namespace IncredibleFit.SQL.Entities
     [Entity("APPOINTMENT")]
     public class Appointment : BindableObject
     {
-        [ID, Field("APPOINTMENTID", OracleDbType.Int32), AutoIncrement]
+        [ID, Field("APPOINTMENTID", OracleDbType.Int32), ServerGenerated]
         public int AppointmentID
         {
             get => (int)GetValue(AppointmentIDProperty);

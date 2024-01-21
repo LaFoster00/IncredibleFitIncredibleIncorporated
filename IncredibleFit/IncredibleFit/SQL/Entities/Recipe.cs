@@ -5,7 +5,7 @@ namespace IncredibleFit.SQL.Entities
     [Entity("RECIPE")]
     public class Recipe : BindableObject
     {
-        [ID, Field("RECIPEID", OracleDbType.Int32), AutoIncrement]
+        [ID, Field("RECIPEID", OracleDbType.Int32), ServerGenerated]
         public int RecipeID
         {
             get => (int)GetValue(RecipeIDProperty);

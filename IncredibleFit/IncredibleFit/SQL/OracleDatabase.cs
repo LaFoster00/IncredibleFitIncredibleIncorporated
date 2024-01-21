@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Data;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
-using IncredibleFit.SQL.Entities;
 using Oracle.ManagedDataAccess.Client;
-using Oracle.ManagedDataAccess.Types;
 using static IncredibleFit.SQL.OracleDatabase;
 
 namespace IncredibleFit.SQL
@@ -277,8 +273,7 @@ namespace IncredibleFit.SQL
             if (Instance.connection == null || o == null)
                 return;
 
-            var entityName = typeof(T).GetEntity();
-            if (entityName == null)
+            if (typeof(T).TryGetEntity() == null)
                 return;
 
             ExecuteCommandWithObjectData(GetInsertCommand<T>(), o);
@@ -303,8 +298,7 @@ namespace IncredibleFit.SQL
             if (Instance.connection == null || o == null)
                 return;
 
-            var entityName = typeof(T).GetEntity();
-            if (entityName == null)
+            if (typeof(T).TryGetEntity() == null)
                 return;
 
             ExecuteCommandWithObjectData(GetUpdateCommand<T>(), o);
@@ -315,8 +309,8 @@ namespace IncredibleFit.SQL
         {
             if (Instance.connection == null || o == null)
                 return;
-            var entityName = typeof(T).GetEntity();
-            if (entityName == null)
+
+            if (typeof(T).TryGetEntity() == null)
                 return;
 
             ExecuteCommandWithObjectData(GetDeleteCommand<T>(), o);
@@ -358,7 +352,7 @@ namespace IncredibleFit.SQL
                     else
                         continue;
 
-                var fieldAttribute = propertyInfo.GetField();
+                var fieldAttribute = propertyInfo.TryGetField();
                 if (fieldAttribute == null)
                     continue;
 
@@ -368,7 +362,7 @@ namespace IncredibleFit.SQL
                     direction,
                     GetOracleDbType(propertyInfo, fieldAttribute),
                     fieldAttribute.Size,
-                    propertyInfo.GetSubroutine())
+                    propertyInfo.TryGetCreateSubroutine())
                 );
 
             }
@@ -378,17 +372,17 @@ namespace IncredibleFit.SQL
 
         private static List<CommandParameter> GetIdProperty<T>(ParameterDirection direction)
         {
-            var idProperties = typeof(T).GetProperties().Where(info => info.GetField() != null && info.GetCustomAttribute<ID>() != null);
+            var idProperties = typeof(T).GetProperties().Where(info => info.TryGetField() != null && info.TryGetId() != null);
             if (!idProperties.Any())
             {
                 throw new InvalidOperationException("No id field specified in this class. Can't update object without");
             }
 
             return (from info in idProperties
-                    let field = info.GetField()!
+                    let field = info.TryGetField()!
                     let name = field.Name
                     let type = GetOracleDbType(info, field)
-                    select new CommandParameter(name, info, direction, type, field.Size, info.GetSubroutine())
+                    select new CommandParameter(name, info, direction, type, field.Size, info.TryGetCreateSubroutine())
                 ).ToList();
         }
 
@@ -435,8 +429,7 @@ namespace IncredibleFit.SQL
 
             #region RetreiveTableName
             var type = typeof(T);
-            var entityName = typeof(T).GetEntity();
-            commandBuilder.Append($"\"{entityName!.Name}\" ");
+            commandBuilder.Append($"\"{typeof(T).TryGetEntityName()!}\" ");
             #endregion
 
             var parameters = GetParameterList(typeof(T), true);
@@ -493,8 +486,8 @@ namespace IncredibleFit.SQL
 
             #region RetreiveTableName
 
-            var entityName = typeof(T).GetEntity();
-            commandBuilder.Append($"\"{entityName!.Name}\"");
+            var entity = typeof(T).TryGetEntity()!;
+            commandBuilder.Append($"\"{entity.Name}\"");
 
             #endregion
 
@@ -513,7 +506,7 @@ namespace IncredibleFit.SQL
             var idProperties = GetIdProperty<T>(ParameterDirection.Input);
             parameters.AddRange(idProperties);
 
-            commandBuilder.Append(CreateWhereStatement(entityName, idProperties));
+            commandBuilder.Append(CreateWhereStatement(entity, idProperties));
 
             #endregion
 
@@ -533,8 +526,8 @@ namespace IncredibleFit.SQL
             commandBuilder.Append("DELETE FROM ");
 
             #region RetreiveTableName
-            var entityName = typeof(T).GetEntity();
-            commandBuilder.Append($"\"{entityName!.Name}\"\n");
+            var entity = typeof(T).TryGetEntity()!;
+            commandBuilder.Append($"\"{entity.Name}\"\n");
             #endregion
 
             #region AddParamsAndValueParams
@@ -542,7 +535,7 @@ namespace IncredibleFit.SQL
             var idProperties = GetIdProperty<T>(ParameterDirection.Input);
             parameters.AddRange(idProperties);
 
-            commandBuilder.Append(CreateWhereStatement(entityName, idProperties));
+            commandBuilder.Append(CreateWhereStatement(entity, idProperties));
 
             #endregion
 
@@ -554,13 +547,13 @@ namespace IncredibleFit.SQL
 
         private static OracleDbType GetOracleDbType(PropertyInfo info, Field field)
         {
-            if (field.Mapping == null)
+            if (field.Type == null)
             {
                 return TypeToDb[info.PropertyType.GetNullableUnderlying()];
             }
             else
             {
-                return field.Mapping.Value;
+                return field.Type.Value;
             }
         }
 

@@ -5,7 +5,7 @@ namespace IncredibleFit.SQL.Entities
     [Entity("TRACK")]
     public class Track : BindableObject
     {
-        [ID, Field("TRACKID", OracleDbType.Int32), AutoIncrement]
+        [ID, Field("TRACKID", OracleDbType.Int32), ServerGenerated]
         public int TrackID
         {
             get => (int)GetValue(TrackIDProperty);

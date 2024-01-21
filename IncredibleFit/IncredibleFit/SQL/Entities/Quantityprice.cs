@@ -5,7 +5,7 @@ namespace IncredibleFit.SQL.Entities
     [Entity("QUANTITYPRICE")]
     public class Quantityprice : BindableObject
     {
-        [ID, Field("QUANTITYPRICEID", OracleDbType.Int32), AutoIncrement]
+        [ID, Field("QUANTITYPRICEID", OracleDbType.Int32), ServerGenerated]
         public int QuantitypriceID
         {
             get => (int)GetValue(QuantitypriceIDProperty);

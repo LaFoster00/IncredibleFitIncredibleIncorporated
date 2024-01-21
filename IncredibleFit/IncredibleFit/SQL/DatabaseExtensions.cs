@@ -39,18 +39,17 @@ namespace IncredibleFit.SQL
                 return new List<T>();
             }
 
-            var typeInfo = typeof(T).GetTypeInfo();
-            var entityName = typeInfo.GetCustomAttribute(typeof(Entity));
-            if (entityName == null)
+            var type = typeof(T);
+            if (type.TryGetEntity() == null)
                 return new List<T>();
 
             var list = new List<T>();
             while (reader.Read())
             {
                 var newInstance = (T)Activator.CreateInstance(typeof(T), true)!;
-                foreach (var propertyInfo in typeInfo.GetProperties())
+                foreach (var propertyInfo in type.GetProperties())
                 {
-                    var fieldAttribute = propertyInfo.GetCustomAttribute<Field>();
+                    var fieldAttribute = propertyInfo.TryGetField();
                     if (fieldAttribute == null)
                         continue;
                     for (var i = 0; i < reader.FieldCount; i++)
@@ -60,7 +59,7 @@ namespace IncredibleFit.SQL
                         if (reader.GetValue(i).Equals(DBNull.Value))
                             break;
 
-                        propertyInfo.SetValue(newInstance, reader.GetValue(i).ToSystemObject(fieldAttribute.Mapping, propertyInfo.PropertyType));
+                        propertyInfo.SetValue(newInstance, reader.GetValue(i).ToSystemObject(fieldAttribute.Type, propertyInfo.PropertyType));
 
                         break;
                     }

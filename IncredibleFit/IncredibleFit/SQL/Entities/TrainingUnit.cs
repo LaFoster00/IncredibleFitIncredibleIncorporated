@@ -6,7 +6,7 @@ namespace IncredibleFit.SQL.Entities
     public class TrainingUnit : BindableObject
 
     {
-        [ID, Field("TRAININGUNITID", OracleDbType.Int32), AutoIncrement]
+        [ID, Field("TRAININGUNITID", OracleDbType.Int32), ServerGenerated]
         public int TrainingUnitID
         {
             get => (int)GetValue(TrainingUnitIDProperty);
