@@ -279,7 +279,8 @@ namespace IncredibleFit.SQL
         /// <param name="o"></param>
         private static void ExecuteCommandWithObjectData(
             in (OracleCommand command, IReadOnlyList<CommandParameter> parameters) c,
-            in object o)
+            in object o,
+            bool printStatement = true)
         {
             foreach (var param in c.parameters)
             {
@@ -289,6 +290,9 @@ namespace IncredibleFit.SQL
                 var value = param.PropertyInfo.GetValue(o);
                 c.command.Parameters[$"P{param.Name}"].Value = value.FromDomain() ?? DBNull.Value;
             }
+
+            if (printStatement)
+                Debug.WriteLine(c.command.CommandText);
 
             try
             {
