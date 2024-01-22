@@ -41,6 +41,7 @@ public partial class TimeLineField : ContentView
         set => SetValue(AppointmentsNotVisibleProperty, value);
     }
 
+
     public static readonly BindableProperty DateTimeProperty = BindableProperty.Create(
             nameof(DateTime),
             typeof(DateTime),
@@ -71,10 +72,11 @@ public partial class TimeLineField : ContentView
             typeof(TimeLineField),
             false);
 
+
     public TimeLineField()
-	{
-		InitializeComponent();
-	}
+    {
+        InitializeComponent();
+    }
 
     protected override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
@@ -83,7 +85,8 @@ public partial class TimeLineField : ContentView
         {
             case nameof(DateTime):
                 Date = DateTime.ToString("dd/MM/yyyy");
-                Appointments = SQLTimeline.getAllAppointmentsByDate(DateTime);
+                SessionInfo info = SessionInfo.Instance;
+                Appointments = SQLTimeline.getAllAppointmentsByDate(DateTime, info.User!);
                 if (!Appointments.Any())
                 {
                     AppointmentsVisible = false;

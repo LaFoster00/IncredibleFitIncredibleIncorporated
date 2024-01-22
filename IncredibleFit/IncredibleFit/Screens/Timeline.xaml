@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:contentViews = "clr-namespace:IncredibleFit.ContentViews"
+             xmlns:screens = "clr-namespace:IncredibleFit.Screens"
+             x:DataType="screens:Timeline"
              x:Class="IncredibleFit.Screens.Timeline"
              Shell.NavBarIsVisible="False">
 

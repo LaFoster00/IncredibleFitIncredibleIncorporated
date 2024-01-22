@@ -6,7 +6,7 @@
 
     <Color x:Key="Primary">#FB8505</Color>
     <Color x:Key="Secondary">#FAC405</Color>
-    <Color x:Key="Tertiary">#ce4646</Color>
+    <Color x:Key="Tertiary">#FF1905</Color>
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>
     <Color x:Key="Transparent">#FFFFFFFF</Color>

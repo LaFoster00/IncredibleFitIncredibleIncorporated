@@ -7,7 +7,7 @@ namespace IncredibleFit.SQL
 {
     public static class SQLTimeline
     {
-        public static ObservableCollection<Appointment> getAllAppointmentsByDate(DateTime date)
+        public static ObservableCollection<Appointment> getAllAppointmentsByDate(DateTime date, User user)
         {
             ObservableCollection<Appointment> appointments = new ObservableCollection<Appointment>();
             DateTime date2 = new DateTime(date.Year, date.Month, date.Day);
@@ -15,7 +15,8 @@ namespace IncredibleFit.SQL
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "APPOINTMENT"
-                 WHERE "DATE" = :PDATE
+                 JOIN "USER_APPOINTMENT" ON APPOINTMENT.APPOINTMENTID = USER_APPOINTMENT.APPOINTMENTID
+                 WHERE APPOINTMENT."DATE" = :PDATE AND USER_APPOINTMENT.EMAIL = '{user.Email}'
                  """);
             command.Parameters.Add(new OracleParameter("PDATE", OracleDbType.Date)).Value = date2;
 
@@ -123,7 +124,6 @@ namespace IncredibleFit.SQL
                     }
                     else
                     {
-                        //User_Appointment deletet automatically?
                         OracleDatabase.DeleteObject(appointment);
                     }
                 }

@@ -38,9 +38,11 @@ public static class MauiProgram
         builder.Services.AddSingleton<Training>();
         builder.Services.AddSingleton<Trainingplan>();
         builder.Services.AddSingleton<SelectTrainingplan>();
+        builder.Services.AddSingleton<Timeline>();
 
         builder.Services.AddTransient<EditableField>();
         builder.Services.AddTransient<TrainingPlanUnitField>();
+        builder.Services.AddTransient<TimeLineField>();
         builder.Services.AddTransient<RecipeField>();
 
 

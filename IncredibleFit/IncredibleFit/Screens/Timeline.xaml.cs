@@ -3,9 +3,9 @@ using System.Collections.ObjectModel;
 namespace IncredibleFit.Screens;
 
 public partial class Timeline : ContentPage
-{
-	public ObservableCollection<DateTime> dateTimes { get; set; } = new ObservableCollection<DateTime>();
-	public Timeline()
+{ 
+    public ObservableCollection<DateTime> dateTimes { get; set; } = new ObservableCollection<DateTime>();
+	public Timeline(SessionInfo info)
 	{
 		InitializeComponent();
 		DateTime now = DateTime.Now;

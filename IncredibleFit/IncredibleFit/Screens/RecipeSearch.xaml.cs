@@ -17,7 +17,7 @@ public partial class RecipeSearch : ContentPage
 	{
         InitializeComponent();
         _sessionInfo = info;
-        recipeList = SQLNutrition.getAllVisibleRecipes(); ;
+        recipeList = SQLNutrition.getAllVisibleRecipes(_sessionInfo.User!); ;
         
         BindingContext = this;
     }
@@ -52,7 +52,7 @@ public partial class RecipeSearch : ContentPage
         this._filterKeyword = filterKeyword;
         this._filterIngredient = filterIngredient;
         recipeList.Clear();
-        ObservableCollection<Recipe> recipeList2 = SQLNutrition.getRecipesByIngredientAndKeyword(filterKeyword, filterIngredient);
+        ObservableCollection<Recipe> recipeList2 = SQLNutrition.getRecipesByIngredientAndKeyword(filterKeyword, filterIngredient, _sessionInfo.User!);
         for (int i = 0; i < recipeList2.Count; i++)
         {
             recipeList.Add(recipeList2[i]);

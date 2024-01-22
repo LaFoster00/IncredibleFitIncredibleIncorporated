@@ -5,6 +5,13 @@ namespace IncredibleFit
 {
     public partial class SessionInfo : ObservableObject
     {
+        public static SessionInfo Instance { get; private set; }
+
+        public SessionInfo()
+        {
+            Instance = this;
+        }
+
         [ObservableProperty]
         private User? _user = null; 
     }

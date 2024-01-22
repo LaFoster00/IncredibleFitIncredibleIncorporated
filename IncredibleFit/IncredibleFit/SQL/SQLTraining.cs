@@ -35,10 +35,13 @@ namespace IncredibleFit.SQL
 
             var command = OracleDatabase.CreateCommand(
                 $"""
-                 SELECT * FROM "TRAININGPLAN" 
-                 JOIN "USER_PLAN" 
-                 ON USER_PLAN.TRAININGPLANID = TRAININGPLAN.TRAININGPLANID
-                 WHERE USER_PLAN.EMAIL = '{user.Email}'
+                 SELECT *
+                 FROM "TRAININGPLAN"
+                 WHERE "TRAININGPLANID" IN (
+                     SELECT "TRAININGPLANID"
+                     FROM "USER_PLAN"
+                     WHERE "EMAIL" = '{user.Email}'
+                 )
                  """);
 
             var reader = OracleDatabase.ExecuteQuery(command);

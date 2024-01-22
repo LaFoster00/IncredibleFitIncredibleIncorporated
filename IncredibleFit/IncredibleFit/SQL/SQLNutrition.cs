@@ -1,23 +1,19 @@
 ﻿using IncredibleFit.SQL.Entities;
-using Microsoft.Maui.ApplicationModel.Communication;
 using Oracle.ManagedDataAccess.Client;
-using Oracle.ManagedDataAccess.Types;
 using System.Collections.ObjectModel;
-using System.Data;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace IncredibleFit.SQL
 {
     public static class SQLNutrition
     {
-        public static ObservableCollection<Recipe> getAllVisibleRecipes()
+        public static ObservableCollection<Recipe> getAllVisibleRecipes(User user)
         {
             ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
 
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "RECIPE"
-                 WHERE VISIBILITY=1
+                 WHERE VISIBILITY=1 OR (VISIBILITY = 0 AND EMAIL = '{user.Email}')
                  """);
 
             var reader = OracleDatabase.ExecuteQuery(command);
@@ -37,7 +33,7 @@ namespace IncredibleFit.SQL
             return recipes;
         }
 
-        public static ObservableCollection<Recipe> getRecipesByIngredientAndKeyword(string keyword, string ingredientname)
+        public static ObservableCollection<Recipe> getRecipesByIngredientAndKeyword(string keyword, string ingredientname, User user)
         {
             ObservableCollection<Recipe> recipes = new ObservableCollection<Recipe>();
 
@@ -48,7 +44,7 @@ namespace IncredibleFit.SQL
                 command = OracleDatabase.CreateCommand(
                     $"""
                  SELECT * FROM "RECIPE"
-                 WHERE VISIBILITY=1 AND NAME LIKE '%{keyword}%' 
+                 WHERE (VISIBILITY=1 OR (VISIBILITY = 0 AND EMAIL = '{user.Email}')) AND NAME LIKE '%{keyword}%' 
                  """);
             }
             else
@@ -58,7 +54,8 @@ namespace IncredibleFit.SQL
                  SELECT * FROM "RECIPE"
                  JOIN "RECIPEINGREDIENT"
                  ON RECIPEINGREDIENT.RECIPEID = RECIPE.RECIPEID
-                 WHERE RECIPE.VISIBILITY=1 AND RECIPE.NAME LIKE '%{keyword}%' AND RECIPEINGREDIENT.INGREDIENTNAME = '{ingredientname}'
+                 WHERE (RECIPE.VISIBILITY=1 OR (RECIPE.VISIBILITY = 0 AND RECIPE.EMAIL = '{user.Email}')) 
+                 AND RECIPE.NAME LIKE '%{keyword}%' AND RECIPEINGREDIENT.INGREDIENTNAME = '{ingredientname}'
                  """);
             }
 
