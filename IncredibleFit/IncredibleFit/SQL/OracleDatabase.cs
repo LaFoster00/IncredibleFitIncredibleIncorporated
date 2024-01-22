@@ -1,29 +1,38 @@
-﻿using System;
+﻿// Written by Lasse Foster https://github.com/LaFoster00
+
+using System;
 using System.Data;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
-using IncredibleFit.SQL.Entities;
 using Oracle.ManagedDataAccess.Client;
-using Oracle.ManagedDataAccess.Types;
 using static IncredibleFit.SQL.OracleDatabase;
 
 namespace IncredibleFit.SQL
 {
     internal static class DbExtensions
     {
-        // Converts oracle objects to their .net equivalent in case it is an oracle object
+        /// <summary>
+        /// Converts oracle objects to their .net equivalent in case it is an oracle object
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static object? ToSystemObject(this object? o, CommandParameter c)
         {
-            return o.ToSystemObject(c.Type, c.PropertyInfo.PropertyType);
+            return o.ToSystemObject(c.PropertyInfo.PropertyType, c.Type);
         }
     }
 
+    /// <summary>
+    /// Wrapper class around the Oracle Database specific code and basic database operations 
+    /// </summary>
     public partial class OracleDatabase : ObservableObject, IDisposable, IAsyncDisposable
     {
+        /// <summary>
+        /// All information required for an OracleCommand Parameter
+        /// </summary>
         internal struct CommandParameter
         {
             public readonly string Name;
@@ -50,6 +59,7 @@ namespace IncredibleFit.SQL
             }
         }
 
+        // Status information about the current connection
         [ObservableProperty]
         private bool _connected = false;
 
@@ -59,11 +69,18 @@ namespace IncredibleFit.SQL
         [ObservableProperty]
         private bool _connectionFailed = false;
 
+        // The current connection
         private OracleConnection? connection = null;
 
+        // The oracle database singleton instance
         private static OracleDatabase? _instance = null;
+
+        // The prefix for all generated return parameters
         private static readonly string GeneratedExt = "generated";
 
+        /// <summary>
+        /// The OracleDatabase singleton accessor
+        /// </summary>
         public static OracleDatabase Instance
         {
             get => _instance ??= new OracleDatabase();
@@ -124,6 +141,12 @@ namespace IncredibleFit.SQL
         {
         }
 
+        /// <summary>
+        /// Connects this app to the Oracle Database Server using the HSBI server info
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public static async Task Connect(string username, string password)
         {
             if (Instance.connection != null)
@@ -181,6 +204,13 @@ namespace IncredibleFit.SQL
                 }
             }
         }
+
+        /// <summary>
+        /// Creates an OracleCommand containing the specified command string and the current OracleConnection.
+        /// The Command is also set to bind by name so that parameter order is irrelevant.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         public static OracleCommand CreateCommand(in string command)
         {
             var cmd = new OracleCommand(command, Instance.connection);
@@ -188,6 +218,11 @@ namespace IncredibleFit.SQL
             return cmd;
         }
 
+        /// <summary>
+        /// Executes an OracleCommand query.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns>OracleDataReader containing the records of the query or null if command fails.</returns>
         public static OracleDataReader? ExecuteQuery(in OracleCommand command)
         {
             if (Instance.connection == null)
@@ -212,6 +247,10 @@ namespace IncredibleFit.SQL
             return null;
         }
 
+        /// <summary>
+        /// Executes non query oracle command
+        /// </summary>
+        /// <param name="command"></param>
         public static void ExecuteNonQuery(in OracleCommand command)
         {
             if (Instance.connection == null)
@@ -233,9 +272,15 @@ namespace IncredibleFit.SQL
             }
         }
 
+        /// <summary>
+        /// Executes non query with specified object's data
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="o"></param>
         private static void ExecuteCommandWithObjectData(
             in (OracleCommand command, IReadOnlyList<CommandParameter> parameters) c,
-            in object o)
+            in object o,
+            bool printStatement = true)
         {
             foreach (var param in c.parameters)
             {
@@ -245,6 +290,9 @@ namespace IncredibleFit.SQL
                 var value = param.PropertyInfo.GetValue(o);
                 c.command.Parameters[$"P{param.Name}"].Value = value.FromDomain() ?? DBNull.Value;
             }
+
+            if (printStatement)
+                Debug.WriteLine(c.command.CommandText);
 
             try
             {
@@ -256,7 +304,7 @@ namespace IncredibleFit.SQL
                     {
                         continue;
                     }
-                    param.PropertyInfo.SetValue(o, 
+                    param.PropertyInfo.SetValue(o,
                         c.command.Parameters[$"{GeneratedExt}{param.Name}"].Value.ToSystemObject(param));
                 }
             }
@@ -272,19 +320,27 @@ namespace IncredibleFit.SQL
             }
         }
 
+        /// <summary>
+        /// Inserts the specified object into the database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
         public static void InsertObject<T>(in T? o)
         {
             if (Instance.connection == null || o == null)
                 return;
 
-            var entityName = typeof(T).GetEntity();
-            if (entityName == null)
+            if (typeof(T).TryGetEntity() == null)
                 return;
 
             ExecuteCommandWithObjectData(GetInsertCommand<T>(), o);
         }
 
-
+        /// <summary>
+        /// Inserts multiple objects into the database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objects"></param>
         public static void InsertObjects<T>(in IReadOnlyList<T> objects)
         {
             if (Instance.connection == null)
@@ -298,30 +354,45 @@ namespace IncredibleFit.SQL
             transaction.Commit();
         }
 
+        /// <summary>
+        /// Updates the specified object in the database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
         public static void UpdateObject<T>(in T? o)
         {
             if (Instance.connection == null || o == null)
                 return;
 
-            var entityName = typeof(T).GetEntity();
-            if (entityName == null)
+            if (typeof(T).TryGetEntity() == null)
                 return;
 
             ExecuteCommandWithObjectData(GetUpdateCommand<T>(), o);
 
         }
 
+        /// <summary>
+        /// Deletes an object from the database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
         public static void DeleteObject<T>(in T? o)
         {
             if (Instance.connection == null || o == null)
                 return;
-            var entityName = typeof(T).GetEntity();
-            if (entityName == null)
+
+            if (typeof(T).TryGetEntity() == null)
                 return;
 
             ExecuteCommandWithObjectData(GetDeleteCommand<T>(), o);
         }
 
+        /// <summary>
+        /// Creates and populates an OracleCommand and its parameters with the command parameters given.
+        /// </summary>
+        /// <param name="commandBuilder"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         private static OracleCommand SetupCommandWithParams(
             in StringBuilder commandBuilder,
             in IReadOnlyList<CommandParameter> parameters)
@@ -345,8 +416,33 @@ namespace IncredibleFit.SQL
             return command;
         }
 
+        private static readonly Dictionary<Type, (List<CommandParameter> NoReadBack, List<CommandParameter> ReadBack)> TypeParamters = new();
+
+        /// <summary>
+        /// Gets the parameters for a type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="readBack"></param>
+        /// <returns>If readBack disabled, list with only input parameters, else list with output and return parameters included</returns>
         // Marks private setters as output values to be set in class after operation
         private static List<CommandParameter> GetParameterList(in Type type, in bool readBack)
+        {
+            if (TypeParamters.TryGetValue(type, out var ps))
+                return readBack ? ps.ReadBack : ps.NoReadBack;
+
+            TypeParamters.Add(type,
+                (GenerateParameterList(type, false), GenerateParameterList(type, true)));
+            return readBack ? TypeParamters[type].ReadBack : TypeParamters[type].NoReadBack;
+        }
+        
+        /// <summary>
+        /// Internal function only.
+        /// Generates the parameter list with or without read back parameters
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="readBack"></param>
+        /// <returns></returns>
+        private static List<CommandParameter> GenerateParameterList(in Type type, in bool readBack)
         {
             var parameters = new List<CommandParameter>();
             foreach (var propertyInfo in type.GetProperties())
@@ -358,7 +454,7 @@ namespace IncredibleFit.SQL
                     else
                         continue;
 
-                var fieldAttribute = propertyInfo.GetField();
+                var fieldAttribute = propertyInfo.TryGetField();
                 if (fieldAttribute == null)
                     continue;
 
@@ -368,7 +464,7 @@ namespace IncredibleFit.SQL
                     direction,
                     GetOracleDbType(propertyInfo, fieldAttribute),
                     fieldAttribute.Size,
-                    propertyInfo.GetSubroutine())
+                    propertyInfo.TryGetCreateSubroutine())
                 );
 
             }
@@ -376,22 +472,34 @@ namespace IncredibleFit.SQL
             return parameters;
         }
 
-        private static List<CommandParameter> GetIdProperty<T>(ParameterDirection direction)
+        /// <summary>
+        /// Finds all fields marked with an id property.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        private static List<CommandParameter> GetIdProperties<T>(ParameterDirection direction)
         {
-            var idProperties = typeof(T).GetProperties().Where(info => info.GetField() != null && info.GetCustomAttribute<ID>() != null);
+            var idProperties = typeof(T).GetProperties().Where(info => info.TryGetField() != null && info.TryGetId() != null);
             if (!idProperties.Any())
             {
                 throw new InvalidOperationException("No id field specified in this class. Can't update object without");
             }
 
             return (from info in idProperties
-                    let field = info.GetField()!
+                    let field = info.TryGetField()!
                     let name = field.Name
                     let type = GetOracleDbType(info, field)
-                    select new CommandParameter(name, info, direction, type, field.Size, info.GetSubroutine())
+                    select new CommandParameter(name, info, direction, type, field.Size, info.TryGetCreateSubroutine())
                 ).ToList();
         }
 
+        /// <summary>
+        /// Creates the RETURNING sql statement for all output and return parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         private static string CreateReturnStatement(IReadOnlyList<CommandParameter> parameters)
         {
             bool hasReturn = false;
@@ -411,6 +519,12 @@ namespace IncredibleFit.SQL
             return hasReturn ? vars.Append(ids).ToString() : string.Empty;
         }
 
+        /// <summary>
+        /// Creates the WHERE statements for all the id parameters
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="idProperties"></param>
+        /// <returns></returns>
         private static string CreateWhereStatement(Entity entity, IReadOnlyList<CommandParameter> idProperties)
         {
             var statement = new StringBuilder();
@@ -425,6 +539,11 @@ namespace IncredibleFit.SQL
         }
 
         private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeInsertCommands = new();
+        /// <summary>
+        /// Generates an insert command for the given type and caches it for reuse
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetInsertCommand<T>()
         {
             if (TypeInsertCommands.ContainsKey(typeof(T)))
@@ -435,8 +554,7 @@ namespace IncredibleFit.SQL
 
             #region RetreiveTableName
             var type = typeof(T);
-            var entityName = typeof(T).GetEntity();
-            commandBuilder.Append($"\"{entityName!.Name}\" ");
+            commandBuilder.Append($"\"{typeof(T).TryGetEntityName()!}\" ");
             #endregion
 
             var parameters = GetParameterList(typeof(T), true);
@@ -482,7 +600,11 @@ namespace IncredibleFit.SQL
         }
 
         private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeUpdateCommands = new();
-
+        /// <summary>
+        /// Generates an Update command for a given type and caches it for reuse
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetUpdateCommand<T>()
         {
             if (TypeUpdateCommands.ContainsKey(typeof(T)))
@@ -493,8 +615,8 @@ namespace IncredibleFit.SQL
 
             #region RetreiveTableName
 
-            var entityName = typeof(T).GetEntity();
-            commandBuilder.Append($"\"{entityName!.Name}\"");
+            var entity = typeof(T).TryGetEntity()!;
+            commandBuilder.Append($"\"{entity.Name}\"");
 
             #endregion
 
@@ -510,10 +632,10 @@ namespace IncredibleFit.SQL
                     .Append(i < parameters.Count - 1 ? "," : "").Append('\n');
             }
 
-            var idProperties = GetIdProperty<T>(ParameterDirection.Input);
+            var idProperties = GetIdProperties<T>(ParameterDirection.Input);
             parameters.AddRange(idProperties);
 
-            commandBuilder.Append(CreateWhereStatement(entityName, idProperties));
+            commandBuilder.Append(CreateWhereStatement(entity, idProperties));
 
             #endregion
 
@@ -524,6 +646,11 @@ namespace IncredibleFit.SQL
         }
 
         private static readonly Dictionary<Type, (OracleCommand command, IReadOnlyList<CommandParameter> parameters)> TypeDeleteCommands = new();
+        /// <summary>
+        /// Generates a delete command for a given type and caches it for reuse
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         private static (OracleCommand command, IReadOnlyList<CommandParameter> parameters) GetDeleteCommand<T>()
         {
             if (TypeDeleteCommands.ContainsKey(typeof(T)))
@@ -533,16 +660,16 @@ namespace IncredibleFit.SQL
             commandBuilder.Append("DELETE FROM ");
 
             #region RetreiveTableName
-            var entityName = typeof(T).GetEntity();
-            commandBuilder.Append($"\"{entityName!.Name}\"\n");
+            var entity = typeof(T).TryGetEntity()!;
+            commandBuilder.Append($"\"{entity.Name}\"\n");
             #endregion
 
             #region AddParamsAndValueParams
             var parameters = new List<CommandParameter>();
-            var idProperties = GetIdProperty<T>(ParameterDirection.Input);
+            var idProperties = GetIdProperties<T>(ParameterDirection.Input);
             parameters.AddRange(idProperties);
 
-            commandBuilder.Append(CreateWhereStatement(entityName, idProperties));
+            commandBuilder.Append(CreateWhereStatement(entity, idProperties));
 
             #endregion
 
@@ -552,15 +679,21 @@ namespace IncredibleFit.SQL
             return TypeDeleteCommands[typeof(T)];
         }
 
+        /// <summary>
+        /// Get the fields specified OracleDbType or looks up its implicit mapping using TypeToDb
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="field"></param>
+        /// <returns></returns>
         private static OracleDbType GetOracleDbType(PropertyInfo info, Field field)
         {
-            if (field.Mapping == null)
+            if (field.Type == null)
             {
                 return TypeToDb[info.PropertyType.GetNullableUnderlying()];
             }
             else
             {
-                return field.Mapping.Value;
+                return field.Type.Value;
             }
         }
 

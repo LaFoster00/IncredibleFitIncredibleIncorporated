@@ -1,18 +1,20 @@
-﻿using Oracle.ManagedDataAccess.Client;
+﻿// Written by Lasse Foster https://github.com/LaFoster00 and Lisa Weikenmeier
+
+using Oracle.ManagedDataAccess.Client;
 
 namespace IncredibleFit.SQL.Entities
 {
     [Entity("EXERCISEUNIT")]
     public class ExerciseUnit : BindableObject
     {
-        [ID, Field("EXERCISEUNITID", OracleDbType.Int32), AutoIncrement]
+        [ID, Field("EXERCISEUNITID", OracleDbType.Int32), ServerGenerated]
         public int ExerciseUnitID
         {
             get => (int)GetValue(ExerciseUnitIDProperty);
             private set => SetValue(ExerciseUnitIDProperty, value);
         }
 
-        [Field("EXERCISEID", OracleDbType.Int32), AutoIncrement]
+        [Field("EXERCISEID", OracleDbType.Int32), ServerGenerated]
         public int ExerciseID
         {
             get => (int)GetValue(ExerciseIDProperty);

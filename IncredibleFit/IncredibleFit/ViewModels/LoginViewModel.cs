@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿// Written by Lasse Foster https://github.com/LaFoster00
+
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using IncredibleFit.SQL;
 using IncredibleFit.SQL.Entities;

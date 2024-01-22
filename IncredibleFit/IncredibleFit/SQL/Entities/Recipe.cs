@@ -1,11 +1,13 @@
-﻿using Oracle.ManagedDataAccess.Client;
+﻿// Written by Lasse Foster https://github.com/LaFoster00 and Lisa Weikenmeier
+
+using Oracle.ManagedDataAccess.Client;
 
 namespace IncredibleFit.SQL.Entities
 {
     [Entity("RECIPE")]
     public class Recipe : BindableObject
     {
-        [ID, Field("RECIPEID", OracleDbType.Int32), AutoIncrement]
+        [ID, Field("RECIPEID", OracleDbType.Int32), ServerGenerated]
         public int RecipeID
         {
             get => (int)GetValue(RecipeIDProperty);

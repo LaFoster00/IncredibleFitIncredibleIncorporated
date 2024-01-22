@@ -1,11 +1,13 @@
-﻿using Oracle.ManagedDataAccess.Client;
+﻿// Written by Lasse Foster https://github.com/LaFoster00 and Lisa Weikenmeier
+
+using Oracle.ManagedDataAccess.Client;
 
 namespace IncredibleFit.SQL.Entities
 {
     [Entity("QUANTITYPRICE")]
     public class Quantityprice : BindableObject
     {
-        [ID, Field("QUANTITYPRICEID", OracleDbType.Int32), AutoIncrement]
+        [ID, Field("QUANTITYPRICEID", OracleDbType.Int32), ServerGenerated]
         public int QuantitypriceID
         {
             get => (int)GetValue(QuantitypriceIDProperty);

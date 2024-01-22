@@ -1,4 +1,4 @@
-﻿// SwitchableField.xaml.cs
+﻿// Written by Lasse Foster https://github.com/LaFoster00
 
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.Input;
