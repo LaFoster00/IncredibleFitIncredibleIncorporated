@@ -1,8 +1,7 @@
+// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
 using IncredibleFit.SQL;
 using IncredibleFit.SQL.Entities;
-using Microsoft.Maui;
-using System.DirectoryServices.ActiveDirectory;
-using System.Drawing;
 using System.Runtime.CompilerServices;
 
 namespace IncredibleFit.ContentViews;

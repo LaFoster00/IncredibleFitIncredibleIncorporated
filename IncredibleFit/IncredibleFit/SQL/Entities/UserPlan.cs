@@ -1,4 +1,6 @@
-﻿using Oracle.ManagedDataAccess.Client;
+﻿// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
+using Oracle.ManagedDataAccess.Client;
 
 namespace IncredibleFit.SQL.Entities
 {

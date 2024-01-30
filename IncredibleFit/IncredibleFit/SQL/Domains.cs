@@ -115,7 +115,7 @@ namespace IncredibleFit.SQL
 
     public enum Weekday : short
     {
-        FridayFridayGottaGetDownOnFriday = -1,
+        Invalid = -1,
         Monday = 0,
         Tuesday = 1,
         Wednesday = 2,

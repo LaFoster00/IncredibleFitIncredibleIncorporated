@@ -1,3 +1,5 @@
+// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
 using IncredibleFit.SQL;
 using IncredibleFit.SQL.Entities;
 using System.Runtime.CompilerServices;

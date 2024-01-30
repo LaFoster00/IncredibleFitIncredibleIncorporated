@@ -1,3 +1,5 @@
+// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
 using System.Collections.ObjectModel;
 
 namespace IncredibleFit.Screens;

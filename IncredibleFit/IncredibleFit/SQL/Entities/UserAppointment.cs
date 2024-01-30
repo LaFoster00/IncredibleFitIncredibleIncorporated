@@ -1,9 +1,6 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
+using Oracle.ManagedDataAccess.Client;
 
 namespace IncredibleFit.SQL.Entities
 {

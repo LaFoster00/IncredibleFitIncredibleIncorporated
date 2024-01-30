@@ -1,4 +1,4 @@
-﻿// Written by Lasse Foster https://github.com/LaFoster00
+﻿// Written by Lasse Foster https://github.com/LaFoster00 and Lisa Weickenmeier https://github.com/LisaWckn
 
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.Input;
