@@ -1,4 +1,5 @@
-using IncredibleFit.Screens;
+// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
 using IncredibleFit.SQL.Entities;
 
 namespace IncredibleFit.ContentViews;

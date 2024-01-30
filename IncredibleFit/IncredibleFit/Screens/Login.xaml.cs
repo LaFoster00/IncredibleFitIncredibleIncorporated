@@ -1,4 +1,6 @@
-﻿using IncredibleFit.ViewModels;
+﻿// Written by Lasse Foster https://github.com/LaFoster00
+
+using IncredibleFit.ViewModels;
 
 namespace IncredibleFit.Screens
 {

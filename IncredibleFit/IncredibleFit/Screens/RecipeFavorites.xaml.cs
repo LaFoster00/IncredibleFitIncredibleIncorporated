@@ -1,3 +1,5 @@
+// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
 using IncredibleFit.SQL;
 using IncredibleFit.SQL.Entities;
 using System.Collections.ObjectModel;
@@ -24,16 +26,10 @@ public partial class RecipeFavorites : ContentPage
         Navigation.PushAsync(new RecipeDetails(recipe, _sessionInfo));
     }
 
-    void RefreshFavorites(object sender, EventArgs e)
+    void RefreshFavorites(object? sender, EventArgs? e)
     {
         FavoritesList.Clear();
         ObservableCollection<Recipe> tmp = SQLNutrition.getFavoriteRecipes(_sessionInfo.User!);
-        for (int i = 0; i < FavoritesList.Count; i++)
-        {
-            Recipecategory recipeCat = SQLNutrition.getRecipeCategory(tmp[i]);
-            tmp[i].MealType = recipeCat.Mealtype;
-            tmp[i].FoodCategory = recipeCat.Foodcategory;
-        }
 
         for (int i = 0; i < tmp.Count; i++)
         {

@@ -1,9 +1,8 @@
-using CommunityToolkit.Maui;
+// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
 using CommunityToolkit.Maui.Views;
 using IncredibleFit.SQL.Entities;
 using IncredibleFit.Screens;
-using IncredibleFit.SQL;
-using System.Globalization;
 
 namespace IncredibleFit.PopUps;
 

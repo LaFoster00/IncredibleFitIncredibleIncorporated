@@ -1,3 +1,5 @@
+// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
 using IncredibleFit.PopUps;
 using IncredibleFit.SQL.Entities;
 using CommunityToolkit.Maui.Views;

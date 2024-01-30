@@ -1,4 +1,6 @@
-﻿using IncredibleFit.SQL.Entities;
+﻿// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
+using IncredibleFit.SQL.Entities;
 using Oracle.ManagedDataAccess.Client;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -56,7 +58,7 @@ namespace IncredibleFit.SQL
             OracleDatabase.InsertObject(uA);
         }
 
-        public static Recipe getRecipeByAppointment(Appointment appointment)
+        public static Recipe? getRecipeByAppointment(Appointment appointment)
         {
             var command = OracleDatabase.CreateCommand(
                 $"""
@@ -71,7 +73,7 @@ namespace IncredibleFit.SQL
             return track.Any() ? track[0] : null;
         }
 
-        public static TrainingUnit getTrainingUnitByAppointment(Appointment appointment)
+        public static TrainingUnit? getTrainingUnitByAppointment(Appointment appointment)
         {
             var command = OracleDatabase.CreateCommand(
                 $"""
@@ -87,17 +89,21 @@ namespace IncredibleFit.SQL
 
         public static void deleteAppointmentsForOldTrainingPlan(TrainingPlan trainingPlan, User user)
         {
-            List<PlanTrainingUnit> planTrainingUnits = SQLTraining.getPlanTrainingUnitsByTrainingPlan(trainingPlan);
+            List<PlanTrainingUnit>? planTrainingUnits = SQLTraining.getPlanTrainingUnitsByTrainingPlan(trainingPlan);
+
+            if(planTrainingUnits == null) { return; }
 
             for(int i = 0; i < planTrainingUnits.Count; i++)
             {
-                TrainingUnit tU = SQLTraining.getTrainingUnit(planTrainingUnits[i]);
+                TrainingUnit? tU = SQLTraining.getTrainingUnit(planTrainingUnits[i]);
                 deleteTrainingUnitAppointment(tU, user);
             }
         }
 
-        public static void deleteTrainingUnitAppointment(TrainingUnit trainingUnit, User user)
+        public static void deleteTrainingUnitAppointment(TrainingUnit? trainingUnit, User user)
         {
+            if(trainingUnit == null) { return; }
+
             var command = OracleDatabase.CreateCommand(
                 $"""
                  SELECT * FROM "APPOINTMENT"
@@ -132,7 +138,9 @@ namespace IncredibleFit.SQL
 
         public static void insertAppointmentsForNewTrainingPlan(TrainingPlan trainingPlan, User user)
         {
-            List<PlanTrainingUnit> planTrainingUnits = SQLTraining.getPlanTrainingUnitsByTrainingPlan(trainingPlan);
+            List<PlanTrainingUnit>? planTrainingUnits = SQLTraining.getPlanTrainingUnitsByTrainingPlan(trainingPlan);
+
+            if(planTrainingUnits == null) { return; }
 
             for (int i = 0; i < planTrainingUnits.Count; i++)
             {
@@ -140,14 +148,16 @@ namespace IncredibleFit.SQL
                 for(int j = 0; j < 10; j++)
                 {
                     DateTime current = start.AddDays(7 * j);
-                    TrainingUnit tU = SQLTraining.getTrainingUnit(planTrainingUnits[i]);
+                    TrainingUnit? tU = SQLTraining.getTrainingUnit(planTrainingUnits[i]);
                     insertTrainingUnitAppointment(tU, user, current);
                 }
             }
         }
 
-        public static void insertTrainingUnitAppointment(TrainingUnit trainingUnit, User user, DateTime date)
+        public static void insertTrainingUnitAppointment(TrainingUnit? trainingUnit, User user, DateTime date)
         {
+            if(trainingUnit == null) { return; }
+
             var command = OracleDatabase.CreateCommand(
                 $"""
                  INSERT INTO APPOINTMENT("DATE", STATUS, TRAININGUNITID)

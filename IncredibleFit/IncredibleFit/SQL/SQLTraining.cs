@@ -1,5 +1,6 @@
-﻿using IncredibleFit.SQL.Entities;
-using System.Collections;
+﻿// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
+using IncredibleFit.SQL.Entities;
 using System.Collections.ObjectModel;
 
 namespace IncredibleFit.SQL
@@ -29,7 +30,7 @@ namespace IncredibleFit.SQL
 
             return TrainingPlans;
         }
-        public static TrainingPlan getCurrentTrainingPlan(User user)
+        public static TrainingPlan? getCurrentTrainingPlan(User user)
         {
             //Get selected plan by user
 
@@ -87,7 +88,7 @@ namespace IncredibleFit.SQL
             SQLTimeline.insertAppointmentsForNewTrainingPlan(trainingPlan, user);
         }
 
-        public static List<PlanTrainingUnit> getPlanTrainingUnitsByTrainingPlan(TrainingPlan trainingPlan)
+        public static List<PlanTrainingUnit>? getPlanTrainingUnitsByTrainingPlan(TrainingPlan trainingPlan)
         {
             if(trainingPlan == null)
             {
@@ -107,7 +108,7 @@ namespace IncredibleFit.SQL
             return track;
         }
 
-        public static TrainingUnit getTrainingUnit(PlanTrainingUnit unit)
+        public static TrainingUnit? getTrainingUnit(PlanTrainingUnit unit)
         {
             if(unit == null)
             {
@@ -143,7 +144,7 @@ namespace IncredibleFit.SQL
             return exercises.Count();
         }
 
-        public static TrainingUnit getNextTrainingUnit(User user)
+        public static TrainingUnit? getNextTrainingUnit(User user)
         {
             var command = OracleDatabase.CreateCommand(
                 $"""
@@ -157,7 +158,7 @@ namespace IncredibleFit.SQL
 
             var track = reader.ToObjectList<Appointment>();
 
-            Appointment appointment = track.Any() ? track[0] : null;
+            Appointment? appointment = track.Any() ? track[0] : null;
 
             if(appointment == null)
             {
@@ -177,8 +178,10 @@ namespace IncredibleFit.SQL
             return track2.Any() ? track2[0] : null;
         }
 
-        public static void setTrainingUnitDone(TrainingUnit unit)
+        public static void setTrainingUnitDone(TrainingUnit? unit)
         {
+            if(unit == null) { return; }
+
             //Set Appointment with unit done in database
             var command = OracleDatabase.CreateCommand(
                 $"""
@@ -190,7 +193,7 @@ namespace IncredibleFit.SQL
 
             var track = reader.ToObjectList<Appointment>();
 
-            Appointment appointment = track.Any() ? track[0] : null;
+            Appointment? appointment = track.Any() ? track[0] : null;
 
             if(appointment == null) { return;}
 
@@ -232,7 +235,7 @@ namespace IncredibleFit.SQL
             return exerciseUnits;
         }
 
-        public static Exercise getExerciseByExerciseUnit(ExerciseUnit exerciseUnit)
+        public static Exercise? getExerciseByExerciseUnit(ExerciseUnit exerciseUnit)
         {
             var command = OracleDatabase.CreateCommand(
                 $"""

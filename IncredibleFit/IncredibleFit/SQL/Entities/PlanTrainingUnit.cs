@@ -1,4 +1,4 @@
-﻿// Written by Lasse Foster https://github.com/LaFoster00 and Lisa Weikenmeier
+﻿// Written by Lasse Foster https://github.com/LaFoster00 and Lisa Weickenmeier https://github.com/LisaWckn
 
 using Oracle.ManagedDataAccess.Client;
 
@@ -47,7 +47,7 @@ namespace IncredibleFit.SQL.Entities
                 nameof(Weekday), 
                 typeof(Weekday), 
                 typeof(PlanTrainingUnit), 
-                Weekday.FridayFridayGottaGetDownOnFriday);
+                Weekday.Invalid);
 
         private PlanTrainingUnit() { }
 

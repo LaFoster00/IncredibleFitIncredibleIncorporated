@@ -1,4 +1,6 @@
-﻿using IncredibleFit.SQL.Entities;
+﻿// Written by Lisa Weickenmeier https://github.com/LisaWckn
+
+using IncredibleFit.SQL.Entities;
 using Oracle.ManagedDataAccess.Client;
 using System.Collections.ObjectModel;
 
@@ -23,9 +25,12 @@ namespace IncredibleFit.SQL
             {
                 foreach ( var item in track)
                 {
-                    Recipecategory recipeCat = SQLNutrition.getRecipeCategory(item);
-                    item.MealType = recipeCat.Mealtype;
-                    item.FoodCategory = recipeCat.Foodcategory;
+                    Recipecategory? recipeCat = SQLNutrition.getRecipeCategory(item);
+                    if (recipeCat != null)
+                    {
+                        item.MealType = recipeCat.Mealtype;
+                        item.FoodCategory = recipeCat.Foodcategory;
+                    }
                     recipes.Add(item);
                 }
             }
@@ -66,9 +71,12 @@ namespace IncredibleFit.SQL
             {
                 foreach (var item in track)
                 {
-                    Recipecategory recipeCat = SQLNutrition.getRecipeCategory(item);
-                    item.MealType = recipeCat.Mealtype;
-                    item.FoodCategory = recipeCat.Foodcategory;
+                    Recipecategory? recipeCat = SQLNutrition.getRecipeCategory(item);
+                    if (recipeCat != null)
+                    {
+                        item.MealType = recipeCat.Mealtype;
+                        item.FoodCategory = recipeCat.Foodcategory;
+                    }
                     recipes.Add(item);
                 }
             }
@@ -98,9 +106,12 @@ namespace IncredibleFit.SQL
             {
                 foreach (var item in track)
                 {
-                    Recipecategory recipeCat = SQLNutrition.getRecipeCategory(item);
-                    item.MealType = recipeCat.Mealtype;
-                    item.FoodCategory = recipeCat.Foodcategory;
+                    Recipecategory? recipeCat = SQLNutrition.getRecipeCategory(item);
+                    if (recipeCat != null)
+                    {
+                        item.MealType = recipeCat.Mealtype;
+                        item.FoodCategory = recipeCat.Foodcategory;
+                    }
                     recipes.Add(item);
                 }
             }
@@ -133,7 +144,7 @@ namespace IncredibleFit.SQL
             OracleDatabase.DeleteObject(usR);
         }
 
-        public static Recipecategory getRecipeCategory(Recipe recipe)
+        public static Recipecategory? getRecipeCategory(Recipe recipe)
         {
             var command = OracleDatabase.CreateCommand(
                 $"""
@@ -204,7 +215,7 @@ namespace IncredibleFit.SQL
             return track.Any() ? track[0].Quantityunit : QuantityUnit.Invalid;
         }
 
-        public static Track getTrackByDate(DateTime date, User? user)
+        public static Track? getTrackByDate(DateTime date, User? user)
         {
             string mail = "";
             if (user != null)
