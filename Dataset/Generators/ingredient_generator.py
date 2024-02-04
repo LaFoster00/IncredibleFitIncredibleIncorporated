@@ -114,7 +114,7 @@ ingredientInsert = '''EXECUTE INSERTINGREDIENT('{}', {}, {}, {}, {}, {}, {}, TO_
 def generateIngredients():
     print("\n-- ingredient\n")
     for name, ingredientParams in ingredients.items():
-        a = ingredientInsert.format(name, *ingredientParams[:-2], str(ingredientParams[-2]), str(ingredientParams[-1]))
+        a = ingredientInsert.format(name, *ingredientParams[:-2], str(ingredientParams[-2]).replace(".", ","), str(ingredientParams[-1]).replace(".", ","))
         print(a)
 
 if __name__ == "__main__":

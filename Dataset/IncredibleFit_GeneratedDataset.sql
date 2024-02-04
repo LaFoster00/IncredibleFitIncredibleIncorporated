@@ -238,38 +238,38 @@ VALUES ('samuel.hardy@gmail.com', TO_DATE('2024-01-31', 'YYYY-MM-DD'), 2149, 110
 
 -- ingredient
 
-EXECUTE INSERTINGREDIENT('aubergine', 2, 23, 2, 0, 3, 4, TO_NUMBER('0.7'), TO_NUMBER('1.2'));
-EXECUTE INSERTINGREDIENT('beef', 0, 107, 22, 2, 0, 2, TO_NUMBER('6.0'), TO_NUMBER('12.0'));
-EXECUTE INSERTINGREDIENT('banana', 2, 96, 1, 1, 22, 2, TO_NUMBER('6.0'), TO_NUMBER('12.0'));
-EXECUTE INSERTINGREDIENT('carrot', 2, 135, 1, 0, 5, 2, TO_NUMBER('0.5'), TO_NUMBER('1.9'));
-EXECUTE INSERTINGREDIENT('cheese', 1, 353, 24, 28, 0, 2, TO_NUMBER('3.2'), TO_NUMBER('8.0'));
-EXECUTE INSERTINGREDIENT('chicken breast', 0, 152, 21, 8, 0, 2, TO_NUMBER('3.0'), TO_NUMBER('6.0'));
-EXECUTE INSERTINGREDIENT('cream', 1, 293, 2, 30, 4, 3, TO_NUMBER('0.1'), TO_NUMBER('0.3'));
-EXECUTE INSERTINGREDIENT('garlic', 2, 139, 6, 1, 28, 2, TO_NUMBER('0.1'), TO_NUMBER('0.7'));
-EXECUTE INSERTINGREDIENT('pork', 0, 120, 28, 10, 0, 2, TO_NUMBER('4.0'), TO_NUMBER('7.0'));
-EXECUTE INSERTINGREDIENT('potato', 2, 72, 2, 0, 15, 2, TO_NUMBER('0.4'), TO_NUMBER('2.1'));
-EXECUTE INSERTINGREDIENT('red bell pepper', 2, 44, 1, 0, 3, 4, TO_NUMBER('0.5'), TO_NUMBER('0.9'));
-EXECUTE INSERTINGREDIENT('rice', 2, 128, 8, 5, 58, 3, TO_NUMBER('0.8'), TO_NUMBER('4.4'));
-EXECUTE INSERTINGREDIENT('salad', 2, 28, 2, 0, 2, 4, TO_NUMBER('0.7'), TO_NUMBER('3.0'));
-EXECUTE INSERTINGREDIENT('salmon', 0, 188, 20, 12, 0, 2, TO_NUMBER('5.0'), TO_NUMBER('11.0'));
-EXECUTE INSERTINGREDIENT('spaghetti', 2, 417, 4, 3, 70, 3, TO_NUMBER('0.5'), TO_NUMBER('2.7'));
-EXECUTE INSERTINGREDIENT('tomato', 2, 19, 1, 1, 4, 2, TO_NUMBER('0.1'), TO_NUMBER('0.7'));
-EXECUTE INSERTINGREDIENT('zucchini', 2, 20, 2, 0, 2, 4, TO_NUMBER('0.5'), TO_NUMBER('1.1'));
-EXECUTE INSERTINGREDIENT('yoghurt', 1, 59, 10, 1, 3, 0, TO_NUMBER('3.0'), TO_NUMBER('6.0'));
-EXECUTE INSERTINGREDIENT('beeries', 2, 54, 0, 1, 5, 0, TO_NUMBER('4.5'), TO_NUMBER('7.5'));
-EXECUTE INSERTINGREDIENT('honey', 1, 304, 0, 0, 82, 0, TO_NUMBER('3.0'), TO_NUMBER('8.0'));
-EXECUTE INSERTINGREDIENT('nuts', 2, 576, 21, 50, 22, 0, TO_NUMBER('5.5'), TO_NUMBER('10.0'));
-EXECUTE INSERTINGREDIENT('qunioa', 2, 120, 31, 4, 17, 0, TO_NUMBER('7.0'), TO_NUMBER('11.0'));
-EXECUTE INSERTINGREDIENT('lemon juice', 2, 22, 0, 0, 6, 0, TO_NUMBER('3.0'), TO_NUMBER('5.0'));
-EXECUTE INSERTINGREDIENT('sweet potatoes', 2, 86, 2, 0, 20, 0, TO_NUMBER('9.0'), TO_NUMBER('15.0'));
-EXECUTE INSERTINGREDIENT('sugar', 1, 400, 0, 0, 100, 0, TO_NUMBER('3.0'), TO_NUMBER('4.5'));
-EXECUTE INSERTINGREDIENT('flour', 2, 300, 10, 1, 60, 0, TO_NUMBER('0.5'), TO_NUMBER('2.5'));
-EXECUTE INSERTINGREDIENT('eggs', 1, 70, 6, 5, 1, 4, TO_NUMBER('5.0'), TO_NUMBER('7.0'));
-EXECUTE INSERTINGREDIENT('olive oil', 1, 120, 0, 14, 0, 1, TO_NUMBER('0.1'), TO_NUMBER('0.2'));
-EXECUTE INSERTINGREDIENT('basil', 2, 2, 0, 0, 0, 4, TO_NUMBER('1.5'), TO_NUMBER('2.0'));
-EXECUTE INSERTINGREDIENT('ground beef', 0, 250, 26, 17, 0, 0, TO_NUMBER('0.5'), TO_NUMBER('1.0'));
-EXECUTE INSERTINGREDIENT('tomato sauce', 2, 50, 2, 0, 10, 0, TO_NUMBER('0.05'), TO_NUMBER('0.1'));
-EXECUTE INSERTINGREDIENT('quinoa', 2, 43, 4, 8, 9, 0, TO_NUMBER('0.5'), TO_NUMBER('1.0'));
+EXECUTE INSERTINGREDIENT('aubergine', 2, 23, 2, 0, 3, 4, TO_NUMBER('0,7'), TO_NUMBER('1,2'));
+EXECUTE INSERTINGREDIENT('beef', 0, 107, 22, 2, 0, 2, TO_NUMBER('6,0'), TO_NUMBER('12,0'));
+EXECUTE INSERTINGREDIENT('banana', 2, 96, 1, 1, 22, 2, TO_NUMBER('6,0'), TO_NUMBER('12,0'));
+EXECUTE INSERTINGREDIENT('carrot', 2, 135, 1, 0, 5, 2, TO_NUMBER('0,5'), TO_NUMBER('1,9'));
+EXECUTE INSERTINGREDIENT('cheese', 1, 353, 24, 28, 0, 2, TO_NUMBER('3,2'), TO_NUMBER('8,0'));
+EXECUTE INSERTINGREDIENT('chicken breast', 0, 152, 21, 8, 0, 2, TO_NUMBER('3,0'), TO_NUMBER('6,0'));
+EXECUTE INSERTINGREDIENT('cream', 1, 293, 2, 30, 4, 3, TO_NUMBER('0,1'), TO_NUMBER('0,3'));
+EXECUTE INSERTINGREDIENT('garlic', 2, 139, 6, 1, 28, 2, TO_NUMBER('0,1'), TO_NUMBER('0,7'));
+EXECUTE INSERTINGREDIENT('pork', 0, 120, 28, 10, 0, 2, TO_NUMBER('4,0'), TO_NUMBER('7,0'));
+EXECUTE INSERTINGREDIENT('potato', 2, 72, 2, 0, 15, 2, TO_NUMBER('0,4'), TO_NUMBER('2,1'));
+EXECUTE INSERTINGREDIENT('red bell pepper', 2, 44, 1, 0, 3, 4, TO_NUMBER('0,5'), TO_NUMBER('0,9'));
+EXECUTE INSERTINGREDIENT('rice', 2, 128, 8, 5, 58, 3, TO_NUMBER('0,8'), TO_NUMBER('4,4'));
+EXECUTE INSERTINGREDIENT('salad', 2, 28, 2, 0, 2, 4, TO_NUMBER('0,7'), TO_NUMBER('3,0'));
+EXECUTE INSERTINGREDIENT('salmon', 0, 188, 20, 12, 0, 2, TO_NUMBER('5,0'), TO_NUMBER('11,0'));
+EXECUTE INSERTINGREDIENT('spaghetti', 2, 417, 4, 3, 70, 3, TO_NUMBER('0,5'), TO_NUMBER('2,7'));
+EXECUTE INSERTINGREDIENT('tomato', 2, 19, 1, 1, 4, 2, TO_NUMBER('0,1'), TO_NUMBER('0,7'));
+EXECUTE INSERTINGREDIENT('zucchini', 2, 20, 2, 0, 2, 4, TO_NUMBER('0,5'), TO_NUMBER('1,1'));
+EXECUTE INSERTINGREDIENT('yoghurt', 1, 59, 10, 1, 3, 0, TO_NUMBER('3,0'), TO_NUMBER('6,0'));
+EXECUTE INSERTINGREDIENT('beeries', 2, 54, 0, 1, 5, 0, TO_NUMBER('4,5'), TO_NUMBER('7,5'));
+EXECUTE INSERTINGREDIENT('honey', 1, 304, 0, 0, 82, 0, TO_NUMBER('3,0'), TO_NUMBER('8,0'));
+EXECUTE INSERTINGREDIENT('nuts', 2, 576, 21, 50, 22, 0, TO_NUMBER('5,5'), TO_NUMBER('10,0'));
+EXECUTE INSERTINGREDIENT('qunioa', 2, 120, 31, 4, 17, 0, TO_NUMBER('7,0'), TO_NUMBER('11,0'));
+EXECUTE INSERTINGREDIENT('lemon juice', 2, 22, 0, 0, 6, 0, TO_NUMBER('3,0'), TO_NUMBER('5,0'));
+EXECUTE INSERTINGREDIENT('sweet potatoes', 2, 86, 2, 0, 20, 0, TO_NUMBER('9,0'), TO_NUMBER('15,0'));
+EXECUTE INSERTINGREDIENT('sugar', 1, 400, 0, 0, 100, 0, TO_NUMBER('3,0'), TO_NUMBER('4,5'));
+EXECUTE INSERTINGREDIENT('flour', 2, 300, 10, 1, 60, 0, TO_NUMBER('0,5'), TO_NUMBER('2,5'));
+EXECUTE INSERTINGREDIENT('eggs', 1, 70, 6, 5, 1, 4, TO_NUMBER('5,0'), TO_NUMBER('7,0'));
+EXECUTE INSERTINGREDIENT('olive oil', 1, 120, 0, 14, 0, 1, TO_NUMBER('0,1'), TO_NUMBER('0,2'));
+EXECUTE INSERTINGREDIENT('basil', 2, 2, 0, 0, 0, 4, TO_NUMBER('1,5'), TO_NUMBER('2,0'));
+EXECUTE INSERTINGREDIENT('ground beef', 0, 250, 26, 17, 0, 0, TO_NUMBER('0,5'), TO_NUMBER('1,0'));
+EXECUTE INSERTINGREDIENT('tomato sauce', 2, 50, 2, 0, 10, 0, TO_NUMBER('0,05'), TO_NUMBER('0,1'));
+EXECUTE INSERTINGREDIENT('quinoa', 2, 43, 4, 8, 9, 0, TO_NUMBER('0,5'), TO_NUMBER('1,0'));
 
 -- recipecategory
 
@@ -337,7 +337,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'),
     'garlic',
-    1
+    2
     );
 
 
@@ -345,7 +345,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'),
     'red bell pepper',
-    3
+    2
     );
 
 
@@ -353,7 +353,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'),
     'chicken breast',
-    1
+    2
     );
 
 
@@ -380,7 +380,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Lemon-Pepper Salmon'),
     'garlic',
-    2
+    3
     );
 
 
@@ -396,7 +396,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Lemon-Pepper Salmon'),
     'salmon',
-    2
+    1
     );
 
 
@@ -423,7 +423,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpasti'),
     'zucchini',
-    1
+    2
     );
 
 
@@ -439,7 +439,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpasti'),
     'aubergine',
-    2
+    3
     );
 
 
@@ -474,7 +474,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'),
     'tomato',
-    1
+    3
     );
 
 
@@ -482,7 +482,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'),
     'chicken breast',
-    1
+    3
     );
 
 
@@ -498,7 +498,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'),
     'red bell pepper',
-    1
+    2
     );
 
 
@@ -517,7 +517,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Chicken, Zucchini, and Artichoke Salad'),
     'zucchini',
-    2
+    1
     );
 
 
@@ -533,7 +533,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Chicken, Zucchini, and Artichoke Salad'),
     'chicken breast',
-    3
+    2
     );
 
 
@@ -541,7 +541,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Chicken, Zucchini, and Artichoke Salad'),
     'salad',
-    3
+    1
     );
 
 
@@ -560,7 +560,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'),
     'garlic',
-    2
+    1
     );
 
 
@@ -576,7 +576,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'),
     'potato',
-    2
+    1
     );
 
 
@@ -592,7 +592,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'),
     'red bell pepper',
-    3
+    2
     );
 
 
@@ -600,7 +600,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'),
     'zucchini',
-    1
+    2
     );
 
 
@@ -608,7 +608,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'),
     'rice',
-    3
+    1
     );
 
 
@@ -627,7 +627,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'),
     'garlic',
-    1
+    2
     );
 
 
@@ -643,7 +643,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'),
     'salad',
-    1
+    3
     );
 
 
@@ -651,7 +651,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'),
     'pork',
-    1
+    2
     );
 
 
@@ -659,7 +659,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'),
     'cheese',
-    2
+    3
     );
 
 
@@ -678,7 +678,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Avocado banana smoothie'),
     'banana',
-    1
+    3
     );
 
 
@@ -697,22 +697,6 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'),
     'yoghurt',
-    1
-    );
-
-
-INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES (
-    (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'),
-    'beeries',
-    3
-    );
-
-
-INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES (
-    (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'),
-    'honey',
     2
     );
 
@@ -720,8 +704,24 @@ VALUES (
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'),
-    'nuts',
+    'beeries',
     1
+    );
+
+
+INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
+VALUES (
+    (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'),
+    'honey',
+    1
+    );
+
+
+INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
+VALUES (
+    (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'),
+    'nuts',
+    3
     );
 
 
@@ -740,7 +740,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Chicken-Quinoa-salad'),
     'chicken breast',
-    2
+    3
     );
 
 
@@ -756,7 +756,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Chicken-Quinoa-salad'),
     'olive oil',
-    3
+    1
     );
 
 
@@ -764,7 +764,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Chicken-Quinoa-salad'),
     'lemon juice',
-    3
+    2
     );
 
 
@@ -783,7 +783,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Salmon with sweet potatoes'),
     'lemon juice',
-    1
+    3
     );
 
 
@@ -791,7 +791,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Salmon with sweet potatoes'),
     'salmon',
-    2
+    1
     );
 
 
@@ -799,7 +799,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Salmon with sweet potatoes'),
     'sweet potatoes',
-    2
+    3
     );
 
 
@@ -826,7 +826,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Cheesecake'),
     'flour',
-    1
+    2
     );
 
 
@@ -861,7 +861,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Tomato Salad'),
     'olive oil',
-    3
+    2
     );
 
 
@@ -869,7 +869,7 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Tomato Salad'),
     'basil',
-    2
+    1
     );
 
 
@@ -888,14 +888,6 @@ INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Pasta Bolognese'),
     'ground beef',
-    1
-    );
-
-
-INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES (
-    (select recipeid from RECIPE where RECIPE.name = 'Pasta Bolognese'),
-    'tomato sauce',
     3
     );
 
@@ -903,8 +895,16 @@ VALUES (
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES (
     (select recipeid from RECIPE where RECIPE.name = 'Pasta Bolognese'),
-    'spaghetti',
+    'tomato sauce',
     1
+    );
+
+
+INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
+VALUES (
+    (select recipeid from RECIPE where RECIPE.name = 'Pasta Bolognese'),
+    'spaghetti',
+    2
     );
 
 
@@ -1039,35 +1039,35 @@ INSERT INTO TRAININGUNIT (NAME, DESCRIPTION, TRAININGUNITDIFFICULTY) VALUES ('Be
 
 
 INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (1, 1, 1);
-INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (1, 2, 2);
-INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (1, 3, 3);
+INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (1, 2, 1);
+INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (1, 3, 1);
 INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (2, 4, 2);
-INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (2, 5, 1);
-INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (2, 6, 3);
-INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (3, 7, 1);
-INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (3, 8, 2);
+INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (2, 5, 2);
+INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (2, 6, 2);
+INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (3, 7, 3);
+INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (3, 8, 3);
 INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (3, 9, 3);
 
 
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (1, 'Slow jogging for 30 minutes', 1, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (2, 'Vinyasa Flow for 60 minutes', 0, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (3, 'Bench Press with 3 sets of 12 repetitions', 2, 12);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (4, 'Sprints and walking alternation for 20 minutes', 1, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (5, 'Yoga poses for balance and relaxation', 0, 0);     
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (6, 'Squats with weights for 3 sets of 15 repetitions', 2, 15);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (7, 'Intervals of sprinting and walking for 15 minutes', 1, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (8, 'Dynamic Ashtanga Yoga style for 75 minutes', 0, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (9, 'Heavy Deadlifts with 3 sets of 10 repetitions', 2, 10);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (10, 'Stair climbing for 20 minutes', 1, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (11, 'Yin Yoga for deep stretching', 0, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (12, 'Lunges for leg training', 2, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (13, 'Obstacle course for 30 minutes', 1, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (14, 'Dynamic Power Yoga for energy and strength', 0, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (15, 'Lat Pulldown for back training', 2, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (16, 'Outdoor cycling for 45 minutes', 1, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (17, 'Kundalini Yoga for consciousness expansion', 0, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (18, 'Triceps Dips for arm strength', 2, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (19, 'Swimming in the pool for 30 minutes', 1, 0);      
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (16, 'Slow jogging for 30 minutes', 1, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (17, 'Vinyasa Flow for 60 minutes', 0, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (18, 'Bench Press with 3 sets of 12 repetitions', 2, 12);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (19, 'Sprints and walking alternation for 20 minutes', 1, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (20, 'Yoga poses for balance and relaxation', 0, 0);    
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (21, 'Squats with weights for 3 sets of 15 repetitions', 2, 15);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (22, 'Intervals of sprinting and walking for 15 minutes', 1, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (23, 'Dynamic Ashtanga Yoga style for 75 minutes', 0, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (24, 'Heavy Deadlifts with 3 sets of 10 repetitions', 2, 10);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (25, 'Stair climbing for 20 minutes', 1, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (26, 'Yin Yoga for deep stretching', 0, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (27, 'Lunges for leg training', 2, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (28, 'Obstacle course for 30 minutes', 1, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (29, 'Dynamic Power Yoga for energy and strength', 0, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (30, 'Lat Pulldown for back training', 2, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (31, 'Outdoor cycling for 45 minutes', 1, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (32, 'Kundalini Yoga for consciousness expansion', 0, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (33, 'Triceps Dips for arm strength', 2, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (34, 'Swimming in the pool for 30 minutes', 1, 0);      
 
 
 INSERT INTO TRAINING_UNIT_UNIT (EXERCISEUNITID, TRAININGUNITID) VALUES (1, 1);
