@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 19c                           */
-/* Created on:     18.01.2024 14:16:30                          */
+/* Created on:     04.02.2024 12:49:38                          */
 /*==============================================================*/
 
 
@@ -881,6 +881,7 @@ alter table MANAGES_SPORT
 alter table PLANTRAININGUNIT
    add constraint FK_PLANTRAI_PLAN_UNIT_TRAINING foreign key (TRAININGPLANID)
       references TRAININGPLAN (TRAININGPLANID)
+      on delete cascade
 /
 
 alter table PLAN_UNIT_UNIT
@@ -1013,7 +1014,7 @@ alter table USER_SAVED_RECIPES
 /
 
 
-create or replace function GENERATESALT()
+create or replace function GENERATESALT
 RETURN VARCHAR2
 IS
   SALT VARCHAR2(10);
