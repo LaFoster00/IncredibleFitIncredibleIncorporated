@@ -501,7 +501,7 @@ namespace IncredibleFit.SQL
         private static List<CommandParameter> GetIdProperties<T>(ParameterDirection direction)
         {
             // Use linq to find all the properties that are marked as field and id
-            PropertyInfo idProperties = typeof(T).GetProperties().Where(info => info.TryGetField() != null && info.TryGetId() != null);
+            var idProperties = typeof(T).GetProperties().Where(info => info.TryGetField() != null && info.TryGetId() != null);
             if (!idProperties.Any())
             {
                 throw new InvalidOperationException("No id field specified in this class. Can't update object without");
