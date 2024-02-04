@@ -1,7 +1,6 @@
 ﻿// Written by Lisa Weickenmeier https://github.com/LisaWckn
 
 using IncredibleFit.SQL.Entities;
-using MetalPerformanceShaders;
 using Oracle.ManagedDataAccess.Client;
 using System.Collections.ObjectModel;
 

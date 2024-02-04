@@ -35,7 +35,7 @@ public partial class Training : ContentPage
 		else
 		{
             btn.Text = "Start training";
-            SQLTraining.setTrainingUnitDone(_nextTrainingUnit);
+            SQLTraining.setTrainingUnitDone(_nextTrainingUnit, _sessionInfo.User!);
 
             ExerciseUnits.Clear();
             _nextTrainingUnit = SQLTraining.getNextTrainingUnit(_sessionInfo.User!);
