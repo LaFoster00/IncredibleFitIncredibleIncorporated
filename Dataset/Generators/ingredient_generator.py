@@ -112,7 +112,13 @@ ingredients = {
 ingredientInsert = '''EXECUTE INSERTINGREDIENT('{}', {}, {}, {}, {}, {}, {}, TO_NUMBER('{}'), TO_NUMBER('{}'));'''
 
 def generateIngredients():
-    print("\n-- ingredient\n")
+    print('''
+--------------------------------------------
+-- Generate the ingredients. Since ingredients require a quantity price
+-- they are more complex to create than usual and therefore the INSERTINGREDIENT
+-- procedure is used to setup the dependencies indirectly.
+--------------------------------------------
+    ''')
     for name, ingredientParams in ingredients.items():
         a = ingredientInsert.format(name, *ingredientParams[:-2], str(ingredientParams[-2]).replace(".", ","), str(ingredientParams[-1]).replace(".", ","))
         print(a)

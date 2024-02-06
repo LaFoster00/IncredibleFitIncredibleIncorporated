@@ -11,7 +11,12 @@ insert into RECIPECATEGORY (mealtype, foodcategory)
 VALUES ({}, {});'''
 
 def generateRecipeCategories():
-    print("\n-- recipecategory\n")
+    print('''
+--------------------------------------------
+-- Generate the recipe-categories. There is only a limited number of
+-- possible categories, which is why we create all of them here.
+--------------------------------------------
+    ''')
     for food_category in range(3):
         for meal_type in range(5):
             print(recipecategoryInsert.format(meal_type, food_category))

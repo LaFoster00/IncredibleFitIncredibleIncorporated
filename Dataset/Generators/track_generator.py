@@ -38,7 +38,11 @@ INSERT INTO TRACK (EMAIL, "DATE", CALORIES, PROTEIN, FAT, CARBONHYDRATES)
 VALUES ('{email}', TO_DATE('{date}', 'YYYY-MM-DD'), {calories}, {proteins}, {fat}, {carbonhydrates});'''
 
 def generateTracks():
-    print("\n-- track\n")
+    print('''
+--------------------------------------------
+-- Generate the calorie-tracks for some users.
+--------------------------------------------
+    ''')
     for trackInfo in tracks:
         print(trackInsert.format(
             email = trackInfo[0],

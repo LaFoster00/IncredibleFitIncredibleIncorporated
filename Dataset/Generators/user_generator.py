@@ -27,7 +27,12 @@ VALUES ('{email}', '{salt}', '{password}', '{name}', '{firstName}', {weight}, {h
 );'''
 
 def generateUsers():
-    print("\n-- user\n")
+    print('''
+--------------------------------------------
+-- Generate the users. Since the password is a hashed representation of the 
+-- password itself and the salt there are two randomly seeming strings in each user.
+--------------------------------------------
+    ''')
     for email, userInfos in users.items():
         print(userInsert.format(
             email = email,

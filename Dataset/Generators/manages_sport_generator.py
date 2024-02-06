@@ -12,14 +12,14 @@ managesSport = [
 
 managesSportInsert = '''
 INSERT INTO MANAGES_SPORT (SPORTNAME, EMPLOYEEID)
-VALUES 
-    (
-    '{sport}',
-    (SELECT EMPLOYEEID FROM EMPLOYEE WHERE EMAIL = '{email}')
-    );'''
+VALUES ('{sport}', (SELECT EMPLOYEEID FROM EMPLOYEE WHERE EMAIL = '{email}') );'''
 
 def generateManagesSport():
-    print("\n-- managessport\n")
+    print('''
+--------------------------------------------
+-- Generate the MANAGES_SPORT relations.
+--------------------------------------------
+    ''')
 
     for managesSportInfo in managesSport:
         print(managesSportInsert.format(

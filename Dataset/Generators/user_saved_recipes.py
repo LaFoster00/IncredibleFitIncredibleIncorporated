@@ -15,13 +15,14 @@ userSavedRecipes = [
 
 userSavedRecipesInsert = '''
 INSERT INTO USER_SAVED_RECIPES (EMAIL, RECIPEID)
-VALUES (
-    '{useremail}',
-    (SELECT RECIPEID FROM RECIPE WHERE NAME = '{recipename}')
-    );'''
+VALUES ('{useremail}', (SELECT RECIPEID FROM RECIPE WHERE NAME = '{recipename}') );'''
 
 def generateUserSavedRecipes():
-    print("\n-- usersavedrecipes\n")
+    print('''
+--------------------------------------------
+-- Generate the user-saved-recipes.
+--------------------------------------------
+    ''')
     for userSavedRecipeInfo in userSavedRecipes:
         print(userSavedRecipesInsert.format(
             useremail = userSavedRecipeInfo[0],

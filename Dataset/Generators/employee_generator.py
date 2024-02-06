@@ -24,6 +24,11 @@ END;
 /'''
 
 def generateEmployees():
+    print('''
+--------------------------------------------
+-- Generate the employees. Employees are a simple link for a employeenumber to a user.
+--------------------------------------------
+    ''')
     for email, employeeInfo in employees.items():
         print(employeeInsert.format(
             email =         email,

@@ -98,24 +98,23 @@ recipeInsert = """
 INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = {meal_type} and foodcategory = {food_category}),
-    '{email}',
-    '{name}',
-    '{descr}',
-    '{instr}'
+    '{email}', '{name}', '{descr}', '{instr}'
     );"""
 
 recipeIngredientInsert = '''
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES (
-    (select recipeid from RECIPE where RECIPE.name = '{}'),
-    '{}',
-    {}
-    );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = '{}'), '{}', {} );
     '''
 
 def generateRecipes():
-    print("\n-- recipe\n")
+    print('''
+--------------------------------------------
+-- Generate the recipes. For each recipe there is a list of recipe ingredients
+-- that need to be generated and linked to the actual recipe.
+--------------------------------------------
+    ''')
     for name, recipe in recipes.items():
+        print(f"----- {name} -----")
         print(recipeInsert.format(
             email=recipe.get("email", default_email).replace("'", "''"),
             name=name.replace("'", "''"),
@@ -124,7 +123,6 @@ def generateRecipes():
             meal_type=recipe["category"][1],
             food_category=recipe["category"][0]))
 
-        print("-- recipeingredient\n")
         for ingredient in recipe["ingredients"]:
             print(recipeIngredientInsert.format(name.replace("'", "''"), ingredient, randrange(3) + 1))
 

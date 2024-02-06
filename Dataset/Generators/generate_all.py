@@ -1,3 +1,9 @@
+print('''
+--------------------------------------------
+-- Delete all the data that was previously in the tables
+--------------------------------------------
+    ''')
+
 import employee_generator
 import ingredient_generator
 import manages_sport_generator
@@ -22,6 +28,12 @@ print("DELETE FROM USER_APPOINTMENT;")
 print("DELETE FROM USER_PLAN;")
 
 print('''
+--------------------------------------------
+-- Insert the default fitnesslevels
+--------------------------------------------
+    ''')
+
+print('''
 INSERT INTO FITNESSLEVEL (FITNESSSTATUS) VALUES ('Impairment');
 INSERT INTO FITNESSLEVEL (FITNESSSTATUS) VALUES ('Absolute beginner');
 INSERT INTO FITNESSLEVEL (FITNESSSTATUS) VALUES ('Beginner');
@@ -39,6 +51,12 @@ recipecategory_generator.generateRecipeCategories()
 recipe_generator.generateRecipes()
 user_saved_recipes.generateUserSavedRecipes()
 
+print('''
+--------------------------------------------
+-- Insert the sports. Sports are used to manage multiple other aspects of user specific data.
+--------------------------------------------
+    ''')
+
 # Sport
 print('''
 INSERT INTO SPORT (SPORTNAME, DESCRIPTION) VALUES ('Strength training', 'Builds muscle strength using resistance, like weights.');
@@ -48,7 +66,15 @@ INSERT INTO SPORT (SPORTNAME, DESCRIPTION) VALUES ('General fitness', 'Overall h
 INSERT INTO SPORT (SPORTNAME, DESCRIPTION) VALUES ('Yoga', 'Combines postures, breath control, and meditation.');
 INSERT INTO SPORT (SPORTNAME, DESCRIPTION) VALUES ('Cardiovascular training', 'Boosts heart health through activities like running.');
 ''')
+
 manages_sport_generator.generateManagesSport()
+
+print('''
+--------------------------------------------
+-- Insert the Exercises for the sports.
+--------------------------------------------
+    ''')
+
 print('''
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('General fitness', 'jumping jack', 'A jumping exercise with simultaneous arm and leg spreading and closing. Effective for cardiovascular training.', 0);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'pull up', 'An upper-body strength exercise involving lifting the body using the arms, targeting the upper back and arms.', 2);
@@ -88,7 +114,14 @@ INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Yoga'
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'Lateral Raises', 'Shoulder training with lateral raises', 2);
 ''')
 
+
 # Training plans
+print('''
+--------------------------------------------
+-- Insert the trainingplans.
+--------------------------------------------
+    ''')
+
 print('''
 INSERT INTO TRAININGPLAN (EMPLOYEEID, SPORTNAME, NAME, DESCRIPTION, TRAININGPLANDIFFICULTY) VALUES (1, 'Cardiovascular training', 'Running Plan', 'Plan for regular running', 1);
 INSERT INTO TRAININGPLAN (EMPLOYEEID, SPORTNAME, NAME, DESCRIPTION, TRAININGPLANDIFFICULTY) VALUES (1, 'Yoga', 'Yoga Relaxation', 'Yoga for stress relief and flexibility', 0);
@@ -96,6 +129,12 @@ INSERT INTO TRAININGPLAN (EMPLOYEEID, SPORTNAME, NAME, DESCRIPTION, TRAININGPLAN
 ''')
 
 # PlanTrainingUnit
+print('''
+--------------------------------------------
+-- Insert the plantrainingunit which is a wrapper for multiple exercises on a specific workday.
+--------------------------------------------
+    ''')
+
 print('''
 INSERT INTO PLANTRAININGUNIT (TRAININGPLANID, DESCRIPTION, WEEKDAY) VALUES (1, 'Running training in the Park', 1);
 INSERT INTO PLANTRAININGUNIT (TRAININGPLANID, DESCRIPTION, WEEKDAY) VALUES (1, 'Sprint intervals', 3);
@@ -110,12 +149,24 @@ INSERT INTO PLANTRAININGUNIT (TRAININGPLANID, DESCRIPTION, WEEKDAY) VALUES (3, '
 
 # Trainingunit
 print('''
+--------------------------------------------
+-- Insert the trainingunit which is a wrapper for multiple exercises in a specific plantrainingunit.
+--------------------------------------------
+    ''')
+
+print('''
 INSERT INTO TRAININGUNIT (NAME, DESCRIPTION, TRAININGUNITDIFFICULTY) VALUES ('Running in the Park', 'Jogging for endurance', 1);
 INSERT INTO TRAININGUNIT (NAME, DESCRIPTION, TRAININGUNITDIFFICULTY) VALUES ('Vinyasa Yoga', 'Dynamic yoga', 0);
 INSERT INTO TRAININGUNIT (NAME, DESCRIPTION, TRAININGUNITDIFFICULTY) VALUES ('Bench Press', 'Upper body strength training', 2);
 ''')
 
 # Plan Unit Unit
+print('''
+--------------------------------------------
+-- Insert the plan-unit-unit which relates the trainingplan plantrainingunit and trainingunit.
+--------------------------------------------
+    ''')
+
 print('''
 INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (1, 1, 1);
 INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) VALUES (1, 2, 1);
@@ -129,6 +180,12 @@ INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) 
 ''')
 
 # Exerciseunit
+print('''
+--------------------------------------------
+-- Insert the exercise-units which is a wrapper to give more precise instructions on how to execute an exercise.
+--------------------------------------------
+    ''')
+
 print('''
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (16, 'Slow jogging for 30 minutes', 1, 0);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (17, 'Vinyasa Flow for 60 minutes', 0, 0);
@@ -153,6 +210,12 @@ INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIO
 
 # Training_Unit_Unit
 print('''
+--------------------------------------------
+-- Insert the training-unit-units which is a relation mapping the exercise-units to the training-units.
+--------------------------------------------
+    ''')
+
+print('''
 INSERT INTO TRAINING_UNIT_UNIT (EXERCISEUNITID, TRAININGUNITID) VALUES (1, 1);
 INSERT INTO TRAINING_UNIT_UNIT (EXERCISEUNITID, TRAININGUNITID) VALUES (2, 2);
 INSERT INTO TRAINING_UNIT_UNIT (EXERCISEUNITID, TRAININGUNITID) VALUES (3, 3);
@@ -176,6 +239,12 @@ INSERT INTO TRAINING_UNIT_UNIT (EXERCISEUNITID, TRAININGUNITID) VALUES (19, 1);
 
 # Appointments
 print('''
+--------------------------------------------
+-- Insert some of the training-units into the appointments.
+--------------------------------------------
+    ''')
+
+print('''
 INSERT INTO APPOINTMENT (TRAININGUNITID, "DATE", STATUS) 
 VALUES (NULL, TO_DATE('2024-01-14', 'YYYY-MM-DD'), 0);
 INSERT INTO APPOINTMENT (TRAININGUNITID, "DATE", STATUS) 
@@ -188,6 +257,12 @@ VALUES (NULL, TO_DATE('2024-01-26', 'YYYY-MM-DD'), 0);
 
 # Recipe Appointment
 print('''
+--------------------------------------------
+-- Insert some of the recipes into the appointments.
+--------------------------------------------
+    ''')
+
+print('''
 INSERT INTO RECIPE_APPOINTMENT (RECIPEID, APPOINTMENTID) 
 VALUES (3, 4);
 INSERT INTO RECIPE_APPOINTMENT (RECIPEID, APPOINTMENTID) 
@@ -195,6 +270,12 @@ VALUES (1, 1);
 ''')
 
 # User Appointment
+print('''
+--------------------------------------------
+-- Map some of the appointments to the user
+--------------------------------------------
+    ''')
+
 print('''
 INSERT INTO USER_APPOINTMENT (APPOINTMENTID, EMAIL) 
 VALUES (1, 'samuel.hardy@gmail.com'); 
@@ -207,6 +288,12 @@ VALUES (4, 'samuel.hardy@gmail.com');
 ''')
 
 # User Plan
+print('''
+--------------------------------------------
+-- Map a trainingplan to a user
+--------------------------------------------
+    ''')
+
 print('''
 INSERT INTO USER_PLAN (TRAININGPLANID, EMAIL) 
 VALUES (1, 'samuel.hardy@gmail.com');
