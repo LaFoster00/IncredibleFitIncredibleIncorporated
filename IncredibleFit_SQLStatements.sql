@@ -32,30 +32,20 @@ SELECT "USER".FIRSTNAME, "USER".LASTNAME, "USER".WEIGHT
 FROM "USER"
 WHERE "USER".LASTNAME = 'Hardy' AND "USER".FIRSTNAME = 'Iris';
 
-
-
-
---Trainingspläne einer Sportart löschen:
-
---daten anzeigen lasse:
-
+--Show all trainingplans from the sport 'Strengt training'
 SELECT *
 FROM "TRAININGPLAN"
 WHERE "TRAININGPLAN".SPORTNAME = 'Strength training';
 
---löschen
-
+--Delete all trainingplans from the sport 'Strengt training'
 DELETE
 FROM "TRAININGPLAN"
 WHERE "TRAININGPLAN".SPORTNAME = 'Strength training';
 
---Löschung überprüfen → kein Ergebnis
-
+--Check if the delete statement was successful
 SELECT *
 FROM "TRAININGPLAN"
 WHERE "TRAININGPLAN".SPORTNAME = 'Strength training';
-
-
 
 --Show us a list of all the ingredients and in which recipes they are used.
 --This statement uses LISTAGG, JOINs and GROUP BY.
@@ -178,3 +168,8 @@ WHERE "TRAININGPLANID" IN (
     FROM "USER_PLAN"
     WHERE "EMAIL" = 'samuel.hardy@gmail.com'
 );
+
+--Delete the user Blaire Cooper
+DELETE
+FROM "USER"
+WHERE EMAIL = 'blair.cooper@freenet.com'
