@@ -178,9 +178,6 @@ END;
 --------------------------------------------
 
 
--- track
-
-
 INSERT INTO TRACK (EMAIL, "DATE", CALORIES, PROTEIN, FAT, CARBONHYDRATES)
 VALUES ('anne.mitchel@yahoo.com', TO_DATE('2023-12-24', 'YYYY-MM-DD'), 2600, 80, 79, 201);
 
@@ -356,37 +353,35 @@ VALUES (4, 2);
 
 ----- Garlic Chicken Stir Fry -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 1 and foodcategory = 0),
-    'anne.mitchel@yahoo.com', 'Garlic Chicken Stir Fry', 'Strips of skinless chicken breast stir it up with garlic, ginger, and tons of crunchy vegetables, including sliced cabbage, red bell pepper, and sugar snap peas.', 'step one, step two, step three, enjoy!'
-    );
+    'anne.mitchel@yahoo.com', 'Garlic Chicken Stir Fry', 'Strips of skinless chicken breast stir it up with garlic, ginger, and tons of crunchy vegetables, including sliced cabbage, red bell pepper, and sugar snap peas.', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'), 'garlic', 2 );
-
-
-INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'), 'red bell pepper', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'), 'garlic', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'), 'chicken breast', 3 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'), 'red bell pepper', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'), 'potato', 3 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'), 'chicken breast', 1 );
+
+
+INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Garlic Chicken Stir Fry'), 'potato', 1 );
 
 ----- Lemon-Pepper Salmon -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 2 and foodcategory = 0),
-    'anne.mitchel@yahoo.com', 'Lemon-Pepper Salmon', 'Salmon sizzles in the pan with fresh garlic and then simmers briefly with chopped fresh tomatoes and cilantro until the fish is wonderfully flaky.', 'step one, step two, step three, enjoy!'
-    );
+    'anne.mitchel@yahoo.com', 'Lemon-Pepper Salmon', 'Salmon sizzles in the pan with fresh garlic and then simmers briefly with chopped fresh tomatoes and cilantro until the fish is wonderfully flaky.', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Lemon-Pepper Salmon'), 'garlic', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Lemon-Pepper Salmon'), 'garlic', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -394,22 +389,21 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Lemon-Pepper Salmon')
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Lemon-Pepper Salmon'), 'salmon', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Lemon-Pepper Salmon'), 'salmon', 3 );
 
 ----- Mediterranean Anitpasti -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 2 and foodcategory = 1),
-    'matthew.fuller@gmail.com', 'Mediterranean Anitpasti', 'Chopped and grilled legumes in white wine with goat''s cheese, olives, onions, and garlic.', 'step one, step two, step three, enjoy!'
-    );
+    'matthew.fuller@gmail.com', 'Mediterranean Anitpasti', 'Chopped and grilled legumes in white wine with goat''s cheese, olives, onions, and garlic.', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpasti'), 'garlic', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpasti'), 'garlic', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpasti'), 'zucchini', 3 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpasti'), 'zucchini', 2 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -417,34 +411,33 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpas
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpasti'), 'aubergine', 3 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpasti'), 'aubergine', 2 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpasti'), 'red bell pepper', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Mediterranean Anitpasti'), 'red bell pepper', 1 );
 
 ----- Chicken Fiesta Salad -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 0 and foodcategory = 0),
-    'anne.mitchel@yahoo.com', 'Chicken Fiesta Salad', 'Salad greens and tomato wedges with seasoned skinless, boneless chicken breast halves sauteed in a little vegetable oil, and then dress it all up with a tasty mixture of black beans, Mexican-style corn, tomato salsa, and fajita seasoning', 'step one, step two, step three, enjoy!'
-    );
+    'anne.mitchel@yahoo.com', 'Chicken Fiesta Salad', 'Salad greens and tomato wedges with seasoned skinless, boneless chicken breast halves sauteed in a little vegetable oil, and then dress it all up with a tasty mixture of black beans, Mexican-style corn, tomato salsa, and fajita seasoning', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'), 'salad', 1 );
-
-
-INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'), 'tomato', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'), 'salad', 2 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'), 'chicken breast', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'), 'tomato', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'), 'carrot', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'), 'chicken breast', 1 );
+
+
+INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'), 'carrot', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -452,14 +445,13 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken Fiesta Salad'
 
 ----- Chicken, Zucchini, and Artichoke Salad -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 3 and foodcategory = 0),
-    'anne.mitchel@yahoo.com', 'Chicken, Zucchini, and Artichoke Salad', 'Pieces of skinless, boneless chicken breast are lightly pan-fried and tossed with sauteed zucchini, garbanzo beans, olives, and artichoke hearts.', 'step one, step two, step three, enjoy!'
-    );
+    'anne.mitchel@yahoo.com', 'Chicken, Zucchini, and Artichoke Salad', 'Pieces of skinless, boneless chicken breast are lightly pan-fried and tossed with sauteed zucchini, garbanzo beans, olives, and artichoke hearts.', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken, Zucchini, and Artichoke Salad'), 'zucchini', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken, Zucchini, and Artichoke Salad'), 'zucchini', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -467,26 +459,25 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken, Zucchini, an
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken, Zucchini, and Artichoke Salad'), 'chicken breast', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken, Zucchini, and Artichoke Salad'), 'chicken breast', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken, Zucchini, and Artichoke Salad'), 'salad', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken, Zucchini, and Artichoke Salad'), 'salad', 2 );
 
 ----- Ratatouille -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 3 and foodcategory = 2),
-    'christin.blake@gmx.com', 'Ratatouille', 'This classic Mediterranean dish is loaded with healthy fresh vegetables, including zucchini, fresh tomatoes, eggplant, mushrooms, bell peppers, and onions.', 'step one, step two, step three, enjoy!'
-    );
+    'christin.blake@gmx.com', 'Ratatouille', 'This classic Mediterranean dish is loaded with healthy fresh vegetables, including zucchini, fresh tomatoes, eggplant, mushrooms, bell peppers, and onions.', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'garlic', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'garlic', 1 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'tomato', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'tomato', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -494,11 +485,11 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'potat
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'aubergine', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'aubergine', 1 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'red bell pepper', 3 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'red bell pepper', 2 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -506,56 +497,53 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'zucch
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'rice', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Ratatouille'), 'rice', 2 );
 
 ----- Pork mince salad -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 1 and foodcategory = 0),
-    'christin.blake@gmx.com', 'Pork mince salad', 'Larb partnered with my favourite flat bread, fresh herbs, a good schmear of hoisin and some pork', 'step one, step two, step three, enjoy!'
-    );
+    'christin.blake@gmx.com', 'Pork mince salad', 'Larb partnered with my favourite flat bread, fresh herbs, a good schmear of hoisin and some pork', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'), 'garlic', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'), 'tomato', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'), 'tomato', 2 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'), 'salad', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'), 'salad', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'), 'pork', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'), 'pork', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'), 'cheese', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pork mince salad'), 'cheese', 1 );
 
 ----- Avocado banana smoothie -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 4 and foodcategory = 2),
-    'anne.mitchel@yahoo.com', 'Avocado banana smoothie', 'Healthy blend for a perfect breakfast experience.', 'step one, step two, step three, enjoy!'      
-    );
+    'anne.mitchel@yahoo.com', 'Avocado banana smoothie', 'Healthy blend for a perfect breakfast experience.', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Avocado banana smoothie'), 'banana', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Avocado banana smoothie'), 'banana', 2 );
 
 ----- Yoghurt with beeries -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 1 and foodcategory = 0),
-    'anne.mitchel@yahoo.com', 'Yoghurt with beeries', 'Sweet yoghurt with some fresh berries and nuts.', 'step one, step two, step three, enjoy!'
-    );
+    'anne.mitchel@yahoo.com', 'Yoghurt with beeries', 'Sweet yoghurt with some fresh berries and nuts.', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'), 'yoghurt', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'), 'yoghurt', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -563,7 +551,7 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'), 'honey', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'), 'honey', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -571,22 +559,21 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Yoghurt with beeries'
 
 ----- Chicken-Quinoa-salad -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 0 and foodcategory = 0),
-    'anne.mitchel@yahoo.com', 'Chicken-Quinoa-salad', 'A salad based on quinoa, chicken and vegetables', 'step one, step two, step three, enjoy!'
-    );
+    'anne.mitchel@yahoo.com', 'Chicken-Quinoa-salad', 'A salad based on quinoa, chicken and vegetables', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
 VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken-Quinoa-salad'), 'chicken breast', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken-Quinoa-salad'), 'quinoa', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken-Quinoa-salad'), 'quinoa', 1 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken-Quinoa-salad'), 'olive oil', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken-Quinoa-salad'), 'olive oil', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -594,18 +581,17 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Chicken-Quinoa-salad'
 
 ----- Salmon with sweet potatoes -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 1 and foodcategory = 0),
-    'anne.mitchel@yahoo.com', 'Salmon with sweet potatoes', 'Some salmon out of the oven with sweet potato slices', 'step one, step two, step three, enjoy!'
-    );
+    'anne.mitchel@yahoo.com', 'Salmon with sweet potatoes', 'Some salmon out of the oven with sweet potato slices', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Salmon with sweet potatoes'), 'lemon juice', 3 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Salmon with sweet potatoes'), 'lemon juice', 1 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Salmon with sweet potatoes'), 'salmon', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Salmon with sweet potatoes'), 'salmon', 2 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -613,14 +599,13 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Salmon with sweet pot
 
 ----- Cheesecake -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 0 and foodcategory = 1),
-    'anne.mitchel@yahoo.com', 'Cheesecake', 'A delicious cheesecake', 'step one, step two, step three, enjoy!'
-    );
+    'anne.mitchel@yahoo.com', 'Cheesecake', 'A delicious cheesecake', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Cheesecake'), 'sugar', 3 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Cheesecake'), 'sugar', 2 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -632,37 +617,35 @@ VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Cheesecake'), 'eggs',
 
 ----- Tomato Salad -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 2 and foodcategory = 2),
-    'anne.mitchel@yahoo.com', 'Tomato Salad', 'Fresh tomato salad', 'step one, step two, step three, enjoy!'
-    );
+    'anne.mitchel@yahoo.com', 'Tomato Salad', 'Fresh tomato salad', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Tomato Salad'), 'tomato', 1 );
-
-
-INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Tomato Salad'), 'olive oil', 1 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Tomato Salad'), 'tomato', 3 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Tomato Salad'), 'basil', 3 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Tomato Salad'), 'olive oil', 2 );
+
+
+INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Tomato Salad'), 'basil', 1 );
 
 ----- Pasta Bolognese -----
 
-INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions)
+INSERT INTO "RECIPE" (recipecategoryid, email, name, description, instructions, visibility)
 VALUES (
     (SELECT recipecategoryid FROM RECIPECATEGORY where mealtype = 1 and foodcategory = 2),
-    'anne.mitchel@yahoo.com', 'Pasta Bolognese', 'Classic pasta Bolognese', 'step one, step two, step three, enjoy!'
-    );
+    'anne.mitchel@yahoo.com', 'Pasta Bolognese', 'Classic pasta Bolognese', 'step one, step two, step three, enjoy!', 1);
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pasta Bolognese'), 'ground beef', 2 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pasta Bolognese'), 'ground beef', 1 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
-VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pasta Bolognese'), 'tomato sauce', 3 );
+VALUES ( (select recipeid from RECIPE where RECIPE.name = 'Pasta Bolognese'), 'tomato sauce', 1 );
 
 
 INSERT INTO "RECIPEINGREDIENT" (recipeid, ingredientname, quantity)
@@ -739,25 +722,25 @@ INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Core 
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'chest lift', 'Lying on the back, lifting the upper body to activate the upper abdominal muscles.', 2);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'chest lift with rotation', 'Similar to the Chest Lift but includes rotation of the upper body, targeting the oblique abdominal muscles.', 2);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Core training', 'single leg stretch', 'Pilates exercise involving alternating leg lifts to target the abdominal muscles.', 1);
-INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Cardiovascular training', 'Running in the Park', 'Jogging for endurance', 2);    
+INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Cardiovascular training', 'Running in the Park', 'Jogging for endurance', 2);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Yoga', 'Vinyasa Yoga', 'Dynamic yoga', 0);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'Bench Press', 'Upper body strength training', 2);
-INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('General fitness', 'Sprint Training', 'Intensive sprinting for the legs', 2);     
+INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('General fitness', 'Sprint Training', 'Intensive sprinting for the legs', 2);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Yoga', 'Hatha Yoga', 'Slow yoga poses for balance and relaxation', 0);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'Squats', 'Leg training with squats', 2);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Bodyweight training', 'Interval Training', 'Alternating between sprinting and walking', 2);
-INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Yoga', 'Ashtanga Yoga', 'Dynamic yoga style for strength and flexibility', 0);   
-INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'Deadlifts', 'Back and leg training with deadlifts', 2);     
+INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Yoga', 'Ashtanga Yoga', 'Dynamic yoga style for strength and flexibility', 0);
+INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'Deadlifts', 'Back and leg training with deadlifts', 2);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Cardiovascular training', 'Stair Climbing', 'Cardio training through stair climbing', 1);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Yoga', 'Yin Yoga', 'Long-held yoga poses for deep stretching', 0);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'Lunges', 'Leg training with lunges', 2);
-INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Bodyweight training', 'Obstacle Course', 'Running over obstacles for endurance and strength', 2);
+INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Bodyweight training', 'Obstacle Course', 'Running over obstacles for endurance and strength', 2);       
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Yoga', 'Power Yoga', 'Dynamic yoga for strength and energy', 2);
-INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'Lat Pulldown', 'Back training with lat pulldowns', 2);      
-INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Cardiovascular training', 'Cycling', 'Cardio training with the bicycle', 0);     
-INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Yoga', 'Kundalini Yoga', 'Spiritual yoga for consciousness expansion', 1);       
+INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'Lat Pulldown', 'Back training with lat pulldowns', 2);
+INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Cardiovascular training', 'Cycling', 'Cardio training with the bicycle', 0);
+INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Yoga', 'Kundalini Yoga', 'Spiritual yoga for consciousness expansion', 1);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'Triceps Dips', 'Arm strength training with triceps dips', 2);
-INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Cardiovascular training', 'Swimming', 'Cardio training in the water', 1);        
+INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Cardiovascular training', 'Swimming', 'Cardio training in the water', 1);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Yoga', 'Restorative Yoga', 'Gentle yoga for regeneration', 1);
 INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Strength training', 'Lateral Raises', 'Shoulder training with lateral raises', 2);
 
@@ -767,8 +750,8 @@ INSERT INTO EXERCISE (SPORTNAME, NAME, DESCRIPTION, EXERCISETYPE) VALUES ('Stren
 --------------------------------------------
 
 
-INSERT INTO TRAININGPLAN (EMPLOYEEID, SPORTNAME, NAME, DESCRIPTION, TRAININGPLANDIFFICULTY) VALUES (1, 'Cardiovascular training', 'Running Plan', 'Plan for regular running', 1);
-INSERT INTO TRAININGPLAN (EMPLOYEEID, SPORTNAME, NAME, DESCRIPTION, TRAININGPLANDIFFICULTY) VALUES (1, 'Yoga', 'Yoga Relaxation', 'Yoga for stress relief and flexibility', 0);
+INSERT INTO TRAININGPLAN (EMPLOYEEID, SPORTNAME, NAME, DESCRIPTION, TRAININGPLANDIFFICULTY) VALUES (1, 'Cardiovascular training', 'Running Plan', 'Plan for regular running', 1);  
+INSERT INTO TRAININGPLAN (EMPLOYEEID, SPORTNAME, NAME, DESCRIPTION, TRAININGPLANDIFFICULTY) VALUES (1, 'Yoga', 'Yoga Relaxation', 'Yoga for stress relief and flexibility', 0);    
 INSERT INTO TRAININGPLAN (EMPLOYEEID, SPORTNAME, NAME, DESCRIPTION, TRAININGPLANDIFFICULTY) VALUES (1, 'Strength training', 'Strength Training', 'Plan for muscle building and strength', 2);
 
 
@@ -821,21 +804,21 @@ INSERT INTO PLAN_UNIT_UNIT (TRAININGPLANID, PLANTRAININGUNITID, TRAININGUNITID) 
 
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (16, 'Slow jogging for 30 minutes', 1, 0);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (17, 'Vinyasa Flow for 60 minutes', 0, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (18, 'Bench Press with 3 sets of 12 repetitions', 2, 12);        
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (19, 'Sprints and walking alternation for 20 minutes', 1, 0);    
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (18, 'Bench Press with 3 sets of 12 repetitions', 2, 12);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (19, 'Sprints and walking alternation for 20 minutes', 1, 0);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (20, 'Yoga poses for balance and relaxation', 0, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (21, 'Squats with weights for 3 sets of 15 repetitions', 2, 15); 
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (22, 'Intervals of sprinting and walking for 15 minutes', 1, 0); 
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (23, 'Dynamic Ashtanga Yoga style for 75 minutes', 0, 0);        
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (24, 'Heavy Deadlifts with 3 sets of 10 repetitions', 2, 10);    
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (21, 'Squats with weights for 3 sets of 15 repetitions', 2, 15);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (22, 'Intervals of sprinting and walking for 15 minutes', 1, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (23, 'Dynamic Ashtanga Yoga style for 75 minutes', 0, 0);
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (24, 'Heavy Deadlifts with 3 sets of 10 repetitions', 2, 10);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (25, 'Stair climbing for 20 minutes', 1, 0);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (26, 'Yin Yoga for deep stretching', 0, 0);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (27, 'Lunges for leg training', 2, 0);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (28, 'Obstacle course for 30 minutes', 1, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (29, 'Dynamic Power Yoga for energy and strength', 0, 0);        
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (29, 'Dynamic Power Yoga for energy and strength', 0, 0);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (30, 'Lat Pulldown for back training', 2, 0);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (31, 'Outdoor cycling for 45 minutes', 1, 0);
-INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (32, 'Kundalini Yoga for consciousness expansion', 0, 0);        
+INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (32, 'Kundalini Yoga for consciousness expansion', 0, 0);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (33, 'Triceps Dips for arm strength', 2, 0);
 INSERT INTO EXERCISEUNIT (EXERCISEID, DESCRIPTION, EXERCISEDIFFICULTY, REPETITIONS) VALUES (34, 'Swimming in the pool for 30 minutes', 1, 0);
 
