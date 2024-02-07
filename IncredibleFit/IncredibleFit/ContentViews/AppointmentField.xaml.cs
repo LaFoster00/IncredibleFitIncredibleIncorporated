@@ -68,9 +68,9 @@ public partial class AppointmentField : ContentView
         {
             case nameof(Appointment):
                 
-                if(Appointment.TrainingUnitID == -1)
+                if(Appointment.TrainingUnitID == 0)
                 {
-                    Recipe recipe = SQLTimeline.getRecipeByAppointment(Appointment);
+                    Recipe? recipe = SQLTimeline.getRecipeByAppointment(Appointment);
                     if(recipe != null)
                     {
                         Type = "Recipe";
@@ -80,7 +80,7 @@ public partial class AppointmentField : ContentView
                 }
                 else
                 {
-                    TrainingUnit trainingUnit = SQLTimeline.getTrainingUnitByAppointment(Appointment);
+                    TrainingUnit? trainingUnit = SQLTimeline.getTrainingUnitByAppointment(Appointment);
                     if(trainingUnit != null)
                     {
                         Type = "Training";

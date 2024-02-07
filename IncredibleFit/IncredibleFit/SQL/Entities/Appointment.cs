@@ -47,7 +47,7 @@ namespace IncredibleFit.SQL.Entities
                 nameof(TrainingUnitID),
                 typeof(int?),
                 typeof(Appointment),
-                -1);
+                null);
 
         public static readonly BindableProperty DateProperty =
             BindableProperty.Create(
